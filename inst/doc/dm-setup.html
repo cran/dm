@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2020-03-04" />
+
+<title>Defining a ‘dm’ object for your data</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Defining a ‘dm’ object for your data</h1>
+<h4 class="date">2020-03-04</h4>
+
+
+
+<p>This document describes how you can get your data into a <code>dm</code> object.</p>
+<p>Although the example that we will be using is included in <code>dm</code>, and you can see it by running <code>dm_nycflights13()</code>, we will be going through the built-in example one more time here, step by step.</p>
+<p>The five tables that we are working with contain information about all flights that departed from the airports of New York to other destinations in the United States in 2013, and are available through the <a href="https://github.com/hadley/nycflights13"><code>nycflights13</code></a> package:</p>
+<ul>
+<li><code>flights</code> represents the trips taken by planes</li>
+<li><code>airlines</code> includes
+<ul>
+<li>the names of transport organizations (<code>name</code>)</li>
+<li>their abbreviated codes (<code>carrier</code>)</li>
+</ul></li>
+<li><code>airports</code> indicates the ports of departure (<code>origin</code>) and of destination (<code>dest</code>)</li>
+<li><code>weather</code> contains meterological information at each hour</li>
+<li><code>planes</code> describes characteristics of aircrafts</li>
+</ul>
+<p>Once we’ve loaded <code>nycflights13</code>, the aforementioned tables are all in our work environment, ready to be accessed.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(dm)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(nycflights13)</a></code></pre></div>
+<div id="adding-tables" class="section level1">
+<h1>Adding Tables</h1>
+<p>First, we will tell <code>dm</code> which tables we want to work with and how they are connected. For that, we can use <code>dm</code> or <code>as_dm()</code>, which accepts lists of objects. You must explicitly name the objects if you use <code>list()</code> (e.g., <code>list(&quot;airlines&quot; = airlines, &quot;flights&quot; = flights)</code>) — here we use <code>tibble::lst()</code>, which automatically names the components of the list.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">flights_dm_no_keys &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">lst</span>(airlines, airports, flights, planes, weather) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw">as_dm</span>()</a></code></pre></div>
+</div>
+<div id="defining-keys" class="section level1">
+<h1>Defining Keys</h1>
+<p>Even though you now have a new <code>dm</code> object that contains all your data, some key details are still missing that determine how your five tables are connected (the foreign keys), and which column(s) uniquely identify the observations (the primary keys).</p>
+<div id="primary-keys" class="section level2">
+<h2>Primary Keys</h2>
+<p><code>dm</code> offers <code>dm_enum_pk_candidates()</code> to identify primary keys and <code>dm_add_pk()</code> to add them.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">dm_enum_pk_candidates</span>(</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="dt">dm =</span> flights_dm_no_keys,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">table =</span> planes</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">)</a></code></pre></div>
+<pre><code>## [90m# A tibble: 9 x 3[39m
+##   columns     candidate why                                                
+##   [3m[90m&lt;keys&gt;[39m[23m      [3m[90m&lt;lgl&gt;[39m[23m     [3m[90m&lt;chr&gt;[39m[23m                                              
+## [90m1[39m tailnum     TRUE      [90m&quot;[39m[90m&quot;[39m                                                 
+## [90m2[39m engine      FALSE     [90m&quot;[39mhas duplicate values: 4 Cycle, Reciprocating, Tur…
+## [90m3[39m engines     FALSE     [90m&quot;[39mhas duplicate values: 1, 2, 3, 4[90m&quot;[39m                 
+## [90m4[39m manufactur… FALSE     [90m&quot;[39mhas duplicate values: AIRBUS, AIRBUS INDUSTRIE, A…
+## [90m5[39m model       FALSE     [90m&quot;[39mhas duplicate values: 717-200, 737-301, 737-3G7, …
+## [90m6[39m seats       FALSE     [90m&quot;[39mhas duplicate values: 2, 4, 5, 6, 7, … (&gt;= 7 tota…
+## [90m7[39m speed       FALSE     [90m&quot;[39mhas duplicate values: 90, 105, 162, 432, NA[90m&quot;[39m      
+## [90m8[39m type        FALSE     [90m&quot;[39mhas duplicate values: Fixed wing multi engine, Fi…
+## [90m9[39m year        FALSE     [90m&quot;[39mhas duplicate values: 1959, 1963, 1975, 1976, 197…</code></pre>
+<p>Now, add the primary keys that you have identified:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">flights_dm_only_pks &lt;-<span class="st"> </span>flights_dm_no_keys <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_add_pk</span>(<span class="dt">table =</span> airlines, <span class="dt">column =</span> carrier) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">dm_add_pk</span>(airports, faa) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">dm_add_pk</span>(planes, tailnum)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">flights_dm_only_pks</a></code></pre></div>
+<pre><code>## [32m──[39m [32mTable source[39m [32m───────────────────────────────────────────────────────────[39m
+## src:  &lt;environment: R_GlobalEnv&gt;
+## [90m──[39m [90mMetadata[39m [90m───────────────────────────────────────────────────────────────[39m
+## Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
+## Columns: 53
+## Primary keys: 3
+## Foreign keys: 0</code></pre>
+<p>To review the primary keys after setting them, call <code>dm_get_all_pks()</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">dm_get_all_pks</span>(flights_dm_only_pks)</a></code></pre></div>
+<pre><code>## [90m# A tibble: 3 x 2[39m
+##   table    pk_col 
+##   [3m[90m&lt;chr&gt;[39m[23m    [3m[90m&lt;keys&gt;[39m[23m 
+## [90m1[39m airlines carrier
+## [90m2[39m airports faa    
+## [90m3[39m planes   tailnum</code></pre>
+</div>
+<div id="foreign-keys" class="section level2">
+<h2>Foreign Keys</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">dm_enum_fk_candidates</span>(</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="dt">dm =</span> flights_dm_only_pks,</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">table =</span> flights,</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="dt">ref_table =</span> airlines</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">)</a></code></pre></div>
+<pre><code>## [90m# A tibble: 19 x 3[39m
+##    columns      candidate why                                              
+##    [3m[90m&lt;keys&gt;[39m[23m       [3m[90m&lt;lgl&gt;[39m[23m     [3m[90m&lt;chr&gt;[39m[23m                                            
+## [90m 1[39m carrier      TRUE      [90m&quot;[39m[90m&quot;[39m                                               
+## [90m 2[39m tailnum      FALSE     [90m&quot;[39m334264 entries (99.3%) of `flights$tailnum` not…
+## [90m 3[39m dest         FALSE     [90m&quot;[39m336776 entries (100%) of `flights$dest` not in …
+## [90m 4[39m origin       FALSE     [90m&quot;[39m336776 entries (100%) of `flights$origin` not i…
+## [90m 5[39m air_time     FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m 6[39m arr_delay    FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m 7[39m arr_time     FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m 8[39m day          FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m 9[39m dep_delay    FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m10[39m dep_time     FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m11[39m distance     FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m12[39m flight       FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m13[39m hour         FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m14[39m minute       FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m15[39m month        FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m16[39m sched_arr_t… FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m17[39m sched_dep_t… FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…
+## [90m18[39m time_hour    FALSE     [90m&quot;[39mcannot join a POSIXct object with an object tha…
+## [90m19[39m year         FALSE     [90m&quot;[39mCan't join on 'value' x 'value' because of inco…</code></pre>
+<p>To define how your tables are related, use <code>dm_add_fk()</code> to add foreign keys. First, define the tables that you wish to connect by parameterizing the <code>dm_add_fk()</code> function with <code>table</code> and <code>ref_table</code> options.</p>
+<p>Then indicate in <code>column</code> which column of <code>table</code> refers to <code>ref_table</code>’s primary key, which you’ve defined above. Use <code>check = FALSE</code> to omit consistency checks.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">flights_dm_all_keys &lt;-<span class="st"> </span>flights_dm_only_pks <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_add_fk</span>(<span class="dt">table =</span> flights, <span class="dt">column =</span> tailnum, <span class="dt">ref_table =</span> planes, <span class="dt">check =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">dm_add_fk</span>(flights, carrier, airlines) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">dm_add_fk</span>(flights, origin, airports)</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">flights_dm_all_keys</a></code></pre></div>
+<pre><code>## [32m──[39m [32mTable source[39m [32m───────────────────────────────────────────────────────────[39m
+## src:  &lt;environment: R_GlobalEnv&gt;
+## [90m──[39m [90mMetadata[39m [90m───────────────────────────────────────────────────────────────[39m
+## Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
+## Columns: 53
+## Primary keys: 3
+## Foreign keys: 3</code></pre>
+</div>
+<div id="retrieving-keys" class="section level2">
+<h2>Retrieving Keys</h2>
+<p>To retrieve your keys later on, use <code>dm_get_all_fks()</code>, or <code>dm_get_fk()</code> for its singular version.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">dm_get_all_pks</span>(flights_dm_all_keys)</a></code></pre></div>
+<pre><code>## [90m# A tibble: 3 x 2[39m
+##   table    pk_col 
+##   [3m[90m&lt;chr&gt;[39m[23m    [3m[90m&lt;keys&gt;[39m[23m 
+## [90m1[39m airlines carrier
+## [90m2[39m airports faa    
+## [90m3[39m planes   tailnum</code></pre>
+<p>Voilà, here’s your <code>dm</code> object that you can work with:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">flights_dm_all_keys</a></code></pre></div>
+<pre><code>## [32m──[39m [32mTable source[39m [32m───────────────────────────────────────────────────────────[39m
+## src:  &lt;environment: R_GlobalEnv&gt;
+## [90m──[39m [90mMetadata[39m [90m───────────────────────────────────────────────────────────────[39m
+## Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
+## Columns: 53
+## Primary keys: 3
+## Foreign keys: 3</code></pre>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
