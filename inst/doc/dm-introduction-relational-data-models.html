@@ -12,17 +12,17 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2020-03-04" />
+<meta name="date" content="2020-05-04" />
 
-<title>Introduction to Relational Data Models</title>
+<title>Introduction to relational data models</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -32,14 +32,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +50,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -299,9 +301,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Introduction to Relational Data Models</h1>
+<h1 class="title toc-ignore">Introduction to relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2020-03-04</h4>
+<h4 class="date">2020-05-04</h4>
 
 
 
@@ -316,9 +318,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </ol>
 <div id="data-frames-and-tables" class="section level2">
 <h2>1. Data Frames and Tables</h2>
-<p>A data frame is a fundamental data structure in R. Columns represent variables, rows represent observations. In more technical terms: a data frame is a list of variables of identical length and unique row names. If you imagine it visually, the result is a typical table structure. That is why working with data from spreadsheets is so convenient and the users of the the popular <a href="https://dplyr.tidyverse.org">{dplyr}</a> package for data wrangling mainly rely on data frames.</p>
+<p>A data frame is a fundamental data structure in R. Columns represent variables, rows represent observations. In more technical terms: a data frame is a list of variables of identical length and unique row names. If you imagine it visually, the result is a typical table structure. That is why working with data from spreadsheets is so convenient and the users of the popular <a href="https://dplyr.tidyverse.org">{dplyr}</a> package for data wrangling mainly rely on data frames.</p>
 <p>The downside is that data frames and flat file systems like spreadsheets can result in bloated tables because they hold many repetitive values. In the worst case, a data frame can contain multiple columns with only a single value different in each row.</p>
-<p>This calls for better data organization by utilizing the resemblance between data frames and database tables, which also consist of columns and rows. The elements are just called differently:</p>
+<p>This calls for better data organization by utilizing the resemblance between data frames and database tables, which also consist of columns and rows. The elements are just named differently:</p>
 <table>
 <thead>
 <tr class="header">
@@ -341,14 +343,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Let’s illustrate this challenge with the data from the <a href="https://github.com/hadley/nycflights13"><code>nycflights13</code> dataset</a> that contains detailed information about the 336776 flights that departed from New York City in 2013. The information is stored in five tables.</p>
 <p>Details like the full name of an airport are not available immediately; these can only be obtained by joining or merging the constituent tables, which can result in long and inflated pipe chains full of <code>left_join()</code>, <code>anti_join()</code> and other forms of data merging.</p>
 <p>In classical {dplyr} notation, you will need three <code>left_join()</code> calls to merge the <code>flights</code> table gradually to <code>airlines</code>, <code>planes</code> and <code>airports</code> tables to create one wide data frame.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(dm)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(nycflights13)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">flights <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">  </span><span class="kw">left_join</span>(airlines, <span class="dt">by =</span> <span class="st">&quot;carrier&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">  </span><span class="kw">left_join</span>(planes, <span class="dt">by =</span> <span class="st">&quot;tailnum&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw">left_join</span>(airports, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;origin&quot;</span> =<span class="st"> &quot;faa&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(dm)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(nycflights13)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  </span><span class="kw">left_join</span>(airlines, <span class="dt">by =</span> <span class="st">&quot;carrier&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  </span><span class="kw">left_join</span>(planes, <span class="dt">by =</span> <span class="st">&quot;tailnum&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">  </span><span class="kw">left_join</span>(airports, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;origin&quot;</span> =<span class="st"> &quot;faa&quot;</span>))</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 336,776 x 35</span><span>
 #&gt;    year.x month   day dep_time sched_dep_time dep_delay arr_time
 #&gt;     </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
@@ -362,13 +364,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #555555;"> 8</span><span>   </span><span style="text-decoration: underline;">2</span><span>013     1     1      557            600        -</span><span style="color: #BB0000;">3</span><span>      709
 #&gt; </span><span style="color: #555555;"> 9</span><span>   </span><span style="text-decoration: underline;">2</span><span>013     1     1      557            600        -</span><span style="color: #BB0000;">3</span><span>      838
 #&gt; </span><span style="color: #555555;">10</span><span>   </span><span style="text-decoration: underline;">2</span><span>013     1     1      558            600        -</span><span style="color: #BB0000;">2</span><span>      753
-#&gt; </span><span style="color: #555555;"># … with 336,766 more rows, and 28 more variables: sched_arr_time </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,
-#&gt; #   arr_delay </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, carrier </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, flight </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, tailnum </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,
-#&gt; #   origin </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, dest </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, air_time </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, distance </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, hour </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,
-#&gt; #   minute </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, time_hour </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span style="color: #555555;">, name.x </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, year.y </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,
-#&gt; #   type </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, manufacturer </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, model </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, engines </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,
-#&gt; #   seats </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, speed </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, engine </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, name.y </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, lat </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,
-#&gt; #   lon </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, alt </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, tz </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, dst </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, tzone </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>
+#&gt; </span><span style="color: #555555;"># … with 336,766 more rows, and 28 more variables: sched_arr_time </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,</span><span>
+#&gt; </span><span style="color: #555555;">#   arr_delay </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, carrier </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, flight </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, tailnum </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span><span>
+#&gt; </span><span style="color: #555555;">#   origin </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, dest </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, air_time </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, distance </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, hour </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span><span>
+#&gt; </span><span style="color: #555555;">#   minute </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, time_hour </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span style="color: #555555;">, name.x </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, year.y </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,</span><span>
+#&gt; </span><span style="color: #555555;">#   type </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, manufacturer </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, model </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, engines </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,</span><span>
+#&gt; </span><span style="color: #555555;">#   seats </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, speed </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, engine </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, name.y </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, lat </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span><span>
+#&gt; </span><span style="color: #555555;">#   lon </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, alt </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, tz </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, dst </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, tzone </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>
 </span></CODE></PRE>
 <p>{dm} offers a more elegant and shorter way to combine tables while augmenting {dplyr}/{dbplyr} workflows.</p>
 <p>It is possible to have the best of both worlds: manage your data with {dm} as linked tables, then flatten multiple tables into one for your analysis with {dplyr} on an as-needed basis.</p>
@@ -378,10 +380,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>2. Data Model</h2>
 <p>A data model shows the structure between multiple tables that can be linked together.</p>
 <p>The <code>nycflights13</code> relations can be transferred into the following graphical representation:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">dm &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>(<span class="dt">cycle =</span> <span class="ot">TRUE</span>) </a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">dm <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">  </span><span class="kw">dm_draw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>dm &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>(<span class="dt">cycle =</span> <span class="ot">TRUE</span>) </span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -401,7 +403,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="96.8969" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">airlines</text>
 <polygon fill="#fbe5d5" stroke="transparent" points="95,-121 95,-141 140,-141 140,-121 95,-121"></polygon>
 <text text-anchor="start" x="97" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="none" stroke="#9e5320" points="93.5,-120 93.5,-162 140.5,-162 140.5,-120 93.5,-120"></polygon>
+<polygon fill="none" stroke="#9e5320" stroke-opacity="0.666667" points="93.5,-120 93.5,-162 140.5,-162 140.5,-120 93.5,-120"></polygon>
 </g>
 <!-- airports -->
 <g id="node2" class="node">
@@ -410,7 +412,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="95.6192" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">airports</text>
 <polygon fill="#fbe5d5" stroke="transparent" points="94,-1 94,-21 140,-21 140,-1 94,-1"></polygon>
 <text text-anchor="start" x="96" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="none" stroke="#9e5320" points="93,0 93,-42 141,-42 141,0 93,0"></polygon>
+<polygon fill="none" stroke="#9e5320" stroke-opacity="0.666667" points="93,0 93,-42 141,-42 141,0 93,0"></polygon>
 </g>
 <!-- flights -->
 <g id="node3" class="node">
@@ -425,7 +427,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="6" y="-36.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
 <polygon fill="#deebf6" stroke="transparent" points="4,-11 4,-31 50,-31 50,-11 4,-11"></polygon>
 <text text-anchor="start" x="6" y="-16.4" font-family="Times,serif" font-size="14.00" fill="#444444">dest</text>
-<polygon fill="none" stroke="#3c678e" points="3,-10 3,-112 51,-112 51,-10 3,-10"></polygon>
+<polygon fill="none" stroke="#3c678e" stroke-opacity="0.666667" points="3,-10 3,-112 51,-112 51,-10 3,-10"></polygon>
 </g>
 <!-- flights&#45;&gt;airlines -->
 <g id="edge1" class="edge">
@@ -452,7 +454,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="99.1178" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">planes</text>
 <polygon fill="#fbe5d5" stroke="transparent" points="94,-61 94,-81 140,-81 140,-61 94,-61"></polygon>
 <text text-anchor="start" x="95.6115" y="-67.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#9e5320" points="93,-60 93,-102 141,-102 141,-60 93,-60"></polygon>
+<polygon fill="none" stroke="#9e5320" stroke-opacity="0.666667" points="93,-60 93,-102 141,-102 141,-60 93,-60"></polygon>
 </g>
 <!-- flights&#45;&gt;planes -->
 <g id="edge4" class="edge">
@@ -465,7 +467,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <title>weather</title>
 <polygon fill="#70ad47" stroke="transparent" points="3,-138 3,-158 51,-158 51,-138 3,-138"></polygon>
 <text text-anchor="start" x="4.8492" y="-143.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">weather</text>
-<polygon fill="none" stroke="#4a732f" points="2,-137 2,-159 52,-159 52,-137 2,-137"></polygon>
+<polygon fill="none" stroke="#4a732f" stroke-opacity="0.666667" points="2,-137 2,-159 52,-159 52,-137 2,-137"></polygon>
 </g>
 </g>
 </svg>
@@ -480,8 +482,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>In a relational data model, every table needs to have <strong>one column or attribute that uniquely identifies a row</strong>. This column is called the <em>primary key</em> (abbreviated with pk). A primary key can be either an existing column that satifies the condition of being unique, or a new column that assigns an identifier.</p>
 <p>Example: In the <code>airlines</code> table of <code>nycflights13</code> the column <code>carrier</code> is the primary key.</p>
 <p>You can get all primary keys in a <code>dm</code> by calling <code>dm_get_all_pks()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">dm <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_get_all_pks</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>dm <span class="op">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw">dm_get_all_pks</span>()</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 2</span><span>
 #&gt;   table    pk_col 
 #&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span> 
@@ -490,28 +492,28 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #555555;">3</span><span> planes   tailnum
 </span></CODE></PRE>
 <p>If an attribute is suitable as a primary key, it can be checked with <code>dm_enum_pk_candidates()</code>. Which columns of the <code>airlines</code> table can serve as a primary key?</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">dm <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_enum_pk_candidates</span>(airports)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span><span class="kw">dm_enum_pk_candidates</span>(airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 8 x 3</span><span>
 #&gt;   columns candidate why                                                    
 #&gt;   </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                                  
 #&gt; </span><span style="color: #555555;">1</span><span> faa     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
 #&gt; </span><span style="color: #555555;">2</span><span> lon     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
-#&gt; </span><span style="color: #555555;">3</span><span> alt     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 0, 1, 3, 4, 5, … (&gt;= 7 total)</span><span style="color: #555555;">&quot;</span><span>  
+#&gt; </span><span style="color: #555555;">3</span><span> alt     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 0, 1, 3, 4, 5, …</span><span style="color: #555555;">&quot;</span><span>               
 #&gt; </span><span style="color: #555555;">4</span><span> dst     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: A, N, U</span><span style="color: #555555;">&quot;</span><span>                        
 #&gt; </span><span style="color: #555555;">5</span><span> lat     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 38.88944, 40.63975</span><span style="color: #555555;">&quot;</span><span>             
 #&gt; </span><span style="color: #555555;">6</span><span> name    FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: All Airports, Capital City Airp…
-#&gt; </span><span style="color: #555555;">7</span><span> tz      FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: -10, -9, -8, -7, -6, … (&gt;= 7 to…
+#&gt; </span><span style="color: #555555;">7</span><span> tz      FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: -10, -9, -8, -7, -6, …</span><span style="color: #555555;">&quot;</span><span>         
 #&gt; </span><span style="color: #555555;">8</span><span> tzone   FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: America/Anchorage, America/Chic…
 </span></CODE></PRE>
-<p>Further Reading: The {dm} package offers several function for dealing with <a href="https://krlmlr.github.io/dm/articles/dm-class-and-basic-operations.html#pk">primary keys</a>.</p>
+<p>Further Reading: The {dm} package offers several functions for dealing with <a href="https://krlmlr.github.io/dm/articles/dm-class-and-basic-operations.html#pk">primary keys</a>.</p>
 </div>
 <div id="fk" class="section level2">
 <h2>4. Foreign Keys</h2>
 <p>The <strong>counterpart of a primary key in one table is the foreign key in another table</strong>. In order to join two tables, the primary key of the first table needs to be available in the second table as well. This second column is called the <em>foreign key</em> (abbreviated with fk).</p>
 <p>For example, if you want to link the <code>airlines</code> table to the <code>flights</code> table, the primary key in <code>airlines</code> needs to match the foreign key in <code>flights</code>. This condition is satisfied because the column <code>carrier</code> is present as a primary key in the <code>airlines</code> table as well as a foreign key in the <code>flights</code> table. You can find foreign key candidates with the function <code>dm_enum_fk_candidates()</code>, they are marked with <code>TRUE</code> in the <code>candidate</code> column.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">dm <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_enum_fk_candidates</span>(flights, airlines)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">dm_enum_fk_candidates</span>(flights, airlines)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 19 x 3</span><span>
 #&gt;    columns      candidate why                                              
 #&gt;    </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                            
@@ -519,28 +521,28 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #555555;"> 2</span><span> tailnum      FALSE     </span><span style="color: #555555;">&quot;</span><span>11080 entries (98.7%) of `flights$tailnum` not …
 #&gt; </span><span style="color: #555555;"> 3</span><span> dest         FALSE     </span><span style="color: #555555;">&quot;</span><span>11227 entries (100%) of `flights$dest` not in `…
 #&gt; </span><span style="color: #555555;"> 4</span><span> origin       FALSE     </span><span style="color: #555555;">&quot;</span><span>11227 entries (100%) of `flights$origin` not in…
-#&gt; </span><span style="color: #555555;"> 5</span><span> air_time     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;"> 6</span><span> arr_delay    FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;"> 7</span><span> arr_time     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;"> 8</span><span> day          FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;"> 9</span><span> dep_delay    FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">10</span><span> dep_time     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">11</span><span> distance     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">12</span><span> flight       FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">13</span><span> hour         FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">14</span><span> minute       FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">15</span><span> month        FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">16</span><span> sched_arr_t… FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
-#&gt; </span><span style="color: #555555;">17</span><span> sched_dep_t… FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
+#&gt; </span><span style="color: #555555;"> 5</span><span> air_time     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;"> 6</span><span> arr_delay    FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;"> 7</span><span> arr_time     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;"> 8</span><span> day          FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;"> 9</span><span> dep_delay    FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">10</span><span> dep_time     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">11</span><span> distance     FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">12</span><span> flight       FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">13</span><span> hour         FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">14</span><span> minute       FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">15</span><span> month        FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">16</span><span> sched_arr_t… FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
+#&gt; </span><span style="color: #555555;">17</span><span> sched_dep_t… FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
 #&gt; </span><span style="color: #555555;">18</span><span> time_hour    FALSE     </span><span style="color: #555555;">&quot;</span><span>cannot join a POSIXct object with an object tha…
-#&gt; </span><span style="color: #555555;">19</span><span> year         FALSE     </span><span style="color: #555555;">&quot;</span><span>Can't join on 'value' x 'value' because of inco…
+#&gt; </span><span style="color: #555555;">19</span><span> year         FALSE     </span><span style="color: #555555;">&quot;</span><span>Can&#39;t join on &#39;value&#39; x &#39;value&#39; because of inco…
 </span></CODE></PRE>
 <p>After finding and assigning foreign keys, get the name of the set foreign key:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">dm <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_get_fk</span>(flights, airlines)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; &lt;list_of&lt;character&gt;[1]&gt;</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; [1] &quot;carrier&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">dm_get_fk</span>(flights, airlines)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; &lt;list_of&lt;character&gt;[1]&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; [1] &quot;carrier&quot;</span></span></code></pre></div>
 <p>Further Reading: All {dm} functions for working with <a href="https://krlmlr.github.io/dm/articles/dm-class-and-basic-operations.html#foreign-keys">foreign keys</a>.</p>
 </div>
 <div id="normalisation" class="section level2">
@@ -548,22 +550,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Normalization is a technical term that describes the <strong>central design principle of a relational data model</strong>: splitting data into multiple tables.</p>
 <p>A normalized data schema consists of several relations (tables) that are linked with attributes (columns). The relations can be joined together by means of <a href="#pk">primary</a> and <a href="#fk">foreign keys</a>. The main goal of normalization is to keep data organization as clean and simple as possible by avoiding redundant data entries.</p>
 <p>For example, if you want to change the name of one airport in the <code>nycflights13</code> dataset, you will only need to update a single data value. This principle is sometimes called the <em>single point of truth</em>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#  Update in one single location...</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">airlines[airlines<span class="op">$</span>carrier <span class="op">==</span><span class="st"> &quot;UA&quot;</span>, <span class="st">&quot;name&quot;</span>] &lt;-<span class="st"> &quot;United broke my guitar&quot;</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">airlines <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(carrier <span class="op">==</span><span class="st"> &quot;UA&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#  Update in one single location...</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>airlines[airlines<span class="op">$</span>carrier <span class="op">==</span><span class="st"> &quot;UA&quot;</span>, <span class="st">&quot;name&quot;</span>] &lt;-<span class="st"> &quot;United broke my guitar&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>airlines <span class="op">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="st">  </span><span class="kw">filter</span>(carrier <span class="op">==</span><span class="st"> &quot;UA&quot;</span>)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
 #&gt;   carrier name                  
 #&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                 
 #&gt; </span><span style="color: #555555;">1</span><span> UA      United broke my guitar
 </span></CODE></PRE>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co"># ...propagates to all related records</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">flights <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">  </span><span class="kw">left_join</span>(airlines) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(flight, name)</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Joining, by = &quot;carrier&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># ...propagates to all related records</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>flights <span class="op">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="st">  </span><span class="kw">left_join</span>(airlines) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="st">  </span><span class="kw">select</span>(flight, name)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; Joining, by = &quot;carrier&quot;</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 336,776 x 2</span><span>
 #&gt;    flight name                    
 #&gt;     </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                   
@@ -579,12 +581,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #555555;">10</span><span>    301 American Airlines Inc.  
 #&gt; </span><span style="color: #555555;"># … with 336,766 more rows</span><span>
 </span></CODE></PRE>
-<p>Another way to demonstrate normalization is splitting a table in two parts.</p>
+<p>Another way to demonstrate normalization is splitting a table into two parts.</p>
 <p>Let’s look at the <code>planes</code> table, which consists of 3322 individual tail numbers and corresponding information for the specific airplane, like the year it was manufactured or the average cruising speed.</p>
 <p>The function <code>decompose_table()</code> extracts two new tables and creates a new key <code>model_id</code>, that links both tables.</p>
 <p>This results in a <code>parent_table</code> and a <code>child_table</code> that differ massively in the number of rows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">planes <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">decompose_table</span>(model_id, model, manufacturer, type, engines, seats, manufacturer, speed)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>planes <span class="op">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span><span class="kw">decompose_table</span>(model_id, model, manufacturer, type, engines, seats, manufacturer, speed)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; $child_table
 #&gt; <span style="color: #555555;"># A tibble: 3,322 x 4</span><span>
 #&gt;    tailnum  year engine    model_id
@@ -626,17 +628,17 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>In production, the data is stored in a relational database and {dm} is used to work with the data.</p>
 <p>Therefore, {dm} can copy data <a href="https://krlmlr.github.io/dm/articles/dm.html#copy">from and to databases</a>, and works transparently with both in-memory data and with relational database systems.</p>
 <p>For example, let’s create a local Sqlite database and copy the <code>dm</code> object to it:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">src_sqlite &lt;-<span class="st"> </span><span class="kw">src_sqlite</span>(<span class="st">&quot;:memory:&quot;</span>, <span class="dt">create =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">src_sqlite</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; src:  sqlite 3.30.1 [:memory:]</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; tbls:</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="kw">copy_dm_to</span>(src_sqlite, dm)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">src_sqlite</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; src:  sqlite 3.30.1 [:memory:]</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; tbls: airlines, airports, flights, planes, sqlite_stat1, sqlite_stat4,</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;   weather</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>src_sqlite &lt;-<span class="st"> </span><span class="kw">src_sqlite</span>(<span class="st">&quot;:memory:&quot;</span>, <span class="dt">create =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>src_sqlite</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; src:  sqlite 3.31.1 [:memory:]</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; tbls:</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="kw">copy_dm_to</span>(src_sqlite, dm)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>src_sqlite</span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; src:  sqlite 3.31.1 [:memory:]</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; tbls: airlines, airports, flights, planes, sqlite_stat1, sqlite_stat4,</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;   weather</span></span></code></pre></div>
 <p>In the opposite direction, <code>dm</code> can also be populated with data from a DB. Unfortunately, this currently works only for MSSQL and Postgres, but not for Sqlite. Therefore, we cannot show the results here just yet:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">dm_learn_from_db</span>(src_sqlite)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">dm_learn_from_db</span>(src_sqlite)</span></code></pre></div>
 </div>
 
 

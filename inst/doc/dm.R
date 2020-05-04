@@ -1,33 +1,30 @@
 ## ----setup, include = FALSE----------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-fansi::set_knit_hooks(knitr::knit_hooks)
-options(crayon.enabled = TRUE, width = 75, cli.width = 75)
+source("setup/setup.R")
 
-knit_print.grViz <- function(x, ...) {
-  x %>% 
-    DiagrammeRsvg::export_svg() %>% 
-    c("`````{=html}\n", ., "\n`````\n") %>% 
-    knitr::asis_output()
-}
+## ----message=FALSE-------------------------------------------------------
+library(tidyverse)
+library(dm)
+
+## ----message=FALSE-------------------------------------------------------
 library(nycflights13)
-library(tidyverse)
-library(dm)
 
-## ----message=FALSE-------------------------------------------------------
-library(tidyverse)
-library(dm)
-
-## ----message=FALSE-------------------------------------------------------
-flights_dm <- dm_from_src(src_df(pkg = "nycflights13"))
+flights_dm <- dm(
+  flights,
+  airlines,
+  airports,
+  planes,
+  weather
+)
 flights_dm
 
 ## ------------------------------------------------------------------------
-dm_get_src(flights_dm)
+names(dm_get_tables(flights_dm))
 dm_get_all_pks(flights_dm)
 dm_get_all_fks(flights_dm)
+
+## ------------------------------------------------------------------------
+names(flights_dm)
+flights_dm$airports
 
 ## ------------------------------------------------------------------------
 flights_dm_with_one_key <- 

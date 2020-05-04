@@ -1,20 +1,5 @@
 ## ----setup, include = FALSE----------------------------------------------
-library(dm)
-library(dplyr)
-library(tidyr)
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-fansi::set_knit_hooks(knitr::knit_hooks)
-options(crayon.enabled = TRUE, width = 75, cli.width = 75)
-
-knit_print.grViz <- function(x, ...) {
-  x %>% 
-    DiagrammeRsvg::export_svg() %>% 
-    c("`````{=html}\n", ., "\n`````\n") %>% 
-    knitr::asis_output()
-}
+source("setup/setup.R")
 
 ## ----zoom----------------------------------------------------------------
 library(dm)
@@ -30,11 +15,11 @@ flights_zoomed
 flights_zoomed_mutate <- 
   flights_zoomed %>% 
   mutate(am_pm_dep = if_else(dep_time < 1200, "am", "pm")) %>% 
-  # in order to see the change we use `select()` for reordering the columns
+  # in order to see our changes in the output we use `select()` for reordering the columns
   select(year:dep_time, am_pm_dep, everything())
 flights_zoomed_mutate
 
-# In order to update the original `dm` with a new `flights` table we use `dm_update_zoomed()`:
+# To update the original `dm` with a new `flights` table we use `dm_update_zoomed()`:
 updated_flights_dm <- 
   flights_zoomed_mutate %>% 
   dm_update_zoomed()
@@ -52,7 +37,7 @@ weather_zoomed
 # Maybe there is some hidden candidate for a primary key that we overlooked
 enum_pk_candidates(weather_zoomed)
 # Seems we have to construct a column with unique values
-# This can be done by combining columns `origin` with `time_hour`, if the latter 
+# This can be done by combining column `origin` with `time_hour`, if the latter 
 # is converted to a single time zone first; all within the `dm`:
 weather_zoomed_mutate <- 
   weather_zoomed %>% 

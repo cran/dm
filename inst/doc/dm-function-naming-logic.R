@@ -1,3 +1,3 @@
-## ----setup, include=FALSE------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE)
+## ----setup, include = FALSE----------------------------------------------
+source("setup/setup.R")
 

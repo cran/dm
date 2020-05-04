@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 0.1.1
-Date: 2020-02-04
+Version: 0.1.2
+Date: 2020-05-03
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -31,20 +31,21 @@ Description: Provides tools for working with multiple related
     then be manipulated with a pipe-friendly syntax.
 License: MIT + file LICENSE
 Depends: R (>= 3.3)
-Imports: backports, cli, DBI, dplyr, DT (>= 0.5), glue, igraph,
-        lifecycle, magrittr, methods, pillar, purrr, rlang (>= 0.4.0),
-        tibble, tidyr (>= 1.0.0), tidyselect (>= 1.0.0), vctrs (>=
-        0.2.0)
-Suggests: DiagrammeR, DiagrammeRsvg, dbplyr, fansi, knitr,
-        nycflights13, rmarkdown, RPostgres, rprojroot, RSQLite,
-        testthat (>= 2.1.0), tidyverse, withr
+Imports: backports, cli (>= 2.0.0), DBI, dplyr, ellipsis, glue, igraph,
+        lifecycle, magrittr, memoise, methods, pillar, purrr, rlang (>=
+        0.4.0), tibble, tidyr (>= 1.0.0), tidyselect (>= 1.0.0), vctrs
+        (>= 0.2.0)
+Suggests: brio, crayon, DiagrammeR, DiagrammeRsvg, dbplyr, digest,
+        fansi, keyring, knitr, nycflights13, odbc, rmarkdown, RMariaDB,
+        RPostgres, rprojroot, RSQLite, testthat (>= 2.1.0), tidyverse,
+        withr
 VignetteBuilder: knitr
 RdMacros: lifecycle
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 NeedsCompilation: no
-Packaged: 2020-03-04 17:19:24 UTC; kirill
+Packaged: 2020-05-04 09:54:50 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Darko Bergant [aut],
@@ -53,4 +54,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph]
 Maintainer: Kirill Müller <krlmlr+r@mailbox.org>
 Repository: CRAN
-Date/Publication: 2020-03-12 17:30:02 UTC
+Date/Publication: 2020-05-04 11:20:02 UTC

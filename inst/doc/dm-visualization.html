@@ -11,17 +11,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-03-04" />
+<meta name="date" content="2020-05-04" />
 
-<title>Visualizing ‘dm’ objects</title>
+<title>Visualizing dm objects</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -31,14 +31,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -47,9 +49,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -298,8 +300,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Visualizing ‘dm’ objects</h1>
-<h4 class="date">2020-03-04</h4>
+<h1 class="title toc-ignore">Visualizing dm objects</h1>
+<h4 class="date">2020-05-04</h4>
 
 
 
@@ -311,10 +313,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><code>dm_get_available_colors()</code></li>
 </ol>
 <p>We use the prepared example <code>dm</code> object <code>dm_nycflights13(cycle = TRUE)</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(dm)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">flights_dm_w_many_keys &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>(<span class="dt">color =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">flights_dm_w_many_keys</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>flights_dm_w_many_keys &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>(<span class="dt">color =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>flights_dm_w_many_keys</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  &lt;environment: R_GlobalEnv&gt;
 #&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
@@ -324,7 +326,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; Foreign keys: 3
 </span></CODE></PRE>
 <p>The schema is drawn with <code>dm_draw()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">dm_draw</span>(flights_dm_w_many_keys)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">dm_draw</span>(flights_dm_w_many_keys)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -406,237 +408,237 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </svg>
 
 <p>You can use colors to visually group your tables into families to reflect their logical grouping. The available colors are either hexcoded colors or the standard R color names. The function <code>dm_get_available_colors()</code> forwards to <code>grDevices::colors()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">dm_get_available_colors</span>()</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;   [1] &quot;default&quot;              &quot;white&quot;                &quot;aliceblue&quot;           </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;   [4] &quot;antiquewhite&quot;         &quot;antiquewhite1&quot;        &quot;antiquewhite2&quot;       </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;   [7] &quot;antiquewhite3&quot;        &quot;antiquewhite4&quot;        &quot;aquamarine&quot;          </span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt;  [10] &quot;aquamarine1&quot;          &quot;aquamarine2&quot;          &quot;aquamarine3&quot;         </span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;  [13] &quot;aquamarine4&quot;          &quot;azure&quot;                &quot;azure1&quot;              </span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;  [16] &quot;azure2&quot;               &quot;azure3&quot;               &quot;azure4&quot;              </span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  [19] &quot;beige&quot;                &quot;bisque&quot;               &quot;bisque1&quot;             </span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  [22] &quot;bisque2&quot;              &quot;bisque3&quot;              &quot;bisque4&quot;             </span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  [25] &quot;black&quot;                &quot;blanchedalmond&quot;       &quot;blue&quot;                </span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  [28] &quot;blue1&quot;                &quot;blue2&quot;                &quot;blue3&quot;               </span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  [31] &quot;blue4&quot;                &quot;blueviolet&quot;           &quot;brown&quot;               </span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;  [34] &quot;brown1&quot;               &quot;brown2&quot;               &quot;brown3&quot;              </span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;  [37] &quot;brown4&quot;               &quot;burlywood&quot;            &quot;burlywood1&quot;          </span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  [40] &quot;burlywood2&quot;           &quot;burlywood3&quot;           &quot;burlywood4&quot;          </span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;  [43] &quot;cadetblue&quot;            &quot;cadetblue1&quot;           &quot;cadetblue2&quot;          </span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;  [46] &quot;cadetblue3&quot;           &quot;cadetblue4&quot;           &quot;chartreuse&quot;          </span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;  [49] &quot;chartreuse1&quot;          &quot;chartreuse2&quot;          &quot;chartreuse3&quot;         </span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;  [52] &quot;chartreuse4&quot;          &quot;chocolate&quot;            &quot;chocolate1&quot;          </span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;  [55] &quot;chocolate2&quot;           &quot;chocolate3&quot;           &quot;chocolate4&quot;          </span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt;  [58] &quot;coral&quot;                &quot;coral1&quot;               &quot;coral2&quot;              </span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt;  [61] &quot;coral3&quot;               &quot;coral4&quot;               &quot;cornflowerblue&quot;      </span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt;  [64] &quot;cornsilk&quot;             &quot;cornsilk1&quot;            &quot;cornsilk2&quot;           </span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt;  [67] &quot;cornsilk3&quot;            &quot;cornsilk4&quot;            &quot;cyan&quot;                </span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt;  [70] &quot;cyan1&quot;                &quot;cyan2&quot;                &quot;cyan3&quot;               </span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt;  [73] &quot;cyan4&quot;                &quot;darkblue&quot;             &quot;darkcyan&quot;            </span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt;  [76] &quot;darkgoldenrod&quot;        &quot;darkgoldenrod1&quot;       &quot;darkgoldenrod2&quot;      </span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt;  [79] &quot;darkgoldenrod3&quot;       &quot;darkgoldenrod4&quot;       &quot;darkgray&quot;            </span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt;  [82] &quot;darkgreen&quot;            &quot;darkgrey&quot;             &quot;darkkhaki&quot;           </span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt;  [85] &quot;darkmagenta&quot;          &quot;darkolivegreen&quot;       &quot;darkolivegreen1&quot;     </span></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">#&gt;  [88] &quot;darkolivegreen2&quot;      &quot;darkolivegreen3&quot;      &quot;darkolivegreen4&quot;     </span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt;  [91] &quot;darkorange&quot;           &quot;darkorange1&quot;          &quot;darkorange2&quot;         </span></a>
-<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt;  [94] &quot;darkorange3&quot;          &quot;darkorange4&quot;          &quot;darkorchid&quot;          </span></a>
-<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt;  [97] &quot;darkorchid1&quot;          &quot;darkorchid2&quot;          &quot;darkorchid3&quot;         </span></a>
-<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt; [100] &quot;darkorchid4&quot;          &quot;darkred&quot;              &quot;darksalmon&quot;          </span></a>
-<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; [103] &quot;darkseagreen&quot;         &quot;darkseagreen1&quot;        &quot;darkseagreen2&quot;       </span></a>
-<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt; [106] &quot;darkseagreen3&quot;        &quot;darkseagreen4&quot;        &quot;darkslateblue&quot;       </span></a>
-<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt; [109] &quot;darkslategray&quot;        &quot;darkslategray1&quot;       &quot;darkslategray2&quot;      </span></a>
-<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt; [112] &quot;darkslategray3&quot;       &quot;darkslategray4&quot;       &quot;darkslategrey&quot;       </span></a>
-<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt; [115] &quot;darkturquoise&quot;        &quot;darkviolet&quot;           &quot;deeppink&quot;            </span></a>
-<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; [118] &quot;deeppink1&quot;            &quot;deeppink2&quot;            &quot;deeppink3&quot;           </span></a>
-<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt; [121] &quot;deeppink4&quot;            &quot;deepskyblue&quot;          &quot;deepskyblue1&quot;        </span></a>
-<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt; [124] &quot;deepskyblue2&quot;         &quot;deepskyblue3&quot;         &quot;deepskyblue4&quot;        </span></a>
-<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; [127] &quot;dimgray&quot;              &quot;dimgrey&quot;              &quot;dodgerblue&quot;          </span></a>
-<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">#&gt; [130] &quot;dodgerblue1&quot;          &quot;dodgerblue2&quot;          &quot;dodgerblue3&quot;         </span></a>
-<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">#&gt; [133] &quot;dodgerblue4&quot;          &quot;firebrick&quot;            &quot;firebrick1&quot;          </span></a>
-<a class="sourceLine" id="cb3-47" data-line-number="47"><span class="co">#&gt; [136] &quot;firebrick2&quot;           &quot;firebrick3&quot;           &quot;firebrick4&quot;          </span></a>
-<a class="sourceLine" id="cb3-48" data-line-number="48"><span class="co">#&gt; [139] &quot;floralwhite&quot;          &quot;forestgreen&quot;          &quot;gainsboro&quot;           </span></a>
-<a class="sourceLine" id="cb3-49" data-line-number="49"><span class="co">#&gt; [142] &quot;ghostwhite&quot;           &quot;gold&quot;                 &quot;gold1&quot;               </span></a>
-<a class="sourceLine" id="cb3-50" data-line-number="50"><span class="co">#&gt; [145] &quot;gold2&quot;                &quot;gold3&quot;                &quot;gold4&quot;               </span></a>
-<a class="sourceLine" id="cb3-51" data-line-number="51"><span class="co">#&gt; [148] &quot;goldenrod&quot;            &quot;goldenrod1&quot;           &quot;goldenrod2&quot;          </span></a>
-<a class="sourceLine" id="cb3-52" data-line-number="52"><span class="co">#&gt; [151] &quot;goldenrod3&quot;           &quot;goldenrod4&quot;           &quot;gray&quot;                </span></a>
-<a class="sourceLine" id="cb3-53" data-line-number="53"><span class="co">#&gt; [154] &quot;gray0&quot;                &quot;gray1&quot;                &quot;gray2&quot;               </span></a>
-<a class="sourceLine" id="cb3-54" data-line-number="54"><span class="co">#&gt; [157] &quot;gray3&quot;                &quot;gray4&quot;                &quot;gray5&quot;               </span></a>
-<a class="sourceLine" id="cb3-55" data-line-number="55"><span class="co">#&gt; [160] &quot;gray6&quot;                &quot;gray7&quot;                &quot;gray8&quot;               </span></a>
-<a class="sourceLine" id="cb3-56" data-line-number="56"><span class="co">#&gt; [163] &quot;gray9&quot;                &quot;gray10&quot;               &quot;gray11&quot;              </span></a>
-<a class="sourceLine" id="cb3-57" data-line-number="57"><span class="co">#&gt; [166] &quot;gray12&quot;               &quot;gray13&quot;               &quot;gray14&quot;              </span></a>
-<a class="sourceLine" id="cb3-58" data-line-number="58"><span class="co">#&gt; [169] &quot;gray15&quot;               &quot;gray16&quot;               &quot;gray17&quot;              </span></a>
-<a class="sourceLine" id="cb3-59" data-line-number="59"><span class="co">#&gt; [172] &quot;gray18&quot;               &quot;gray19&quot;               &quot;gray20&quot;              </span></a>
-<a class="sourceLine" id="cb3-60" data-line-number="60"><span class="co">#&gt; [175] &quot;gray21&quot;               &quot;gray22&quot;               &quot;gray23&quot;              </span></a>
-<a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">#&gt; [178] &quot;gray24&quot;               &quot;gray25&quot;               &quot;gray26&quot;              </span></a>
-<a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">#&gt; [181] &quot;gray27&quot;               &quot;gray28&quot;               &quot;gray29&quot;              </span></a>
-<a class="sourceLine" id="cb3-63" data-line-number="63"><span class="co">#&gt; [184] &quot;gray30&quot;               &quot;gray31&quot;               &quot;gray32&quot;              </span></a>
-<a class="sourceLine" id="cb3-64" data-line-number="64"><span class="co">#&gt; [187] &quot;gray33&quot;               &quot;gray34&quot;               &quot;gray35&quot;              </span></a>
-<a class="sourceLine" id="cb3-65" data-line-number="65"><span class="co">#&gt; [190] &quot;gray36&quot;               &quot;gray37&quot;               &quot;gray38&quot;              </span></a>
-<a class="sourceLine" id="cb3-66" data-line-number="66"><span class="co">#&gt; [193] &quot;gray39&quot;               &quot;gray40&quot;               &quot;gray41&quot;              </span></a>
-<a class="sourceLine" id="cb3-67" data-line-number="67"><span class="co">#&gt; [196] &quot;gray42&quot;               &quot;gray43&quot;               &quot;gray44&quot;              </span></a>
-<a class="sourceLine" id="cb3-68" data-line-number="68"><span class="co">#&gt; [199] &quot;gray45&quot;               &quot;gray46&quot;               &quot;gray47&quot;              </span></a>
-<a class="sourceLine" id="cb3-69" data-line-number="69"><span class="co">#&gt; [202] &quot;gray48&quot;               &quot;gray49&quot;               &quot;gray50&quot;              </span></a>
-<a class="sourceLine" id="cb3-70" data-line-number="70"><span class="co">#&gt; [205] &quot;gray51&quot;               &quot;gray52&quot;               &quot;gray53&quot;              </span></a>
-<a class="sourceLine" id="cb3-71" data-line-number="71"><span class="co">#&gt; [208] &quot;gray54&quot;               &quot;gray55&quot;               &quot;gray56&quot;              </span></a>
-<a class="sourceLine" id="cb3-72" data-line-number="72"><span class="co">#&gt; [211] &quot;gray57&quot;               &quot;gray58&quot;               &quot;gray59&quot;              </span></a>
-<a class="sourceLine" id="cb3-73" data-line-number="73"><span class="co">#&gt; [214] &quot;gray60&quot;               &quot;gray61&quot;               &quot;gray62&quot;              </span></a>
-<a class="sourceLine" id="cb3-74" data-line-number="74"><span class="co">#&gt; [217] &quot;gray63&quot;               &quot;gray64&quot;               &quot;gray65&quot;              </span></a>
-<a class="sourceLine" id="cb3-75" data-line-number="75"><span class="co">#&gt; [220] &quot;gray66&quot;               &quot;gray67&quot;               &quot;gray68&quot;              </span></a>
-<a class="sourceLine" id="cb3-76" data-line-number="76"><span class="co">#&gt; [223] &quot;gray69&quot;               &quot;gray70&quot;               &quot;gray71&quot;              </span></a>
-<a class="sourceLine" id="cb3-77" data-line-number="77"><span class="co">#&gt; [226] &quot;gray72&quot;               &quot;gray73&quot;               &quot;gray74&quot;              </span></a>
-<a class="sourceLine" id="cb3-78" data-line-number="78"><span class="co">#&gt; [229] &quot;gray75&quot;               &quot;gray76&quot;               &quot;gray77&quot;              </span></a>
-<a class="sourceLine" id="cb3-79" data-line-number="79"><span class="co">#&gt; [232] &quot;gray78&quot;               &quot;gray79&quot;               &quot;gray80&quot;              </span></a>
-<a class="sourceLine" id="cb3-80" data-line-number="80"><span class="co">#&gt; [235] &quot;gray81&quot;               &quot;gray82&quot;               &quot;gray83&quot;              </span></a>
-<a class="sourceLine" id="cb3-81" data-line-number="81"><span class="co">#&gt; [238] &quot;gray84&quot;               &quot;gray85&quot;               &quot;gray86&quot;              </span></a>
-<a class="sourceLine" id="cb3-82" data-line-number="82"><span class="co">#&gt; [241] &quot;gray87&quot;               &quot;gray88&quot;               &quot;gray89&quot;              </span></a>
-<a class="sourceLine" id="cb3-83" data-line-number="83"><span class="co">#&gt; [244] &quot;gray90&quot;               &quot;gray91&quot;               &quot;gray92&quot;              </span></a>
-<a class="sourceLine" id="cb3-84" data-line-number="84"><span class="co">#&gt; [247] &quot;gray93&quot;               &quot;gray94&quot;               &quot;gray95&quot;              </span></a>
-<a class="sourceLine" id="cb3-85" data-line-number="85"><span class="co">#&gt; [250] &quot;gray96&quot;               &quot;gray97&quot;               &quot;gray98&quot;              </span></a>
-<a class="sourceLine" id="cb3-86" data-line-number="86"><span class="co">#&gt; [253] &quot;gray99&quot;               &quot;gray100&quot;              &quot;green&quot;               </span></a>
-<a class="sourceLine" id="cb3-87" data-line-number="87"><span class="co">#&gt; [256] &quot;green1&quot;               &quot;green2&quot;               &quot;green3&quot;              </span></a>
-<a class="sourceLine" id="cb3-88" data-line-number="88"><span class="co">#&gt; [259] &quot;green4&quot;               &quot;greenyellow&quot;          &quot;grey&quot;                </span></a>
-<a class="sourceLine" id="cb3-89" data-line-number="89"><span class="co">#&gt; [262] &quot;grey0&quot;                &quot;grey1&quot;                &quot;grey2&quot;               </span></a>
-<a class="sourceLine" id="cb3-90" data-line-number="90"><span class="co">#&gt; [265] &quot;grey3&quot;                &quot;grey4&quot;                &quot;grey5&quot;               </span></a>
-<a class="sourceLine" id="cb3-91" data-line-number="91"><span class="co">#&gt; [268] &quot;grey6&quot;                &quot;grey7&quot;                &quot;grey8&quot;               </span></a>
-<a class="sourceLine" id="cb3-92" data-line-number="92"><span class="co">#&gt; [271] &quot;grey9&quot;                &quot;grey10&quot;               &quot;grey11&quot;              </span></a>
-<a class="sourceLine" id="cb3-93" data-line-number="93"><span class="co">#&gt; [274] &quot;grey12&quot;               &quot;grey13&quot;               &quot;grey14&quot;              </span></a>
-<a class="sourceLine" id="cb3-94" data-line-number="94"><span class="co">#&gt; [277] &quot;grey15&quot;               &quot;grey16&quot;               &quot;grey17&quot;              </span></a>
-<a class="sourceLine" id="cb3-95" data-line-number="95"><span class="co">#&gt; [280] &quot;grey18&quot;               &quot;grey19&quot;               &quot;grey20&quot;              </span></a>
-<a class="sourceLine" id="cb3-96" data-line-number="96"><span class="co">#&gt; [283] &quot;grey21&quot;               &quot;grey22&quot;               &quot;grey23&quot;              </span></a>
-<a class="sourceLine" id="cb3-97" data-line-number="97"><span class="co">#&gt; [286] &quot;grey24&quot;               &quot;grey25&quot;               &quot;grey26&quot;              </span></a>
-<a class="sourceLine" id="cb3-98" data-line-number="98"><span class="co">#&gt; [289] &quot;grey27&quot;               &quot;grey28&quot;               &quot;grey29&quot;              </span></a>
-<a class="sourceLine" id="cb3-99" data-line-number="99"><span class="co">#&gt; [292] &quot;grey30&quot;               &quot;grey31&quot;               &quot;grey32&quot;              </span></a>
-<a class="sourceLine" id="cb3-100" data-line-number="100"><span class="co">#&gt; [295] &quot;grey33&quot;               &quot;grey34&quot;               &quot;grey35&quot;              </span></a>
-<a class="sourceLine" id="cb3-101" data-line-number="101"><span class="co">#&gt; [298] &quot;grey36&quot;               &quot;grey37&quot;               &quot;grey38&quot;              </span></a>
-<a class="sourceLine" id="cb3-102" data-line-number="102"><span class="co">#&gt; [301] &quot;grey39&quot;               &quot;grey40&quot;               &quot;grey41&quot;              </span></a>
-<a class="sourceLine" id="cb3-103" data-line-number="103"><span class="co">#&gt; [304] &quot;grey42&quot;               &quot;grey43&quot;               &quot;grey44&quot;              </span></a>
-<a class="sourceLine" id="cb3-104" data-line-number="104"><span class="co">#&gt; [307] &quot;grey45&quot;               &quot;grey46&quot;               &quot;grey47&quot;              </span></a>
-<a class="sourceLine" id="cb3-105" data-line-number="105"><span class="co">#&gt; [310] &quot;grey48&quot;               &quot;grey49&quot;               &quot;grey50&quot;              </span></a>
-<a class="sourceLine" id="cb3-106" data-line-number="106"><span class="co">#&gt; [313] &quot;grey51&quot;               &quot;grey52&quot;               &quot;grey53&quot;              </span></a>
-<a class="sourceLine" id="cb3-107" data-line-number="107"><span class="co">#&gt; [316] &quot;grey54&quot;               &quot;grey55&quot;               &quot;grey56&quot;              </span></a>
-<a class="sourceLine" id="cb3-108" data-line-number="108"><span class="co">#&gt; [319] &quot;grey57&quot;               &quot;grey58&quot;               &quot;grey59&quot;              </span></a>
-<a class="sourceLine" id="cb3-109" data-line-number="109"><span class="co">#&gt; [322] &quot;grey60&quot;               &quot;grey61&quot;               &quot;grey62&quot;              </span></a>
-<a class="sourceLine" id="cb3-110" data-line-number="110"><span class="co">#&gt; [325] &quot;grey63&quot;               &quot;grey64&quot;               &quot;grey65&quot;              </span></a>
-<a class="sourceLine" id="cb3-111" data-line-number="111"><span class="co">#&gt; [328] &quot;grey66&quot;               &quot;grey67&quot;               &quot;grey68&quot;              </span></a>
-<a class="sourceLine" id="cb3-112" data-line-number="112"><span class="co">#&gt; [331] &quot;grey69&quot;               &quot;grey70&quot;               &quot;grey71&quot;              </span></a>
-<a class="sourceLine" id="cb3-113" data-line-number="113"><span class="co">#&gt; [334] &quot;grey72&quot;               &quot;grey73&quot;               &quot;grey74&quot;              </span></a>
-<a class="sourceLine" id="cb3-114" data-line-number="114"><span class="co">#&gt; [337] &quot;grey75&quot;               &quot;grey76&quot;               &quot;grey77&quot;              </span></a>
-<a class="sourceLine" id="cb3-115" data-line-number="115"><span class="co">#&gt; [340] &quot;grey78&quot;               &quot;grey79&quot;               &quot;grey80&quot;              </span></a>
-<a class="sourceLine" id="cb3-116" data-line-number="116"><span class="co">#&gt; [343] &quot;grey81&quot;               &quot;grey82&quot;               &quot;grey83&quot;              </span></a>
-<a class="sourceLine" id="cb3-117" data-line-number="117"><span class="co">#&gt; [346] &quot;grey84&quot;               &quot;grey85&quot;               &quot;grey86&quot;              </span></a>
-<a class="sourceLine" id="cb3-118" data-line-number="118"><span class="co">#&gt; [349] &quot;grey87&quot;               &quot;grey88&quot;               &quot;grey89&quot;              </span></a>
-<a class="sourceLine" id="cb3-119" data-line-number="119"><span class="co">#&gt; [352] &quot;grey90&quot;               &quot;grey91&quot;               &quot;grey92&quot;              </span></a>
-<a class="sourceLine" id="cb3-120" data-line-number="120"><span class="co">#&gt; [355] &quot;grey93&quot;               &quot;grey94&quot;               &quot;grey95&quot;              </span></a>
-<a class="sourceLine" id="cb3-121" data-line-number="121"><span class="co">#&gt; [358] &quot;grey96&quot;               &quot;grey97&quot;               &quot;grey98&quot;              </span></a>
-<a class="sourceLine" id="cb3-122" data-line-number="122"><span class="co">#&gt; [361] &quot;grey99&quot;               &quot;grey100&quot;              &quot;honeydew&quot;            </span></a>
-<a class="sourceLine" id="cb3-123" data-line-number="123"><span class="co">#&gt; [364] &quot;honeydew1&quot;            &quot;honeydew2&quot;            &quot;honeydew3&quot;           </span></a>
-<a class="sourceLine" id="cb3-124" data-line-number="124"><span class="co">#&gt; [367] &quot;honeydew4&quot;            &quot;hotpink&quot;              &quot;hotpink1&quot;            </span></a>
-<a class="sourceLine" id="cb3-125" data-line-number="125"><span class="co">#&gt; [370] &quot;hotpink2&quot;             &quot;hotpink3&quot;             &quot;hotpink4&quot;            </span></a>
-<a class="sourceLine" id="cb3-126" data-line-number="126"><span class="co">#&gt; [373] &quot;indianred&quot;            &quot;indianred1&quot;           &quot;indianred2&quot;          </span></a>
-<a class="sourceLine" id="cb3-127" data-line-number="127"><span class="co">#&gt; [376] &quot;indianred3&quot;           &quot;indianred4&quot;           &quot;ivory&quot;               </span></a>
-<a class="sourceLine" id="cb3-128" data-line-number="128"><span class="co">#&gt; [379] &quot;ivory1&quot;               &quot;ivory2&quot;               &quot;ivory3&quot;              </span></a>
-<a class="sourceLine" id="cb3-129" data-line-number="129"><span class="co">#&gt; [382] &quot;ivory4&quot;               &quot;khaki&quot;                &quot;khaki1&quot;              </span></a>
-<a class="sourceLine" id="cb3-130" data-line-number="130"><span class="co">#&gt; [385] &quot;khaki2&quot;               &quot;khaki3&quot;               &quot;khaki4&quot;              </span></a>
-<a class="sourceLine" id="cb3-131" data-line-number="131"><span class="co">#&gt; [388] &quot;lavender&quot;             &quot;lavenderblush&quot;        &quot;lavenderblush1&quot;      </span></a>
-<a class="sourceLine" id="cb3-132" data-line-number="132"><span class="co">#&gt; [391] &quot;lavenderblush2&quot;       &quot;lavenderblush3&quot;       &quot;lavenderblush4&quot;      </span></a>
-<a class="sourceLine" id="cb3-133" data-line-number="133"><span class="co">#&gt; [394] &quot;lawngreen&quot;            &quot;lemonchiffon&quot;         &quot;lemonchiffon1&quot;       </span></a>
-<a class="sourceLine" id="cb3-134" data-line-number="134"><span class="co">#&gt; [397] &quot;lemonchiffon2&quot;        &quot;lemonchiffon3&quot;        &quot;lemonchiffon4&quot;       </span></a>
-<a class="sourceLine" id="cb3-135" data-line-number="135"><span class="co">#&gt; [400] &quot;lightblue&quot;            &quot;lightblue1&quot;           &quot;lightblue2&quot;          </span></a>
-<a class="sourceLine" id="cb3-136" data-line-number="136"><span class="co">#&gt; [403] &quot;lightblue3&quot;           &quot;lightblue4&quot;           &quot;lightcoral&quot;          </span></a>
-<a class="sourceLine" id="cb3-137" data-line-number="137"><span class="co">#&gt; [406] &quot;lightcyan&quot;            &quot;lightcyan1&quot;           &quot;lightcyan2&quot;          </span></a>
-<a class="sourceLine" id="cb3-138" data-line-number="138"><span class="co">#&gt; [409] &quot;lightcyan3&quot;           &quot;lightcyan4&quot;           &quot;lightgoldenrod&quot;      </span></a>
-<a class="sourceLine" id="cb3-139" data-line-number="139"><span class="co">#&gt; [412] &quot;lightgoldenrod1&quot;      &quot;lightgoldenrod2&quot;      &quot;lightgoldenrod3&quot;     </span></a>
-<a class="sourceLine" id="cb3-140" data-line-number="140"><span class="co">#&gt; [415] &quot;lightgoldenrod4&quot;      &quot;lightgoldenrodyellow&quot; &quot;lightgray&quot;           </span></a>
-<a class="sourceLine" id="cb3-141" data-line-number="141"><span class="co">#&gt; [418] &quot;lightgreen&quot;           &quot;lightgrey&quot;            &quot;lightpink&quot;           </span></a>
-<a class="sourceLine" id="cb3-142" data-line-number="142"><span class="co">#&gt; [421] &quot;lightpink1&quot;           &quot;lightpink2&quot;           &quot;lightpink3&quot;          </span></a>
-<a class="sourceLine" id="cb3-143" data-line-number="143"><span class="co">#&gt; [424] &quot;lightpink4&quot;           &quot;lightsalmon&quot;          &quot;lightsalmon1&quot;        </span></a>
-<a class="sourceLine" id="cb3-144" data-line-number="144"><span class="co">#&gt; [427] &quot;lightsalmon2&quot;         &quot;lightsalmon3&quot;         &quot;lightsalmon4&quot;        </span></a>
-<a class="sourceLine" id="cb3-145" data-line-number="145"><span class="co">#&gt; [430] &quot;lightseagreen&quot;        &quot;lightskyblue&quot;         &quot;lightskyblue1&quot;       </span></a>
-<a class="sourceLine" id="cb3-146" data-line-number="146"><span class="co">#&gt; [433] &quot;lightskyblue2&quot;        &quot;lightskyblue3&quot;        &quot;lightskyblue4&quot;       </span></a>
-<a class="sourceLine" id="cb3-147" data-line-number="147"><span class="co">#&gt; [436] &quot;lightslateblue&quot;       &quot;lightslategray&quot;       &quot;lightslategrey&quot;      </span></a>
-<a class="sourceLine" id="cb3-148" data-line-number="148"><span class="co">#&gt; [439] &quot;lightsteelblue&quot;       &quot;lightsteelblue1&quot;      &quot;lightsteelblue2&quot;     </span></a>
-<a class="sourceLine" id="cb3-149" data-line-number="149"><span class="co">#&gt; [442] &quot;lightsteelblue3&quot;      &quot;lightsteelblue4&quot;      &quot;lightyellow&quot;         </span></a>
-<a class="sourceLine" id="cb3-150" data-line-number="150"><span class="co">#&gt; [445] &quot;lightyellow1&quot;         &quot;lightyellow2&quot;         &quot;lightyellow3&quot;        </span></a>
-<a class="sourceLine" id="cb3-151" data-line-number="151"><span class="co">#&gt; [448] &quot;lightyellow4&quot;         &quot;limegreen&quot;            &quot;linen&quot;               </span></a>
-<a class="sourceLine" id="cb3-152" data-line-number="152"><span class="co">#&gt; [451] &quot;magenta&quot;              &quot;magenta1&quot;             &quot;magenta2&quot;            </span></a>
-<a class="sourceLine" id="cb3-153" data-line-number="153"><span class="co">#&gt; [454] &quot;magenta3&quot;             &quot;magenta4&quot;             &quot;maroon&quot;              </span></a>
-<a class="sourceLine" id="cb3-154" data-line-number="154"><span class="co">#&gt; [457] &quot;maroon1&quot;              &quot;maroon2&quot;              &quot;maroon3&quot;             </span></a>
-<a class="sourceLine" id="cb3-155" data-line-number="155"><span class="co">#&gt; [460] &quot;maroon4&quot;              &quot;mediumaquamarine&quot;     &quot;mediumblue&quot;          </span></a>
-<a class="sourceLine" id="cb3-156" data-line-number="156"><span class="co">#&gt; [463] &quot;mediumorchid&quot;         &quot;mediumorchid1&quot;        &quot;mediumorchid2&quot;       </span></a>
-<a class="sourceLine" id="cb3-157" data-line-number="157"><span class="co">#&gt; [466] &quot;mediumorchid3&quot;        &quot;mediumorchid4&quot;        &quot;mediumpurple&quot;        </span></a>
-<a class="sourceLine" id="cb3-158" data-line-number="158"><span class="co">#&gt; [469] &quot;mediumpurple1&quot;        &quot;mediumpurple2&quot;        &quot;mediumpurple3&quot;       </span></a>
-<a class="sourceLine" id="cb3-159" data-line-number="159"><span class="co">#&gt; [472] &quot;mediumpurple4&quot;        &quot;mediumseagreen&quot;       &quot;mediumslateblue&quot;     </span></a>
-<a class="sourceLine" id="cb3-160" data-line-number="160"><span class="co">#&gt; [475] &quot;mediumspringgreen&quot;    &quot;mediumturquoise&quot;      &quot;mediumvioletred&quot;     </span></a>
-<a class="sourceLine" id="cb3-161" data-line-number="161"><span class="co">#&gt; [478] &quot;midnightblue&quot;         &quot;mintcream&quot;            &quot;mistyrose&quot;           </span></a>
-<a class="sourceLine" id="cb3-162" data-line-number="162"><span class="co">#&gt; [481] &quot;mistyrose1&quot;           &quot;mistyrose2&quot;           &quot;mistyrose3&quot;          </span></a>
-<a class="sourceLine" id="cb3-163" data-line-number="163"><span class="co">#&gt; [484] &quot;mistyrose4&quot;           &quot;moccasin&quot;             &quot;navajowhite&quot;         </span></a>
-<a class="sourceLine" id="cb3-164" data-line-number="164"><span class="co">#&gt; [487] &quot;navajowhite1&quot;         &quot;navajowhite2&quot;         &quot;navajowhite3&quot;        </span></a>
-<a class="sourceLine" id="cb3-165" data-line-number="165"><span class="co">#&gt; [490] &quot;navajowhite4&quot;         &quot;navy&quot;                 &quot;navyblue&quot;            </span></a>
-<a class="sourceLine" id="cb3-166" data-line-number="166"><span class="co">#&gt; [493] &quot;oldlace&quot;              &quot;olivedrab&quot;            &quot;olivedrab1&quot;          </span></a>
-<a class="sourceLine" id="cb3-167" data-line-number="167"><span class="co">#&gt; [496] &quot;olivedrab2&quot;           &quot;olivedrab3&quot;           &quot;olivedrab4&quot;          </span></a>
-<a class="sourceLine" id="cb3-168" data-line-number="168"><span class="co">#&gt; [499] &quot;orange&quot;               &quot;orange1&quot;              &quot;orange2&quot;             </span></a>
-<a class="sourceLine" id="cb3-169" data-line-number="169"><span class="co">#&gt; [502] &quot;orange3&quot;              &quot;orange4&quot;              &quot;orangered&quot;           </span></a>
-<a class="sourceLine" id="cb3-170" data-line-number="170"><span class="co">#&gt; [505] &quot;orangered1&quot;           &quot;orangered2&quot;           &quot;orangered3&quot;          </span></a>
-<a class="sourceLine" id="cb3-171" data-line-number="171"><span class="co">#&gt; [508] &quot;orangered4&quot;           &quot;orchid&quot;               &quot;orchid1&quot;             </span></a>
-<a class="sourceLine" id="cb3-172" data-line-number="172"><span class="co">#&gt; [511] &quot;orchid2&quot;              &quot;orchid3&quot;              &quot;orchid4&quot;             </span></a>
-<a class="sourceLine" id="cb3-173" data-line-number="173"><span class="co">#&gt; [514] &quot;palegoldenrod&quot;        &quot;palegreen&quot;            &quot;palegreen1&quot;          </span></a>
-<a class="sourceLine" id="cb3-174" data-line-number="174"><span class="co">#&gt; [517] &quot;palegreen2&quot;           &quot;palegreen3&quot;           &quot;palegreen4&quot;          </span></a>
-<a class="sourceLine" id="cb3-175" data-line-number="175"><span class="co">#&gt; [520] &quot;paleturquoise&quot;        &quot;paleturquoise1&quot;       &quot;paleturquoise2&quot;      </span></a>
-<a class="sourceLine" id="cb3-176" data-line-number="176"><span class="co">#&gt; [523] &quot;paleturquoise3&quot;       &quot;paleturquoise4&quot;       &quot;palevioletred&quot;       </span></a>
-<a class="sourceLine" id="cb3-177" data-line-number="177"><span class="co">#&gt; [526] &quot;palevioletred1&quot;       &quot;palevioletred2&quot;       &quot;palevioletred3&quot;      </span></a>
-<a class="sourceLine" id="cb3-178" data-line-number="178"><span class="co">#&gt; [529] &quot;palevioletred4&quot;       &quot;papayawhip&quot;           &quot;peachpuff&quot;           </span></a>
-<a class="sourceLine" id="cb3-179" data-line-number="179"><span class="co">#&gt; [532] &quot;peachpuff1&quot;           &quot;peachpuff2&quot;           &quot;peachpuff3&quot;          </span></a>
-<a class="sourceLine" id="cb3-180" data-line-number="180"><span class="co">#&gt; [535] &quot;peachpuff4&quot;           &quot;peru&quot;                 &quot;pink&quot;                </span></a>
-<a class="sourceLine" id="cb3-181" data-line-number="181"><span class="co">#&gt; [538] &quot;pink1&quot;                &quot;pink2&quot;                &quot;pink3&quot;               </span></a>
-<a class="sourceLine" id="cb3-182" data-line-number="182"><span class="co">#&gt; [541] &quot;pink4&quot;                &quot;plum&quot;                 &quot;plum1&quot;               </span></a>
-<a class="sourceLine" id="cb3-183" data-line-number="183"><span class="co">#&gt; [544] &quot;plum2&quot;                &quot;plum3&quot;                &quot;plum4&quot;               </span></a>
-<a class="sourceLine" id="cb3-184" data-line-number="184"><span class="co">#&gt; [547] &quot;powderblue&quot;           &quot;purple&quot;               &quot;purple1&quot;             </span></a>
-<a class="sourceLine" id="cb3-185" data-line-number="185"><span class="co">#&gt; [550] &quot;purple2&quot;              &quot;purple3&quot;              &quot;purple4&quot;             </span></a>
-<a class="sourceLine" id="cb3-186" data-line-number="186"><span class="co">#&gt; [553] &quot;red&quot;                  &quot;red1&quot;                 &quot;red2&quot;                </span></a>
-<a class="sourceLine" id="cb3-187" data-line-number="187"><span class="co">#&gt; [556] &quot;red3&quot;                 &quot;red4&quot;                 &quot;rosybrown&quot;           </span></a>
-<a class="sourceLine" id="cb3-188" data-line-number="188"><span class="co">#&gt; [559] &quot;rosybrown1&quot;           &quot;rosybrown2&quot;           &quot;rosybrown3&quot;          </span></a>
-<a class="sourceLine" id="cb3-189" data-line-number="189"><span class="co">#&gt; [562] &quot;rosybrown4&quot;           &quot;royalblue&quot;            &quot;royalblue1&quot;          </span></a>
-<a class="sourceLine" id="cb3-190" data-line-number="190"><span class="co">#&gt; [565] &quot;royalblue2&quot;           &quot;royalblue3&quot;           &quot;royalblue4&quot;          </span></a>
-<a class="sourceLine" id="cb3-191" data-line-number="191"><span class="co">#&gt; [568] &quot;saddlebrown&quot;          &quot;salmon&quot;               &quot;salmon1&quot;             </span></a>
-<a class="sourceLine" id="cb3-192" data-line-number="192"><span class="co">#&gt; [571] &quot;salmon2&quot;              &quot;salmon3&quot;              &quot;salmon4&quot;             </span></a>
-<a class="sourceLine" id="cb3-193" data-line-number="193"><span class="co">#&gt; [574] &quot;sandybrown&quot;           &quot;seagreen&quot;             &quot;seagreen1&quot;           </span></a>
-<a class="sourceLine" id="cb3-194" data-line-number="194"><span class="co">#&gt; [577] &quot;seagreen2&quot;            &quot;seagreen3&quot;            &quot;seagreen4&quot;           </span></a>
-<a class="sourceLine" id="cb3-195" data-line-number="195"><span class="co">#&gt; [580] &quot;seashell&quot;             &quot;seashell1&quot;            &quot;seashell2&quot;           </span></a>
-<a class="sourceLine" id="cb3-196" data-line-number="196"><span class="co">#&gt; [583] &quot;seashell3&quot;            &quot;seashell4&quot;            &quot;sienna&quot;              </span></a>
-<a class="sourceLine" id="cb3-197" data-line-number="197"><span class="co">#&gt; [586] &quot;sienna1&quot;              &quot;sienna2&quot;              &quot;sienna3&quot;             </span></a>
-<a class="sourceLine" id="cb3-198" data-line-number="198"><span class="co">#&gt; [589] &quot;sienna4&quot;              &quot;skyblue&quot;              &quot;skyblue1&quot;            </span></a>
-<a class="sourceLine" id="cb3-199" data-line-number="199"><span class="co">#&gt; [592] &quot;skyblue2&quot;             &quot;skyblue3&quot;             &quot;skyblue4&quot;            </span></a>
-<a class="sourceLine" id="cb3-200" data-line-number="200"><span class="co">#&gt; [595] &quot;slateblue&quot;            &quot;slateblue1&quot;           &quot;slateblue2&quot;          </span></a>
-<a class="sourceLine" id="cb3-201" data-line-number="201"><span class="co">#&gt; [598] &quot;slateblue3&quot;           &quot;slateblue4&quot;           &quot;slategray&quot;           </span></a>
-<a class="sourceLine" id="cb3-202" data-line-number="202"><span class="co">#&gt; [601] &quot;slategray1&quot;           &quot;slategray2&quot;           &quot;slategray3&quot;          </span></a>
-<a class="sourceLine" id="cb3-203" data-line-number="203"><span class="co">#&gt; [604] &quot;slategray4&quot;           &quot;slategrey&quot;            &quot;snow&quot;                </span></a>
-<a class="sourceLine" id="cb3-204" data-line-number="204"><span class="co">#&gt; [607] &quot;snow1&quot;                &quot;snow2&quot;                &quot;snow3&quot;               </span></a>
-<a class="sourceLine" id="cb3-205" data-line-number="205"><span class="co">#&gt; [610] &quot;snow4&quot;                &quot;springgreen&quot;          &quot;springgreen1&quot;        </span></a>
-<a class="sourceLine" id="cb3-206" data-line-number="206"><span class="co">#&gt; [613] &quot;springgreen2&quot;         &quot;springgreen3&quot;         &quot;springgreen4&quot;        </span></a>
-<a class="sourceLine" id="cb3-207" data-line-number="207"><span class="co">#&gt; [616] &quot;steelblue&quot;            &quot;steelblue1&quot;           &quot;steelblue2&quot;          </span></a>
-<a class="sourceLine" id="cb3-208" data-line-number="208"><span class="co">#&gt; [619] &quot;steelblue3&quot;           &quot;steelblue4&quot;           &quot;tan&quot;                 </span></a>
-<a class="sourceLine" id="cb3-209" data-line-number="209"><span class="co">#&gt; [622] &quot;tan1&quot;                 &quot;tan2&quot;                 &quot;tan3&quot;                </span></a>
-<a class="sourceLine" id="cb3-210" data-line-number="210"><span class="co">#&gt; [625] &quot;tan4&quot;                 &quot;thistle&quot;              &quot;thistle1&quot;            </span></a>
-<a class="sourceLine" id="cb3-211" data-line-number="211"><span class="co">#&gt; [628] &quot;thistle2&quot;             &quot;thistle3&quot;             &quot;thistle4&quot;            </span></a>
-<a class="sourceLine" id="cb3-212" data-line-number="212"><span class="co">#&gt; [631] &quot;tomato&quot;               &quot;tomato1&quot;              &quot;tomato2&quot;             </span></a>
-<a class="sourceLine" id="cb3-213" data-line-number="213"><span class="co">#&gt; [634] &quot;tomato3&quot;              &quot;tomato4&quot;              &quot;turquoise&quot;           </span></a>
-<a class="sourceLine" id="cb3-214" data-line-number="214"><span class="co">#&gt; [637] &quot;turquoise1&quot;           &quot;turquoise2&quot;           &quot;turquoise3&quot;          </span></a>
-<a class="sourceLine" id="cb3-215" data-line-number="215"><span class="co">#&gt; [640] &quot;turquoise4&quot;           &quot;violet&quot;               &quot;violetred&quot;           </span></a>
-<a class="sourceLine" id="cb3-216" data-line-number="216"><span class="co">#&gt; [643] &quot;violetred1&quot;           &quot;violetred2&quot;           &quot;violetred3&quot;          </span></a>
-<a class="sourceLine" id="cb3-217" data-line-number="217"><span class="co">#&gt; [646] &quot;violetred4&quot;           &quot;wheat&quot;                &quot;wheat1&quot;              </span></a>
-<a class="sourceLine" id="cb3-218" data-line-number="218"><span class="co">#&gt; [649] &quot;wheat2&quot;               &quot;wheat3&quot;               &quot;wheat4&quot;              </span></a>
-<a class="sourceLine" id="cb3-219" data-line-number="219"><span class="co">#&gt; [652] &quot;whitesmoke&quot;           &quot;yellow&quot;               &quot;yellow1&quot;             </span></a>
-<a class="sourceLine" id="cb3-220" data-line-number="220"><span class="co">#&gt; [655] &quot;yellow2&quot;              &quot;yellow3&quot;              &quot;yellow4&quot;             </span></a>
-<a class="sourceLine" id="cb3-221" data-line-number="221"><span class="co">#&gt; [658] &quot;yellowgreen&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">dm_get_available_colors</span>()</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt;   [1] &quot;default&quot;              &quot;white&quot;                &quot;aliceblue&quot;           </span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt;   [4] &quot;antiquewhite&quot;         &quot;antiquewhite1&quot;        &quot;antiquewhite2&quot;       </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt;   [7] &quot;antiquewhite3&quot;        &quot;antiquewhite4&quot;        &quot;aquamarine&quot;          </span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt;  [10] &quot;aquamarine1&quot;          &quot;aquamarine2&quot;          &quot;aquamarine3&quot;         </span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt;  [13] &quot;aquamarine4&quot;          &quot;azure&quot;                &quot;azure1&quot;              </span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt;  [16] &quot;azure2&quot;               &quot;azure3&quot;               &quot;azure4&quot;              </span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt;  [19] &quot;beige&quot;                &quot;bisque&quot;               &quot;bisque1&quot;             </span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt;  [22] &quot;bisque2&quot;              &quot;bisque3&quot;              &quot;bisque4&quot;             </span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt;  [25] &quot;black&quot;                &quot;blanchedalmond&quot;       &quot;blue&quot;                </span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt;  [28] &quot;blue1&quot;                &quot;blue2&quot;                &quot;blue3&quot;               </span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt;  [31] &quot;blue4&quot;                &quot;blueviolet&quot;           &quot;brown&quot;               </span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt;  [34] &quot;brown1&quot;               &quot;brown2&quot;               &quot;brown3&quot;              </span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt;  [37] &quot;brown4&quot;               &quot;burlywood&quot;            &quot;burlywood1&quot;          </span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt;  [40] &quot;burlywood2&quot;           &quot;burlywood3&quot;           &quot;burlywood4&quot;          </span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt;  [43] &quot;cadetblue&quot;            &quot;cadetblue1&quot;           &quot;cadetblue2&quot;          </span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt;  [46] &quot;cadetblue3&quot;           &quot;cadetblue4&quot;           &quot;chartreuse&quot;          </span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt;  [49] &quot;chartreuse1&quot;          &quot;chartreuse2&quot;          &quot;chartreuse3&quot;         </span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt;  [52] &quot;chartreuse4&quot;          &quot;chocolate&quot;            &quot;chocolate1&quot;          </span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt;  [55] &quot;chocolate2&quot;           &quot;chocolate3&quot;           &quot;chocolate4&quot;          </span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt;  [58] &quot;coral&quot;                &quot;coral1&quot;               &quot;coral2&quot;              </span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt;  [61] &quot;coral3&quot;               &quot;coral4&quot;               &quot;cornflowerblue&quot;      </span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt;  [64] &quot;cornsilk&quot;             &quot;cornsilk1&quot;            &quot;cornsilk2&quot;           </span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt;  [67] &quot;cornsilk3&quot;            &quot;cornsilk4&quot;            &quot;cyan&quot;                </span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="co">#&gt;  [70] &quot;cyan1&quot;                &quot;cyan2&quot;                &quot;cyan3&quot;               </span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co">#&gt;  [73] &quot;cyan4&quot;                &quot;darkblue&quot;             &quot;darkcyan&quot;            </span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="co">#&gt;  [76] &quot;darkgoldenrod&quot;        &quot;darkgoldenrod1&quot;       &quot;darkgoldenrod2&quot;      </span></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="co">#&gt;  [79] &quot;darkgoldenrod3&quot;       &quot;darkgoldenrod4&quot;       &quot;darkgray&quot;            </span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co">#&gt;  [82] &quot;darkgreen&quot;            &quot;darkgrey&quot;             &quot;darkkhaki&quot;           </span></span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="co">#&gt;  [85] &quot;darkmagenta&quot;          &quot;darkolivegreen&quot;       &quot;darkolivegreen1&quot;     </span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="co">#&gt;  [88] &quot;darkolivegreen2&quot;      &quot;darkolivegreen3&quot;      &quot;darkolivegreen4&quot;     </span></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="co">#&gt;  [91] &quot;darkorange&quot;           &quot;darkorange1&quot;          &quot;darkorange2&quot;         </span></span>
+<span id="cb3-33"><a href="#cb3-33"></a><span class="co">#&gt;  [94] &quot;darkorange3&quot;          &quot;darkorange4&quot;          &quot;darkorchid&quot;          </span></span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="co">#&gt;  [97] &quot;darkorchid1&quot;          &quot;darkorchid2&quot;          &quot;darkorchid3&quot;         </span></span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="co">#&gt; [100] &quot;darkorchid4&quot;          &quot;darkred&quot;              &quot;darksalmon&quot;          </span></span>
+<span id="cb3-36"><a href="#cb3-36"></a><span class="co">#&gt; [103] &quot;darkseagreen&quot;         &quot;darkseagreen1&quot;        &quot;darkseagreen2&quot;       </span></span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="co">#&gt; [106] &quot;darkseagreen3&quot;        &quot;darkseagreen4&quot;        &quot;darkslateblue&quot;       </span></span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="co">#&gt; [109] &quot;darkslategray&quot;        &quot;darkslategray1&quot;       &quot;darkslategray2&quot;      </span></span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="co">#&gt; [112] &quot;darkslategray3&quot;       &quot;darkslategray4&quot;       &quot;darkslategrey&quot;       </span></span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="co">#&gt; [115] &quot;darkturquoise&quot;        &quot;darkviolet&quot;           &quot;deeppink&quot;            </span></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="co">#&gt; [118] &quot;deeppink1&quot;            &quot;deeppink2&quot;            &quot;deeppink3&quot;           </span></span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="co">#&gt; [121] &quot;deeppink4&quot;            &quot;deepskyblue&quot;          &quot;deepskyblue1&quot;        </span></span>
+<span id="cb3-43"><a href="#cb3-43"></a><span class="co">#&gt; [124] &quot;deepskyblue2&quot;         &quot;deepskyblue3&quot;         &quot;deepskyblue4&quot;        </span></span>
+<span id="cb3-44"><a href="#cb3-44"></a><span class="co">#&gt; [127] &quot;dimgray&quot;              &quot;dimgrey&quot;              &quot;dodgerblue&quot;          </span></span>
+<span id="cb3-45"><a href="#cb3-45"></a><span class="co">#&gt; [130] &quot;dodgerblue1&quot;          &quot;dodgerblue2&quot;          &quot;dodgerblue3&quot;         </span></span>
+<span id="cb3-46"><a href="#cb3-46"></a><span class="co">#&gt; [133] &quot;dodgerblue4&quot;          &quot;firebrick&quot;            &quot;firebrick1&quot;          </span></span>
+<span id="cb3-47"><a href="#cb3-47"></a><span class="co">#&gt; [136] &quot;firebrick2&quot;           &quot;firebrick3&quot;           &quot;firebrick4&quot;          </span></span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="co">#&gt; [139] &quot;floralwhite&quot;          &quot;forestgreen&quot;          &quot;gainsboro&quot;           </span></span>
+<span id="cb3-49"><a href="#cb3-49"></a><span class="co">#&gt; [142] &quot;ghostwhite&quot;           &quot;gold&quot;                 &quot;gold1&quot;               </span></span>
+<span id="cb3-50"><a href="#cb3-50"></a><span class="co">#&gt; [145] &quot;gold2&quot;                &quot;gold3&quot;                &quot;gold4&quot;               </span></span>
+<span id="cb3-51"><a href="#cb3-51"></a><span class="co">#&gt; [148] &quot;goldenrod&quot;            &quot;goldenrod1&quot;           &quot;goldenrod2&quot;          </span></span>
+<span id="cb3-52"><a href="#cb3-52"></a><span class="co">#&gt; [151] &quot;goldenrod3&quot;           &quot;goldenrod4&quot;           &quot;gray&quot;                </span></span>
+<span id="cb3-53"><a href="#cb3-53"></a><span class="co">#&gt; [154] &quot;gray0&quot;                &quot;gray1&quot;                &quot;gray2&quot;               </span></span>
+<span id="cb3-54"><a href="#cb3-54"></a><span class="co">#&gt; [157] &quot;gray3&quot;                &quot;gray4&quot;                &quot;gray5&quot;               </span></span>
+<span id="cb3-55"><a href="#cb3-55"></a><span class="co">#&gt; [160] &quot;gray6&quot;                &quot;gray7&quot;                &quot;gray8&quot;               </span></span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="co">#&gt; [163] &quot;gray9&quot;                &quot;gray10&quot;               &quot;gray11&quot;              </span></span>
+<span id="cb3-57"><a href="#cb3-57"></a><span class="co">#&gt; [166] &quot;gray12&quot;               &quot;gray13&quot;               &quot;gray14&quot;              </span></span>
+<span id="cb3-58"><a href="#cb3-58"></a><span class="co">#&gt; [169] &quot;gray15&quot;               &quot;gray16&quot;               &quot;gray17&quot;              </span></span>
+<span id="cb3-59"><a href="#cb3-59"></a><span class="co">#&gt; [172] &quot;gray18&quot;               &quot;gray19&quot;               &quot;gray20&quot;              </span></span>
+<span id="cb3-60"><a href="#cb3-60"></a><span class="co">#&gt; [175] &quot;gray21&quot;               &quot;gray22&quot;               &quot;gray23&quot;              </span></span>
+<span id="cb3-61"><a href="#cb3-61"></a><span class="co">#&gt; [178] &quot;gray24&quot;               &quot;gray25&quot;               &quot;gray26&quot;              </span></span>
+<span id="cb3-62"><a href="#cb3-62"></a><span class="co">#&gt; [181] &quot;gray27&quot;               &quot;gray28&quot;               &quot;gray29&quot;              </span></span>
+<span id="cb3-63"><a href="#cb3-63"></a><span class="co">#&gt; [184] &quot;gray30&quot;               &quot;gray31&quot;               &quot;gray32&quot;              </span></span>
+<span id="cb3-64"><a href="#cb3-64"></a><span class="co">#&gt; [187] &quot;gray33&quot;               &quot;gray34&quot;               &quot;gray35&quot;              </span></span>
+<span id="cb3-65"><a href="#cb3-65"></a><span class="co">#&gt; [190] &quot;gray36&quot;               &quot;gray37&quot;               &quot;gray38&quot;              </span></span>
+<span id="cb3-66"><a href="#cb3-66"></a><span class="co">#&gt; [193] &quot;gray39&quot;               &quot;gray40&quot;               &quot;gray41&quot;              </span></span>
+<span id="cb3-67"><a href="#cb3-67"></a><span class="co">#&gt; [196] &quot;gray42&quot;               &quot;gray43&quot;               &quot;gray44&quot;              </span></span>
+<span id="cb3-68"><a href="#cb3-68"></a><span class="co">#&gt; [199] &quot;gray45&quot;               &quot;gray46&quot;               &quot;gray47&quot;              </span></span>
+<span id="cb3-69"><a href="#cb3-69"></a><span class="co">#&gt; [202] &quot;gray48&quot;               &quot;gray49&quot;               &quot;gray50&quot;              </span></span>
+<span id="cb3-70"><a href="#cb3-70"></a><span class="co">#&gt; [205] &quot;gray51&quot;               &quot;gray52&quot;               &quot;gray53&quot;              </span></span>
+<span id="cb3-71"><a href="#cb3-71"></a><span class="co">#&gt; [208] &quot;gray54&quot;               &quot;gray55&quot;               &quot;gray56&quot;              </span></span>
+<span id="cb3-72"><a href="#cb3-72"></a><span class="co">#&gt; [211] &quot;gray57&quot;               &quot;gray58&quot;               &quot;gray59&quot;              </span></span>
+<span id="cb3-73"><a href="#cb3-73"></a><span class="co">#&gt; [214] &quot;gray60&quot;               &quot;gray61&quot;               &quot;gray62&quot;              </span></span>
+<span id="cb3-74"><a href="#cb3-74"></a><span class="co">#&gt; [217] &quot;gray63&quot;               &quot;gray64&quot;               &quot;gray65&quot;              </span></span>
+<span id="cb3-75"><a href="#cb3-75"></a><span class="co">#&gt; [220] &quot;gray66&quot;               &quot;gray67&quot;               &quot;gray68&quot;              </span></span>
+<span id="cb3-76"><a href="#cb3-76"></a><span class="co">#&gt; [223] &quot;gray69&quot;               &quot;gray70&quot;               &quot;gray71&quot;              </span></span>
+<span id="cb3-77"><a href="#cb3-77"></a><span class="co">#&gt; [226] &quot;gray72&quot;               &quot;gray73&quot;               &quot;gray74&quot;              </span></span>
+<span id="cb3-78"><a href="#cb3-78"></a><span class="co">#&gt; [229] &quot;gray75&quot;               &quot;gray76&quot;               &quot;gray77&quot;              </span></span>
+<span id="cb3-79"><a href="#cb3-79"></a><span class="co">#&gt; [232] &quot;gray78&quot;               &quot;gray79&quot;               &quot;gray80&quot;              </span></span>
+<span id="cb3-80"><a href="#cb3-80"></a><span class="co">#&gt; [235] &quot;gray81&quot;               &quot;gray82&quot;               &quot;gray83&quot;              </span></span>
+<span id="cb3-81"><a href="#cb3-81"></a><span class="co">#&gt; [238] &quot;gray84&quot;               &quot;gray85&quot;               &quot;gray86&quot;              </span></span>
+<span id="cb3-82"><a href="#cb3-82"></a><span class="co">#&gt; [241] &quot;gray87&quot;               &quot;gray88&quot;               &quot;gray89&quot;              </span></span>
+<span id="cb3-83"><a href="#cb3-83"></a><span class="co">#&gt; [244] &quot;gray90&quot;               &quot;gray91&quot;               &quot;gray92&quot;              </span></span>
+<span id="cb3-84"><a href="#cb3-84"></a><span class="co">#&gt; [247] &quot;gray93&quot;               &quot;gray94&quot;               &quot;gray95&quot;              </span></span>
+<span id="cb3-85"><a href="#cb3-85"></a><span class="co">#&gt; [250] &quot;gray96&quot;               &quot;gray97&quot;               &quot;gray98&quot;              </span></span>
+<span id="cb3-86"><a href="#cb3-86"></a><span class="co">#&gt; [253] &quot;gray99&quot;               &quot;gray100&quot;              &quot;green&quot;               </span></span>
+<span id="cb3-87"><a href="#cb3-87"></a><span class="co">#&gt; [256] &quot;green1&quot;               &quot;green2&quot;               &quot;green3&quot;              </span></span>
+<span id="cb3-88"><a href="#cb3-88"></a><span class="co">#&gt; [259] &quot;green4&quot;               &quot;greenyellow&quot;          &quot;grey&quot;                </span></span>
+<span id="cb3-89"><a href="#cb3-89"></a><span class="co">#&gt; [262] &quot;grey0&quot;                &quot;grey1&quot;                &quot;grey2&quot;               </span></span>
+<span id="cb3-90"><a href="#cb3-90"></a><span class="co">#&gt; [265] &quot;grey3&quot;                &quot;grey4&quot;                &quot;grey5&quot;               </span></span>
+<span id="cb3-91"><a href="#cb3-91"></a><span class="co">#&gt; [268] &quot;grey6&quot;                &quot;grey7&quot;                &quot;grey8&quot;               </span></span>
+<span id="cb3-92"><a href="#cb3-92"></a><span class="co">#&gt; [271] &quot;grey9&quot;                &quot;grey10&quot;               &quot;grey11&quot;              </span></span>
+<span id="cb3-93"><a href="#cb3-93"></a><span class="co">#&gt; [274] &quot;grey12&quot;               &quot;grey13&quot;               &quot;grey14&quot;              </span></span>
+<span id="cb3-94"><a href="#cb3-94"></a><span class="co">#&gt; [277] &quot;grey15&quot;               &quot;grey16&quot;               &quot;grey17&quot;              </span></span>
+<span id="cb3-95"><a href="#cb3-95"></a><span class="co">#&gt; [280] &quot;grey18&quot;               &quot;grey19&quot;               &quot;grey20&quot;              </span></span>
+<span id="cb3-96"><a href="#cb3-96"></a><span class="co">#&gt; [283] &quot;grey21&quot;               &quot;grey22&quot;               &quot;grey23&quot;              </span></span>
+<span id="cb3-97"><a href="#cb3-97"></a><span class="co">#&gt; [286] &quot;grey24&quot;               &quot;grey25&quot;               &quot;grey26&quot;              </span></span>
+<span id="cb3-98"><a href="#cb3-98"></a><span class="co">#&gt; [289] &quot;grey27&quot;               &quot;grey28&quot;               &quot;grey29&quot;              </span></span>
+<span id="cb3-99"><a href="#cb3-99"></a><span class="co">#&gt; [292] &quot;grey30&quot;               &quot;grey31&quot;               &quot;grey32&quot;              </span></span>
+<span id="cb3-100"><a href="#cb3-100"></a><span class="co">#&gt; [295] &quot;grey33&quot;               &quot;grey34&quot;               &quot;grey35&quot;              </span></span>
+<span id="cb3-101"><a href="#cb3-101"></a><span class="co">#&gt; [298] &quot;grey36&quot;               &quot;grey37&quot;               &quot;grey38&quot;              </span></span>
+<span id="cb3-102"><a href="#cb3-102"></a><span class="co">#&gt; [301] &quot;grey39&quot;               &quot;grey40&quot;               &quot;grey41&quot;              </span></span>
+<span id="cb3-103"><a href="#cb3-103"></a><span class="co">#&gt; [304] &quot;grey42&quot;               &quot;grey43&quot;               &quot;grey44&quot;              </span></span>
+<span id="cb3-104"><a href="#cb3-104"></a><span class="co">#&gt; [307] &quot;grey45&quot;               &quot;grey46&quot;               &quot;grey47&quot;              </span></span>
+<span id="cb3-105"><a href="#cb3-105"></a><span class="co">#&gt; [310] &quot;grey48&quot;               &quot;grey49&quot;               &quot;grey50&quot;              </span></span>
+<span id="cb3-106"><a href="#cb3-106"></a><span class="co">#&gt; [313] &quot;grey51&quot;               &quot;grey52&quot;               &quot;grey53&quot;              </span></span>
+<span id="cb3-107"><a href="#cb3-107"></a><span class="co">#&gt; [316] &quot;grey54&quot;               &quot;grey55&quot;               &quot;grey56&quot;              </span></span>
+<span id="cb3-108"><a href="#cb3-108"></a><span class="co">#&gt; [319] &quot;grey57&quot;               &quot;grey58&quot;               &quot;grey59&quot;              </span></span>
+<span id="cb3-109"><a href="#cb3-109"></a><span class="co">#&gt; [322] &quot;grey60&quot;               &quot;grey61&quot;               &quot;grey62&quot;              </span></span>
+<span id="cb3-110"><a href="#cb3-110"></a><span class="co">#&gt; [325] &quot;grey63&quot;               &quot;grey64&quot;               &quot;grey65&quot;              </span></span>
+<span id="cb3-111"><a href="#cb3-111"></a><span class="co">#&gt; [328] &quot;grey66&quot;               &quot;grey67&quot;               &quot;grey68&quot;              </span></span>
+<span id="cb3-112"><a href="#cb3-112"></a><span class="co">#&gt; [331] &quot;grey69&quot;               &quot;grey70&quot;               &quot;grey71&quot;              </span></span>
+<span id="cb3-113"><a href="#cb3-113"></a><span class="co">#&gt; [334] &quot;grey72&quot;               &quot;grey73&quot;               &quot;grey74&quot;              </span></span>
+<span id="cb3-114"><a href="#cb3-114"></a><span class="co">#&gt; [337] &quot;grey75&quot;               &quot;grey76&quot;               &quot;grey77&quot;              </span></span>
+<span id="cb3-115"><a href="#cb3-115"></a><span class="co">#&gt; [340] &quot;grey78&quot;               &quot;grey79&quot;               &quot;grey80&quot;              </span></span>
+<span id="cb3-116"><a href="#cb3-116"></a><span class="co">#&gt; [343] &quot;grey81&quot;               &quot;grey82&quot;               &quot;grey83&quot;              </span></span>
+<span id="cb3-117"><a href="#cb3-117"></a><span class="co">#&gt; [346] &quot;grey84&quot;               &quot;grey85&quot;               &quot;grey86&quot;              </span></span>
+<span id="cb3-118"><a href="#cb3-118"></a><span class="co">#&gt; [349] &quot;grey87&quot;               &quot;grey88&quot;               &quot;grey89&quot;              </span></span>
+<span id="cb3-119"><a href="#cb3-119"></a><span class="co">#&gt; [352] &quot;grey90&quot;               &quot;grey91&quot;               &quot;grey92&quot;              </span></span>
+<span id="cb3-120"><a href="#cb3-120"></a><span class="co">#&gt; [355] &quot;grey93&quot;               &quot;grey94&quot;               &quot;grey95&quot;              </span></span>
+<span id="cb3-121"><a href="#cb3-121"></a><span class="co">#&gt; [358] &quot;grey96&quot;               &quot;grey97&quot;               &quot;grey98&quot;              </span></span>
+<span id="cb3-122"><a href="#cb3-122"></a><span class="co">#&gt; [361] &quot;grey99&quot;               &quot;grey100&quot;              &quot;honeydew&quot;            </span></span>
+<span id="cb3-123"><a href="#cb3-123"></a><span class="co">#&gt; [364] &quot;honeydew1&quot;            &quot;honeydew2&quot;            &quot;honeydew3&quot;           </span></span>
+<span id="cb3-124"><a href="#cb3-124"></a><span class="co">#&gt; [367] &quot;honeydew4&quot;            &quot;hotpink&quot;              &quot;hotpink1&quot;            </span></span>
+<span id="cb3-125"><a href="#cb3-125"></a><span class="co">#&gt; [370] &quot;hotpink2&quot;             &quot;hotpink3&quot;             &quot;hotpink4&quot;            </span></span>
+<span id="cb3-126"><a href="#cb3-126"></a><span class="co">#&gt; [373] &quot;indianred&quot;            &quot;indianred1&quot;           &quot;indianred2&quot;          </span></span>
+<span id="cb3-127"><a href="#cb3-127"></a><span class="co">#&gt; [376] &quot;indianred3&quot;           &quot;indianred4&quot;           &quot;ivory&quot;               </span></span>
+<span id="cb3-128"><a href="#cb3-128"></a><span class="co">#&gt; [379] &quot;ivory1&quot;               &quot;ivory2&quot;               &quot;ivory3&quot;              </span></span>
+<span id="cb3-129"><a href="#cb3-129"></a><span class="co">#&gt; [382] &quot;ivory4&quot;               &quot;khaki&quot;                &quot;khaki1&quot;              </span></span>
+<span id="cb3-130"><a href="#cb3-130"></a><span class="co">#&gt; [385] &quot;khaki2&quot;               &quot;khaki3&quot;               &quot;khaki4&quot;              </span></span>
+<span id="cb3-131"><a href="#cb3-131"></a><span class="co">#&gt; [388] &quot;lavender&quot;             &quot;lavenderblush&quot;        &quot;lavenderblush1&quot;      </span></span>
+<span id="cb3-132"><a href="#cb3-132"></a><span class="co">#&gt; [391] &quot;lavenderblush2&quot;       &quot;lavenderblush3&quot;       &quot;lavenderblush4&quot;      </span></span>
+<span id="cb3-133"><a href="#cb3-133"></a><span class="co">#&gt; [394] &quot;lawngreen&quot;            &quot;lemonchiffon&quot;         &quot;lemonchiffon1&quot;       </span></span>
+<span id="cb3-134"><a href="#cb3-134"></a><span class="co">#&gt; [397] &quot;lemonchiffon2&quot;        &quot;lemonchiffon3&quot;        &quot;lemonchiffon4&quot;       </span></span>
+<span id="cb3-135"><a href="#cb3-135"></a><span class="co">#&gt; [400] &quot;lightblue&quot;            &quot;lightblue1&quot;           &quot;lightblue2&quot;          </span></span>
+<span id="cb3-136"><a href="#cb3-136"></a><span class="co">#&gt; [403] &quot;lightblue3&quot;           &quot;lightblue4&quot;           &quot;lightcoral&quot;          </span></span>
+<span id="cb3-137"><a href="#cb3-137"></a><span class="co">#&gt; [406] &quot;lightcyan&quot;            &quot;lightcyan1&quot;           &quot;lightcyan2&quot;          </span></span>
+<span id="cb3-138"><a href="#cb3-138"></a><span class="co">#&gt; [409] &quot;lightcyan3&quot;           &quot;lightcyan4&quot;           &quot;lightgoldenrod&quot;      </span></span>
+<span id="cb3-139"><a href="#cb3-139"></a><span class="co">#&gt; [412] &quot;lightgoldenrod1&quot;      &quot;lightgoldenrod2&quot;      &quot;lightgoldenrod3&quot;     </span></span>
+<span id="cb3-140"><a href="#cb3-140"></a><span class="co">#&gt; [415] &quot;lightgoldenrod4&quot;      &quot;lightgoldenrodyellow&quot; &quot;lightgray&quot;           </span></span>
+<span id="cb3-141"><a href="#cb3-141"></a><span class="co">#&gt; [418] &quot;lightgreen&quot;           &quot;lightgrey&quot;            &quot;lightpink&quot;           </span></span>
+<span id="cb3-142"><a href="#cb3-142"></a><span class="co">#&gt; [421] &quot;lightpink1&quot;           &quot;lightpink2&quot;           &quot;lightpink3&quot;          </span></span>
+<span id="cb3-143"><a href="#cb3-143"></a><span class="co">#&gt; [424] &quot;lightpink4&quot;           &quot;lightsalmon&quot;          &quot;lightsalmon1&quot;        </span></span>
+<span id="cb3-144"><a href="#cb3-144"></a><span class="co">#&gt; [427] &quot;lightsalmon2&quot;         &quot;lightsalmon3&quot;         &quot;lightsalmon4&quot;        </span></span>
+<span id="cb3-145"><a href="#cb3-145"></a><span class="co">#&gt; [430] &quot;lightseagreen&quot;        &quot;lightskyblue&quot;         &quot;lightskyblue1&quot;       </span></span>
+<span id="cb3-146"><a href="#cb3-146"></a><span class="co">#&gt; [433] &quot;lightskyblue2&quot;        &quot;lightskyblue3&quot;        &quot;lightskyblue4&quot;       </span></span>
+<span id="cb3-147"><a href="#cb3-147"></a><span class="co">#&gt; [436] &quot;lightslateblue&quot;       &quot;lightslategray&quot;       &quot;lightslategrey&quot;      </span></span>
+<span id="cb3-148"><a href="#cb3-148"></a><span class="co">#&gt; [439] &quot;lightsteelblue&quot;       &quot;lightsteelblue1&quot;      &quot;lightsteelblue2&quot;     </span></span>
+<span id="cb3-149"><a href="#cb3-149"></a><span class="co">#&gt; [442] &quot;lightsteelblue3&quot;      &quot;lightsteelblue4&quot;      &quot;lightyellow&quot;         </span></span>
+<span id="cb3-150"><a href="#cb3-150"></a><span class="co">#&gt; [445] &quot;lightyellow1&quot;         &quot;lightyellow2&quot;         &quot;lightyellow3&quot;        </span></span>
+<span id="cb3-151"><a href="#cb3-151"></a><span class="co">#&gt; [448] &quot;lightyellow4&quot;         &quot;limegreen&quot;            &quot;linen&quot;               </span></span>
+<span id="cb3-152"><a href="#cb3-152"></a><span class="co">#&gt; [451] &quot;magenta&quot;              &quot;magenta1&quot;             &quot;magenta2&quot;            </span></span>
+<span id="cb3-153"><a href="#cb3-153"></a><span class="co">#&gt; [454] &quot;magenta3&quot;             &quot;magenta4&quot;             &quot;maroon&quot;              </span></span>
+<span id="cb3-154"><a href="#cb3-154"></a><span class="co">#&gt; [457] &quot;maroon1&quot;              &quot;maroon2&quot;              &quot;maroon3&quot;             </span></span>
+<span id="cb3-155"><a href="#cb3-155"></a><span class="co">#&gt; [460] &quot;maroon4&quot;              &quot;mediumaquamarine&quot;     &quot;mediumblue&quot;          </span></span>
+<span id="cb3-156"><a href="#cb3-156"></a><span class="co">#&gt; [463] &quot;mediumorchid&quot;         &quot;mediumorchid1&quot;        &quot;mediumorchid2&quot;       </span></span>
+<span id="cb3-157"><a href="#cb3-157"></a><span class="co">#&gt; [466] &quot;mediumorchid3&quot;        &quot;mediumorchid4&quot;        &quot;mediumpurple&quot;        </span></span>
+<span id="cb3-158"><a href="#cb3-158"></a><span class="co">#&gt; [469] &quot;mediumpurple1&quot;        &quot;mediumpurple2&quot;        &quot;mediumpurple3&quot;       </span></span>
+<span id="cb3-159"><a href="#cb3-159"></a><span class="co">#&gt; [472] &quot;mediumpurple4&quot;        &quot;mediumseagreen&quot;       &quot;mediumslateblue&quot;     </span></span>
+<span id="cb3-160"><a href="#cb3-160"></a><span class="co">#&gt; [475] &quot;mediumspringgreen&quot;    &quot;mediumturquoise&quot;      &quot;mediumvioletred&quot;     </span></span>
+<span id="cb3-161"><a href="#cb3-161"></a><span class="co">#&gt; [478] &quot;midnightblue&quot;         &quot;mintcream&quot;            &quot;mistyrose&quot;           </span></span>
+<span id="cb3-162"><a href="#cb3-162"></a><span class="co">#&gt; [481] &quot;mistyrose1&quot;           &quot;mistyrose2&quot;           &quot;mistyrose3&quot;          </span></span>
+<span id="cb3-163"><a href="#cb3-163"></a><span class="co">#&gt; [484] &quot;mistyrose4&quot;           &quot;moccasin&quot;             &quot;navajowhite&quot;         </span></span>
+<span id="cb3-164"><a href="#cb3-164"></a><span class="co">#&gt; [487] &quot;navajowhite1&quot;         &quot;navajowhite2&quot;         &quot;navajowhite3&quot;        </span></span>
+<span id="cb3-165"><a href="#cb3-165"></a><span class="co">#&gt; [490] &quot;navajowhite4&quot;         &quot;navy&quot;                 &quot;navyblue&quot;            </span></span>
+<span id="cb3-166"><a href="#cb3-166"></a><span class="co">#&gt; [493] &quot;oldlace&quot;              &quot;olivedrab&quot;            &quot;olivedrab1&quot;          </span></span>
+<span id="cb3-167"><a href="#cb3-167"></a><span class="co">#&gt; [496] &quot;olivedrab2&quot;           &quot;olivedrab3&quot;           &quot;olivedrab4&quot;          </span></span>
+<span id="cb3-168"><a href="#cb3-168"></a><span class="co">#&gt; [499] &quot;orange&quot;               &quot;orange1&quot;              &quot;orange2&quot;             </span></span>
+<span id="cb3-169"><a href="#cb3-169"></a><span class="co">#&gt; [502] &quot;orange3&quot;              &quot;orange4&quot;              &quot;orangered&quot;           </span></span>
+<span id="cb3-170"><a href="#cb3-170"></a><span class="co">#&gt; [505] &quot;orangered1&quot;           &quot;orangered2&quot;           &quot;orangered3&quot;          </span></span>
+<span id="cb3-171"><a href="#cb3-171"></a><span class="co">#&gt; [508] &quot;orangered4&quot;           &quot;orchid&quot;               &quot;orchid1&quot;             </span></span>
+<span id="cb3-172"><a href="#cb3-172"></a><span class="co">#&gt; [511] &quot;orchid2&quot;              &quot;orchid3&quot;              &quot;orchid4&quot;             </span></span>
+<span id="cb3-173"><a href="#cb3-173"></a><span class="co">#&gt; [514] &quot;palegoldenrod&quot;        &quot;palegreen&quot;            &quot;palegreen1&quot;          </span></span>
+<span id="cb3-174"><a href="#cb3-174"></a><span class="co">#&gt; [517] &quot;palegreen2&quot;           &quot;palegreen3&quot;           &quot;palegreen4&quot;          </span></span>
+<span id="cb3-175"><a href="#cb3-175"></a><span class="co">#&gt; [520] &quot;paleturquoise&quot;        &quot;paleturquoise1&quot;       &quot;paleturquoise2&quot;      </span></span>
+<span id="cb3-176"><a href="#cb3-176"></a><span class="co">#&gt; [523] &quot;paleturquoise3&quot;       &quot;paleturquoise4&quot;       &quot;palevioletred&quot;       </span></span>
+<span id="cb3-177"><a href="#cb3-177"></a><span class="co">#&gt; [526] &quot;palevioletred1&quot;       &quot;palevioletred2&quot;       &quot;palevioletred3&quot;      </span></span>
+<span id="cb3-178"><a href="#cb3-178"></a><span class="co">#&gt; [529] &quot;palevioletred4&quot;       &quot;papayawhip&quot;           &quot;peachpuff&quot;           </span></span>
+<span id="cb3-179"><a href="#cb3-179"></a><span class="co">#&gt; [532] &quot;peachpuff1&quot;           &quot;peachpuff2&quot;           &quot;peachpuff3&quot;          </span></span>
+<span id="cb3-180"><a href="#cb3-180"></a><span class="co">#&gt; [535] &quot;peachpuff4&quot;           &quot;peru&quot;                 &quot;pink&quot;                </span></span>
+<span id="cb3-181"><a href="#cb3-181"></a><span class="co">#&gt; [538] &quot;pink1&quot;                &quot;pink2&quot;                &quot;pink3&quot;               </span></span>
+<span id="cb3-182"><a href="#cb3-182"></a><span class="co">#&gt; [541] &quot;pink4&quot;                &quot;plum&quot;                 &quot;plum1&quot;               </span></span>
+<span id="cb3-183"><a href="#cb3-183"></a><span class="co">#&gt; [544] &quot;plum2&quot;                &quot;plum3&quot;                &quot;plum4&quot;               </span></span>
+<span id="cb3-184"><a href="#cb3-184"></a><span class="co">#&gt; [547] &quot;powderblue&quot;           &quot;purple&quot;               &quot;purple1&quot;             </span></span>
+<span id="cb3-185"><a href="#cb3-185"></a><span class="co">#&gt; [550] &quot;purple2&quot;              &quot;purple3&quot;              &quot;purple4&quot;             </span></span>
+<span id="cb3-186"><a href="#cb3-186"></a><span class="co">#&gt; [553] &quot;red&quot;                  &quot;red1&quot;                 &quot;red2&quot;                </span></span>
+<span id="cb3-187"><a href="#cb3-187"></a><span class="co">#&gt; [556] &quot;red3&quot;                 &quot;red4&quot;                 &quot;rosybrown&quot;           </span></span>
+<span id="cb3-188"><a href="#cb3-188"></a><span class="co">#&gt; [559] &quot;rosybrown1&quot;           &quot;rosybrown2&quot;           &quot;rosybrown3&quot;          </span></span>
+<span id="cb3-189"><a href="#cb3-189"></a><span class="co">#&gt; [562] &quot;rosybrown4&quot;           &quot;royalblue&quot;            &quot;royalblue1&quot;          </span></span>
+<span id="cb3-190"><a href="#cb3-190"></a><span class="co">#&gt; [565] &quot;royalblue2&quot;           &quot;royalblue3&quot;           &quot;royalblue4&quot;          </span></span>
+<span id="cb3-191"><a href="#cb3-191"></a><span class="co">#&gt; [568] &quot;saddlebrown&quot;          &quot;salmon&quot;               &quot;salmon1&quot;             </span></span>
+<span id="cb3-192"><a href="#cb3-192"></a><span class="co">#&gt; [571] &quot;salmon2&quot;              &quot;salmon3&quot;              &quot;salmon4&quot;             </span></span>
+<span id="cb3-193"><a href="#cb3-193"></a><span class="co">#&gt; [574] &quot;sandybrown&quot;           &quot;seagreen&quot;             &quot;seagreen1&quot;           </span></span>
+<span id="cb3-194"><a href="#cb3-194"></a><span class="co">#&gt; [577] &quot;seagreen2&quot;            &quot;seagreen3&quot;            &quot;seagreen4&quot;           </span></span>
+<span id="cb3-195"><a href="#cb3-195"></a><span class="co">#&gt; [580] &quot;seashell&quot;             &quot;seashell1&quot;            &quot;seashell2&quot;           </span></span>
+<span id="cb3-196"><a href="#cb3-196"></a><span class="co">#&gt; [583] &quot;seashell3&quot;            &quot;seashell4&quot;            &quot;sienna&quot;              </span></span>
+<span id="cb3-197"><a href="#cb3-197"></a><span class="co">#&gt; [586] &quot;sienna1&quot;              &quot;sienna2&quot;              &quot;sienna3&quot;             </span></span>
+<span id="cb3-198"><a href="#cb3-198"></a><span class="co">#&gt; [589] &quot;sienna4&quot;              &quot;skyblue&quot;              &quot;skyblue1&quot;            </span></span>
+<span id="cb3-199"><a href="#cb3-199"></a><span class="co">#&gt; [592] &quot;skyblue2&quot;             &quot;skyblue3&quot;             &quot;skyblue4&quot;            </span></span>
+<span id="cb3-200"><a href="#cb3-200"></a><span class="co">#&gt; [595] &quot;slateblue&quot;            &quot;slateblue1&quot;           &quot;slateblue2&quot;          </span></span>
+<span id="cb3-201"><a href="#cb3-201"></a><span class="co">#&gt; [598] &quot;slateblue3&quot;           &quot;slateblue4&quot;           &quot;slategray&quot;           </span></span>
+<span id="cb3-202"><a href="#cb3-202"></a><span class="co">#&gt; [601] &quot;slategray1&quot;           &quot;slategray2&quot;           &quot;slategray3&quot;          </span></span>
+<span id="cb3-203"><a href="#cb3-203"></a><span class="co">#&gt; [604] &quot;slategray4&quot;           &quot;slategrey&quot;            &quot;snow&quot;                </span></span>
+<span id="cb3-204"><a href="#cb3-204"></a><span class="co">#&gt; [607] &quot;snow1&quot;                &quot;snow2&quot;                &quot;snow3&quot;               </span></span>
+<span id="cb3-205"><a href="#cb3-205"></a><span class="co">#&gt; [610] &quot;snow4&quot;                &quot;springgreen&quot;          &quot;springgreen1&quot;        </span></span>
+<span id="cb3-206"><a href="#cb3-206"></a><span class="co">#&gt; [613] &quot;springgreen2&quot;         &quot;springgreen3&quot;         &quot;springgreen4&quot;        </span></span>
+<span id="cb3-207"><a href="#cb3-207"></a><span class="co">#&gt; [616] &quot;steelblue&quot;            &quot;steelblue1&quot;           &quot;steelblue2&quot;          </span></span>
+<span id="cb3-208"><a href="#cb3-208"></a><span class="co">#&gt; [619] &quot;steelblue3&quot;           &quot;steelblue4&quot;           &quot;tan&quot;                 </span></span>
+<span id="cb3-209"><a href="#cb3-209"></a><span class="co">#&gt; [622] &quot;tan1&quot;                 &quot;tan2&quot;                 &quot;tan3&quot;                </span></span>
+<span id="cb3-210"><a href="#cb3-210"></a><span class="co">#&gt; [625] &quot;tan4&quot;                 &quot;thistle&quot;              &quot;thistle1&quot;            </span></span>
+<span id="cb3-211"><a href="#cb3-211"></a><span class="co">#&gt; [628] &quot;thistle2&quot;             &quot;thistle3&quot;             &quot;thistle4&quot;            </span></span>
+<span id="cb3-212"><a href="#cb3-212"></a><span class="co">#&gt; [631] &quot;tomato&quot;               &quot;tomato1&quot;              &quot;tomato2&quot;             </span></span>
+<span id="cb3-213"><a href="#cb3-213"></a><span class="co">#&gt; [634] &quot;tomato3&quot;              &quot;tomato4&quot;              &quot;turquoise&quot;           </span></span>
+<span id="cb3-214"><a href="#cb3-214"></a><span class="co">#&gt; [637] &quot;turquoise1&quot;           &quot;turquoise2&quot;           &quot;turquoise3&quot;          </span></span>
+<span id="cb3-215"><a href="#cb3-215"></a><span class="co">#&gt; [640] &quot;turquoise4&quot;           &quot;violet&quot;               &quot;violetred&quot;           </span></span>
+<span id="cb3-216"><a href="#cb3-216"></a><span class="co">#&gt; [643] &quot;violetred1&quot;           &quot;violetred2&quot;           &quot;violetred3&quot;          </span></span>
+<span id="cb3-217"><a href="#cb3-217"></a><span class="co">#&gt; [646] &quot;violetred4&quot;           &quot;wheat&quot;                &quot;wheat1&quot;              </span></span>
+<span id="cb3-218"><a href="#cb3-218"></a><span class="co">#&gt; [649] &quot;wheat2&quot;               &quot;wheat3&quot;               &quot;wheat4&quot;              </span></span>
+<span id="cb3-219"><a href="#cb3-219"></a><span class="co">#&gt; [652] &quot;whitesmoke&quot;           &quot;yellow&quot;               &quot;yellow1&quot;             </span></span>
+<span id="cb3-220"><a href="#cb3-220"></a><span class="co">#&gt; [655] &quot;yellow2&quot;              &quot;yellow3&quot;              &quot;yellow4&quot;             </span></span>
+<span id="cb3-221"><a href="#cb3-221"></a><span class="co">#&gt; [658] &quot;yellowgreen&quot;</span></span></code></pre></div>
 <p>Colors are assigned with <code>dm_set_colors()</code> using syntax known in the {tidyverse} as {tidyselect}-syntax, here in the form: <code>color = table</code>. <code>select_helper</code> functions are supported. The result of <code>dm_set_colors()</code> is a <code>dm</code> object. The information about the color is stored together with the rest of the metadata.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">flights_dm_w_many_keys_and_colors &lt;-</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span>flights_dm_w_many_keys <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">dm_set_colors</span>(</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="dt">maroon4 =</span> flights,</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="dt">orange =</span> <span class="kw">starts_with</span>(<span class="st">&quot;air&quot;</span>),</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="st">&quot;#5986C4&quot;</span> =<span class="st"> </span>planes</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">  )</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>flights_dm_w_many_keys_and_colors &lt;-</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span>flights_dm_w_many_keys <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="st">  </span><span class="kw">dm_set_colors</span>(</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="dt">maroon4 =</span> flights,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="dt">orange =</span> <span class="kw">starts_with</span>(<span class="st">&quot;air&quot;</span>),</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="st">&quot;#5986C4&quot;</span> =<span class="st"> </span>planes</span>
+<span id="cb4-7"><a href="#cb4-7"></a>  )</span></code></pre></div>
 <p>Draw the schema with <code>dm_draw()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">dm_draw</span>(flights_dm_w_many_keys_and_colors)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">dm_draw</span>(flights_dm_w_many_keys_and_colors)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -656,7 +658,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="96.8969" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
 <polygon fill="#ffedcc" stroke="transparent" points="95,-121 95,-141 140,-141 140,-121 95,-121"></polygon>
 <text text-anchor="start" x="97" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="none" stroke="#aa6e00" points="93.5,-120 93.5,-162 140.5,-162 140.5,-120 93.5,-120"></polygon>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="93.5,-120 93.5,-162 140.5,-162 140.5,-120 93.5,-120"></polygon>
 </g>
 <!-- airports -->
 <g id="node2" class="node">
@@ -665,7 +667,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="95.6192" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
 <polygon fill="#ffedcc" stroke="transparent" points="94,-1 94,-21 140,-21 140,-1 94,-1"></polygon>
 <text text-anchor="start" x="96" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="none" stroke="#aa6e00" points="93,0 93,-42 141,-42 141,0 93,0"></polygon>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="93,0 93,-42 141,-42 141,0 93,0"></polygon>
 </g>
 <!-- flights -->
 <g id="node3" class="node">
@@ -678,7 +680,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="5.6115" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
 <polygon fill="#e7d1df" stroke="transparent" points="4,-41 4,-61 50,-61 50,-41 4,-41"></polygon>
 <text text-anchor="start" x="6" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
-<polygon fill="none" stroke="#5c1241" points="3,-40 3,-122 51,-122 51,-40 3,-40"></polygon>
+<polygon fill="none" stroke="#5c1241" stroke-opacity="0.666667" points="3,-40 3,-122 51,-122 51,-40 3,-40"></polygon>
 </g>
 <!-- flights&#45;&gt;airlines -->
 <g id="edge1" class="edge">
@@ -699,7 +701,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="99.1178" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">planes</text>
 <polygon fill="#dde6f3" stroke="transparent" points="94,-61 94,-81 140,-81 140,-61 94,-61"></polygon>
 <text text-anchor="start" x="95.6115" y="-67.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#3b5982" points="93,-60 93,-102 141,-102 141,-60 93,-60"></polygon>
+<polygon fill="none" stroke="#3b5982" stroke-opacity="0.666667" points="93,-60 93,-102 141,-102 141,-60 93,-60"></polygon>
 </g>
 <!-- flights&#45;&gt;planes -->
 <g id="edge3" class="edge">
@@ -718,12 +720,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </svg>
 
 <p>The colors can be queried with <code>dm_get_colors()</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">dm_get_colors</span>(flights_dm_w_many_keys_and_colors)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt;    #FFA500    #FFA500    #8B1C62    #5986C4       &lt;NA&gt; </span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; &quot;airlines&quot; &quot;airports&quot;  &quot;flights&quot;   &quot;planes&quot;  &quot;weather&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">dm_get_colors</span>(flights_dm_w_many_keys_and_colors)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt;  #FFA500FF  #FFA500FF  #8B1C62FF  #5986C4FF    default </span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; &quot;airlines&quot; &quot;airports&quot;  &quot;flights&quot;   &quot;planes&quot;  &quot;weather&quot;</span></span></code></pre></div>
 <p>See the documentation for <code>dm_draw()</code> for further options. One important argument is <code>view_type</code>. Besides the default <code>&quot;keys_only&quot;</code>, it accepts <code>&quot;all&quot;</code> to display all columns, and <code>&quot;title_only&quot;</code> to show only the title of the table.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">flights_dm_w_many_keys_and_colors <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_draw</span>(<span class="dt">view_type =</span> <span class="st">&quot;title_only&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>flights_dm_w_many_keys_and_colors <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">dm_draw</span>(<span class="dt">view_type =</span> <span class="st">&quot;title_only&quot;</span>)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -741,21 +743,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <title>airlines</title>
 <polygon fill="#ffa500" stroke="transparent" points="95,-116 95,-136 140,-136 140,-116 95,-116"></polygon>
 <text text-anchor="start" x="96.8969" y="-121.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
-<polygon fill="none" stroke="#aa6e00" points="93.5,-115 93.5,-137 140.5,-137 140.5,-115 93.5,-115"></polygon>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="93.5,-115 93.5,-137 140.5,-137 140.5,-115 93.5,-115"></polygon>
 </g>
 <!-- airports -->
 <g id="node2" class="node">
 <title>airports</title>
 <polygon fill="#ffa500" stroke="transparent" points="94,-62 94,-82 140,-82 140,-62 94,-62"></polygon>
 <text text-anchor="start" x="95.6192" y="-67.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
-<polygon fill="none" stroke="#aa6e00" points="93,-61 93,-83 141,-83 141,-61 93,-61"></polygon>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="93,-61 93,-83 141,-83 141,-61 93,-61"></polygon>
 </g>
 <!-- flights -->
 <g id="node3" class="node">
 <title>flights</title>
 <polygon fill="#8b1c62" stroke="transparent" points="8,-62 8,-82 47,-82 47,-62 8,-62"></polygon>
 <text text-anchor="start" x="9.6115" y="-67.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">flights</text>
-<polygon fill="none" stroke="#5c1241" points="6.5,-61 6.5,-83 47.5,-83 47.5,-61 6.5,-61"></polygon>
+<polygon fill="none" stroke="#5c1241" stroke-opacity="0.666667" points="6.5,-61 6.5,-83 47.5,-83 47.5,-61 6.5,-61"></polygon>
 </g>
 <!-- flights&#45;&gt;airlines -->
 <g id="edge1" class="edge">
@@ -774,7 +776,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <title>planes</title>
 <polygon fill="#5986c4" stroke="transparent" points="98,-8 98,-28 137,-28 137,-8 98,-8"></polygon>
 <text text-anchor="start" x="99.6178" y="-13.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">planes</text>
-<polygon fill="none" stroke="#3b5982" points="96.5,-7 96.5,-29 137.5,-29 137.5,-7 96.5,-7"></polygon>
+<polygon fill="none" stroke="#3b5982" stroke-opacity="0.666667" points="96.5,-7 96.5,-29 137.5,-29 137.5,-7 96.5,-7"></polygon>
 </g>
 <!-- flights&#45;&gt;planes -->
 <g id="edge3" class="edge">
@@ -793,9 +795,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </svg>
 
 <p>If you would like to visualize only a some of the tables, use <code>dm_select_tbl()</code> before drawing:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">flights_dm_w_many_keys_and_colors <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">dm_select_tbl</span>(flights, airports, planes) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">  </span><span class="kw">dm_draw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>flights_dm_w_many_keys_and_colors <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">dm_select_tbl</span>(flights, airports, planes) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -815,7 +817,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="95.6192" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
 <polygon fill="#ffedcc" stroke="transparent" points="94,-1 94,-21 140,-21 140,-1 94,-1"></polygon>
 <text text-anchor="start" x="96" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="none" stroke="#aa6e00" points="93,0 93,-42 141,-42 141,0 93,0"></polygon>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="93,0 93,-42 141,-42 141,0 93,0"></polygon>
 </g>
 <!-- flights -->
 <g id="node2" class="node">
@@ -826,7 +828,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="5.6115" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
 <polygon fill="#e7d1df" stroke="transparent" points="4,-21 4,-41 50,-41 50,-21 4,-21"></polygon>
 <text text-anchor="start" x="6" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
-<polygon fill="none" stroke="#5c1241" points="3,-20 3,-82 51,-82 51,-20 3,-20"></polygon>
+<polygon fill="none" stroke="#5c1241" stroke-opacity="0.666667" points="3,-20 3,-82 51,-82 51,-20 3,-20"></polygon>
 </g>
 <!-- flights&#45;&gt;airports -->
 <g id="edge1" class="edge">
@@ -841,7 +843,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <text text-anchor="start" x="99.1178" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">planes</text>
 <polygon fill="#dde6f3" stroke="transparent" points="94,-61 94,-81 140,-81 140,-61 94,-61"></polygon>
 <text text-anchor="start" x="95.6115" y="-67.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#3b5982" points="93,-60 93,-102 141,-102 141,-60 93,-60"></polygon>
+<polygon fill="none" stroke="#3b5982" stroke-opacity="0.666667" points="93,-60 93,-102 141,-102 141,-60 93,-60"></polygon>
 </g>
 <!-- flights&#45;&gt;planes -->
 <g id="edge2" class="edge">
@@ -855,7 +857,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>The code for the functions in this section is borrowed from the <a href="https://github.com/bergant/datamodelr">{datamodelr}</a> package.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>The code for the functions in this section is borrowed from the <a href="https://github.com/bergant/datamodelr">{datamodelr}</a> package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

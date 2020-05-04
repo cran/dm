@@ -4,7 +4,7 @@
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis build
-status](https://travis-ci.com/krlmlr/dm.svg?branch=master)](https://travis-ci.com/krlmlr/dm)
+status](https://travis-ci.org/krlmlr/dm.svg?branch=master)](https://travis-ci.org/krlmlr/dm)
 [![Codecov test
 coverage](https://codecov.io/gh/krlmlr/dm/branch/master/graph/badge.svg)](https://codecov.io/gh/krlmlr/dm?branch=master)
 [![CRAN
@@ -318,19 +318,18 @@ nycflights13_from_remote <- dm_learn_from_db(src_postgres)
 
 ## Installation
 
-The latest (development) version of {dm} can be installed from GitHub.
+The latest stable version of the {dm} package can be obtained from
+[CRAN](https://CRAN.R-project.org/package=dm) with the command
+
+``` r
+install.packages("dm")
+```
+
+The latest development version of {dm} can be installed from GitHub.
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("krlmlr/dm")
-```
-
-The {dm} package will also be made available on
-[CRAN](https://CRAN.R-project.org/package=dm), from where it can be
-installed with the command
-
-``` r
-install.packages("dm")
 ```
 
 ## More information

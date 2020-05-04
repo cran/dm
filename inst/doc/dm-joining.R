@@ -1,22 +1,9 @@
 ## ----setup, include = FALSE----------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-fansi::set_knit_hooks(knitr::knit_hooks)
-options(crayon.enabled = TRUE, width = 75, cli.width = 75)
-
-knit_print.grViz <- function(x, ...) {
-  x %>%
-    DiagrammeRsvg::export_svg() %>%
-    c("`````{=html}\n", ., "\n`````\n") %>%
-    knitr::asis_output()
-}
+source("setup/setup.R")
 
 ## ----message=FALSE, warning=FALSE----------------------------------------
 library(dm)
 library(tidyverse)
-library(nycflights13)
 
 ## ------------------------------------------------------------------------
 dm <- dm_nycflights13()
