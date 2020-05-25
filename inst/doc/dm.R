@@ -1,98 +1,74 @@
 ## ----setup, include = FALSE----------------------------------------------
 source("setup/setup.R")
 
-## ----message=FALSE-------------------------------------------------------
-library(tidyverse)
+## ----connect-------------------------------------------------------------
+library(RMariaDB)
+
+fin_db <- dbConnect(
+  MariaDB(),
+  username = 'guest',
+  password = 'relational',
+  dbname = 'Financial_ijs',
+  host = 'relational.fit.cvut.cz'
+)
+
+## ----load, message = FALSE-----------------------------------------------
 library(dm)
 
-## ----message=FALSE-------------------------------------------------------
-library(nycflights13)
+fin_dm <- dm_from_src(fin_db)
+fin_dm
 
-flights_dm <- dm(
-  flights,
-  airlines,
-  airports,
-  planes,
-  weather
-)
-flights_dm
+## ----names---------------------------------------------------------------
+names(fin_dm)
+fin_dm$loans
+dplyr::count(fin_dm$trans)
 
-## ------------------------------------------------------------------------
-names(dm_get_tables(flights_dm))
-dm_get_all_pks(flights_dm)
-dm_get_all_fks(flights_dm)
+## ----select--------------------------------------------------------------
+fin_dm_small <- fin_dm[c("loans", "accounts", "districts", "trans")]
 
-## ------------------------------------------------------------------------
-names(flights_dm)
-flights_dm$airports
+## ----keys----------------------------------------------------------------
+fin_dm_keys <-
+  fin_dm_small %>%
+  dm_add_pk(accounts, id) %>%
+  dm_add_pk(loans, id) %>%
+  dm_add_fk(loans, account_id, accounts) %>%
+  dm_add_pk(trans, id) %>%
+  dm_add_fk(trans, account_id, accounts) %>%
+  dm_add_pk(districts, id) %>%
+  dm_add_fk(accounts, district_id, districts)
 
-## ------------------------------------------------------------------------
-flights_dm_with_one_key <- 
-  flights_dm %>% 
-  dm_add_pk(airlines, carrier) %>% 
-  dm_add_fk(flights, carrier, airlines)
-
-## ------------------------------------------------------------------------
-flights_dm_with_one_key %>% 
+## ----visualize_keys------------------------------------------------------
+fin_dm_keys %>%
+  dm_set_colors(green = c(loans, accounts), darkblue = trans, grey = districts) %>%
   dm_draw()
 
-## ------------------------------------------------------------------------
-flights_dm_with_keys <- dm_nycflights13(cycle = TRUE)
-flights_dm_with_keys %>% 
-  dm_draw()
+## ----squash--------------------------------------------------------------
+fin_dm_keys %>%
+  dm_squash_to_tbl(loans)
 
-## ------------------------------------------------------------------------
-flights_dm_acyclic <- dm_nycflights13()
-flights_dm_acyclic %>% 
-  dm_draw()
+## ----model---------------------------------------------------------------
+loans_df <-
+  fin_dm_keys %>%
+  dm_squash_to_tbl(loans) %>%
+  select(id, amount, duration, A3) %>%
+  collect()
 
-## ------------------------------------------------------------------------
-us_flights_from_jfk_prepared <- 
-  flights_dm_acyclic %>%
-  dm_filter(airports, name == "John F Kennedy Intl") %>% 
-  dm_filter(airlines, name == "US Airways Inc.")
-us_flights_from_jfk_prepared
+model <- lm(amount ~ duration + A3, data = loans_df)
 
-## ------------------------------------------------------------------------
-us_flights_from_jfk <- dm_apply_filters(us_flights_from_jfk_prepared)
-us_flights_from_jfk %>% 
-  dm_get_tables() %>% 
-  map_int(nrow)
+model
 
-## ------------------------------------------------------------------------
-dm_apply_filters_to_tbl(us_flights_from_jfk, "planes")
+## ----zoom----------------------------------------------------------------
+fin_dm_total <-
+  fin_dm_keys %>%
+  dm_zoom_to(loans) %>%
+  group_by(account_id) %>%
+  summarize(total_amount = sum(amount, na.rm = TRUE)) %>%
+  ungroup() %>%
+  dm_insert_zoomed("total_loans")
 
-## ------------------------------------------------------------------------
-dm_apply_filters_to_tbl(us_flights_from_jfk, "planes") %>% 
-  count(model)
+fin_dm_total$total_loans
 
-## ----eval=FALSE----------------------------------------------------------
-#  flights %>%
-#    left_join(airports, by = c("origin" = "faa")) %>%
-#    filter(name == "John F Kennedy Intl") %>%
-#    left_join(airlines, by = "carrier") %>%
-#    filter(name.y == "US Airways Inc.") %>%
-#    semi_join(planes, ., by = "tailnum") %>%
-#    count(model)
-
-## ------------------------------------------------------------------------
-flights_dm_with_keys %>%
-  dm_join_to_tbl(airlines, flights, join = left_join)
-
-## ----eval=FALSE----------------------------------------------------------
-#  library(nycflights13)
-#  airlines %>%
-#    left_join(flights, by = "carrier")
-
-## ------------------------------------------------------------------------
-src_sqlite <- src_sqlite(":memory:", create = TRUE)
-src_sqlite
-flights_dm_with_keys_remote <- copy_dm_to(src_sqlite, flights_dm_with_keys)
-
-## ------------------------------------------------------------------------
-src_sqlite
-flights_dm_with_keys_remote
-
-## ----eval=FALSE----------------------------------------------------------
-#  flights_dm_from_remote <- dm_learn_from_db(src_sqlite)
+## ----constraints---------------------------------------------------------
+fin_dm_total %>%
+  dm_examine_constraints()
 

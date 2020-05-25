@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="James Wondrasek, Kirill Müller" />
+
+<meta name="date" content="2020-05-25" />
+
+<title>Create a dm object from a database</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Create a dm object from a database</h1>
+<h4 class="author">James Wondrasek, Kirill Müller</h4>
+<h4 class="date">2020-05-25</h4>
+
+
+
+<div id="working-with-databases" class="section level1">
+<h1>Working with databases</h1>
+<p>A dm object can be created from any database that has a {<a href="https://dbi.r-dbi.org/">DBI</a>} backend (<a href="https://github.com/r-dbi/backends">see list</a>). When a dm object is created it can either import all the tables in the database, the active schema or a limited set. For some RDBMS, such as Postgres and SQL Server, primary and foreign keys are also imported and do not have to be manually added afterwards.</p>
+<p>To demonstrate, we connect to a <a href="https://relational.fit.cvut.cz/">relational dataset repository</a> with a database server that is publicly accessible without registration. There is a <a href="https://relational.fit.cvut.cz/dataset/Financial">financial dataset</a> that contains loan data along with relevant account information and transactions. We chose this dataset because the relationships between <code>loan</code>, <code>account</code>, <code>transactions</code> tables are a good representation of databases that record real-world business transactions. The repository uses a MariaDB server for which {dm} does not currently import primary or foreign keys, so we will need to add them.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(RMariaDB)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>my_db &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="kw">MariaDB</span>(),</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">username =</span> <span class="st">&#39;guest&#39;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="dt">password =</span> <span class="st">&#39;relational&#39;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="dt">dbname =</span> <span class="st">&#39;Financial_ijs&#39;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="dt">host =</span> <span class="st">&#39;relational.fit.cvut.cz&#39;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>)</span></code></pre></div>
+<p>Creating a dm object takes a single call to <code>dm_from_src()</code> with the DBI connection object as its argument.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(dm)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>my_dm &lt;-<span class="st"> </span><span class="kw">dm_from_src</span>(my_db)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>my_dm</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (9 total)
+#&gt; Columns: 57
+#&gt; Primary keys: 0
+#&gt; Foreign keys: 0
+</span></CODE></PRE>
+<p>The components of the <code>my_dm</code> object are lazy tables powered by {<a href="https://dbplyr.tidyverse.org/">dbplyr</a>}. {dbplyr} translates the {<a href="https://dplyr.tidyverse.org/">dplyr</a>} grammar of data manipulation into queries the database server understands. Lazy tables defer downloading of table data until results are required for printing or local processing.</p>
+<div id="building-a-dm-from-a-subset-of-tables" class="section level2">
+<h2>Building a dm from a subset of tables</h2>
+<p>A dm can also be constructed from individual tables or views. This is useful for when you want to work with a subset of a database’s tables, perhaps from different schemas.</p>
+<p>Below we use the <code>tbl()</code> function from {dplyr} to extract two tables from the financial database. Then we create our dm by passing the tables in as arguments. Note that the tables arguments have to all be from the same source.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">dbListTables</span>(my_db)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] &quot;accounts&quot;  &quot;cards&quot;     &quot;clients&quot;   &quot;disps&quot;     &quot;districts&quot; &quot;loans&quot;    </span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; [7] &quot;orders&quot;    &quot;tkeys&quot;     &quot;trans&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">library</span>(dbplyr)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>loans &lt;-<span class="st"> </span><span class="kw">tbl</span>(my_db, <span class="st">&quot;loans&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a>accounts &lt;-<span class="st"> </span><span class="kw">tbl</span>(my_db, <span class="st">&quot;accounts&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>my_manual_dm &lt;-<span class="st"> </span><span class="kw">dm</span>(loans, accounts)</span>
+<span id="cb3-10"><a href="#cb3-10"></a>my_manual_dm</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `loans`, `accounts`
+#&gt; Columns: 11
+#&gt; Primary keys: 0
+#&gt; Foreign keys: 0
+</span></CODE></PRE>
+</div>
+<div id="define-primary-and-foreign-keys" class="section level2">
+<h2>Define Primary and Foreign Keys</h2>
+<p>Primary keys and foreign keys are how relational database tables are linked with each other. A primary key is a column that has a unique value for each row within a table. A foreign key is a column containing the primary key for a row in another table.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Foreign keys act as cross references between tables. They specify the relationships that gives us the <em>relational</em> database.</p>
+<p>The <a href="https://relational.fit.cvut.cz/assets/img/datasets-generated/financial.svg">model diagram</a> provided by our test database loosely illustrates the intended relationships between tables. In the diagram we can see that the <code>loans</code> table should be linked to the <code>accounts</code> table. Below we create those links in 3 steps:</p>
+<ol style="list-style-type: decimal">
+<li>Add a primary key <code>id</code> to the <code>accounts</code> table</li>
+<li>Add a primary key <code>id</code> to the <code>loans</code> table</li>
+<li>Add a foreign key <code>account_id</code> to the <code>loans</code> table referencing the <code>accounts</code> table</li>
+</ol>
+<p>Then we assign colors to the tables and draw the structure of the dm.</p>
+<p>Note that when the foreign key is created the primary key in the referenced table does not need to be specified, but the primary key must already be defined. And, as mentioned above, primary and foreign key constraints on the database are currently only imported for Postgres and SQL Server databases, and only when <code>dm_from_src()</code> is used. This process of key definition needs to be done manually for other databases.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>my_dm_keys &lt;-</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span>my_manual_dm <span class="op">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(accounts, id) <span class="op">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(loans, id) <span class="op">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  </span><span class="kw">dm_add_fk</span>(loans, account_id, accounts) <span class="op">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="st">  </span><span class="kw">dm_set_colors</span>(<span class="dt">green =</span> loans, <span class="dt">orange =</span> accounts)</span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a>my_dm_keys <span class="op">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg width="165pt" height="70pt" viewBox="0.00 0.00 165.00 70.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 66)">
+<title>%0</title>
+<g id="a_graph0"><a xlink:title="Data Model">
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-66 161,-66 161,4 -4,4"></polygon>
+</a>
+</g>
+<!-- accounts -->
+<g id="node1" class="node">
+<title>accounts</title>
+<polygon fill="#ffa500" stroke="transparent" points="104,-21 104,-41 156,-41 156,-21 104,-21"></polygon>
+<text text-anchor="start" x="105.5105" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">accounts</text>
+<polygon fill="#ffedcc" stroke="transparent" points="104,-1 104,-21 156,-21 156,-1 104,-1"></polygon>
+<text text-anchor="start" x="106" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="103,0 103,-42 157,-42 157,0 103,0"></polygon>
+</g>
+<!-- loans -->
+<g id="node2" class="node">
+<title>loans</title>
+<polygon fill="#00ff00" stroke="transparent" points="1.5,-41 1.5,-61 66.5,-61 66.5,-41 1.5,-41"></polygon>
+<text text-anchor="start" x="19.2251" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">loans</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-21 1.5,-41 66.5,-41 66.5,-21 1.5,-21"></polygon>
+<text text-anchor="start" x="3.5" y="-27.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-1 1.5,-21 66.5,-21 66.5,-1 1.5,-1"></polygon>
+<text text-anchor="start" x="3.2875" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#00aa00" stroke-opacity="0.666667" points="0,0 0,-62 67,-62 67,0 0,0"></polygon>
+</g>
+<!-- loans&#45;&gt;accounts -->
+<g id="edge1" class="edge">
+<title>loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-11C79.1302,-11 84.5819,-11 93.735,-11"></path>
+<polygon fill="#555555" stroke="#555555" points="94,-14.5001 104,-11 94,-7.5001 94,-14.5001"></polygon>
+</g>
+</g>
+</svg>
+
+<p>Once you have instantiated a dm object you can continue to add tables to it. For tables from the original source for the dm, use <code>dm_add_tbl()</code></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>trans &lt;-<span class="st"> </span><span class="kw">tbl</span>(my_db, <span class="st">&quot;trans&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>my_dm_keys <span class="op">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">dm_add_tbl</span>(trans)</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `loans`, `accounts`, `trans`
+#&gt; Columns: 21
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 1
+</span></CODE></PRE>
+<p>For tables from other sources or from the local environment <code>dplyr::copy_to()</code> is used. <code>copy_to()</code> is discussed later in this article.</p>
+</div>
+<div id="transient-nature-of-operations" class="section level2">
+<h2>Transient nature of operations</h2>
+<p>Like other R objects, a dm is immutable and all operations performed on it are transient unless stored in a new variable.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>my_dm_keys</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `loans`, `accounts`
+#&gt; Columns: 11
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 1
+</span></CODE></PRE>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2"></a>my_dm_trans &lt;-</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="st">  </span>my_dm_keys <span class="op">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  </span><span class="kw">dm_add_tbl</span>(trans)</span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a>my_dm_trans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `loans`, `accounts`, `trans`
+#&gt; Columns: 21
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 1
+</span></CODE></PRE>
+<p>And, like {dbplyr}, results are never written to a database unless explicitly requested.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>my_dm_keys <span class="op">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">dm_flatten_to_tbl</span>(loans)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 10]</span><span>
+#&gt; </span><span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span><span>
+#&gt;       id account_id loans.date amount duration payments status district_id
+#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #555555;"> 1</span><span>  </span><span style="text-decoration: underline;">4</span><span>959          2 1994-01-05  </span><span style="text-decoration: underline;">80</span><span>952       24     </span><span style="text-decoration: underline;">3</span><span>373 A                1
+#&gt; </span><span style="color: #555555;"> 2</span><span>  </span><span style="text-decoration: underline;">4</span><span>961         19 1996-04-29  </span><span style="text-decoration: underline;">30</span><span>276       12     </span><span style="text-decoration: underline;">2</span><span>523 B               21
+#&gt; </span><span style="color: #555555;"> 3</span><span>  </span><span style="text-decoration: underline;">4</span><span>962         25 1997-12-08  </span><span style="text-decoration: underline;">30</span><span>276       12     </span><span style="text-decoration: underline;">2</span><span>523 A               68
+#&gt; </span><span style="color: #555555;"> 4</span><span>  </span><span style="text-decoration: underline;">4</span><span>967         37 1998-10-14 </span><span style="text-decoration: underline;">318</span><span>480       60     </span><span style="text-decoration: underline;">5</span><span>308 D               20
+#&gt; </span><span style="color: #555555;"> 5</span><span>  </span><span style="text-decoration: underline;">4</span><span>968         38 1998-04-19 </span><span style="text-decoration: underline;">110</span><span>736       48     </span><span style="text-decoration: underline;">2</span><span>307 C               19
+#&gt; </span><span style="color: #555555;"> 6</span><span>  </span><span style="text-decoration: underline;">4</span><span>973         67 1996-05-02 </span><span style="text-decoration: underline;">165</span><span>960       24     </span><span style="text-decoration: underline;">6</span><span>915 A               16
+#&gt; </span><span style="color: #555555;"> 7</span><span>  </span><span style="text-decoration: underline;">4</span><span>986         97 1997-08-10 </span><span style="text-decoration: underline;">102</span><span>876       12     </span><span style="text-decoration: underline;">8</span><span>573 A               74
+#&gt; </span><span style="color: #555555;"> 8</span><span>  </span><span style="text-decoration: underline;">4</span><span>988        103 1997-12-06 </span><span style="text-decoration: underline;">265</span><span>320       36     </span><span style="text-decoration: underline;">7</span><span>370 D               44
+#&gt; </span><span style="color: #555555;"> 9</span><span>  </span><span style="text-decoration: underline;">4</span><span>989        105 1998-12-05 </span><span style="text-decoration: underline;">352</span><span>704       48     </span><span style="text-decoration: underline;">7</span><span>348 C               21
+#&gt; </span><span style="color: #555555;">10</span><span>  </span><span style="text-decoration: underline;">4</span><span>990        110 1997-09-08 </span><span style="text-decoration: underline;">162</span><span>576       36     </span><span style="text-decoration: underline;">4</span><span>516 C               36
+#&gt; </span><span style="color: #555555;"># … with more rows, and 2 more variables: frequency </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span><span>
+#&gt; </span><span style="color: #555555;">#   accounts.date </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>
+</span></CODE></PRE>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2"></a>my_dm_keys <span class="op">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="st">  </span><span class="kw">dm_flatten_to_tbl</span>(loans) <span class="op">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="st">  </span><span class="kw">sql_render</span>()</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `LHS`.`id` AS `id`, `LHS`.`account_id` AS `account_id`, `LHS`.`loans.date` AS `loans.date`, `LHS`.`amount` AS `amount`, `LHS`.`duration` AS `duration`, `LHS`.`payments` AS `payments`, `LHS`.`status` AS `status`, `RHS`.`district_id` AS `district_id`, `RHS`.`frequency` AS `frequency`, `RHS`.`accounts.date` AS `accounts.date`</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; FROM (SELECT `id`, `account_id`, `date` AS `loans.date`, `amount`, `duration`, `payments`, `status`</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; FROM `loans`) `LHS`</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; LEFT JOIN (SELECT `id`, `district_id`, `frequency`, `date` AS `accounts.date`</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; FROM `accounts`) `RHS`</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; ON (`LHS`.`account_id` = `RHS`.`id`)</span></span></code></pre></div>
+</div>
+<div id="performing-operations-on-tables-by-zooming" class="section level2">
+<h2>Performing operations on tables by “zooming”</h2>
+<p>As the dm is a collection of tables, if we wish to perform operations on an individual table we set it as the context for those operations using <code>dm_zoom_to()</code>. See <code>vignette(&quot;tech-dm-zoom&quot;)</code> for more detail on zooming.</p>
+<p>dm operations are transient unless persistence is explicitly requested. To make our chain of manipulations on the selected table permanent we assign the result of <code>dm_insert_zoomed()</code> to a new object, <code>my_dm_total</code>. This is a new dm object, derived from <code>my_dm_keys</code>, with a new lazy table <code>total_loans</code> linked to the <code>accounts</code> table. The subsequent section describes how to materialize the results on the database.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_dm_total &lt;-</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="st">  </span>my_dm_keys <span class="op">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(loans) <span class="op">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="st">  </span><span class="kw">group_by</span>(account_id) <span class="op">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_amount =</span> <span class="kw">sum</span>(amount, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8"></a></span>
+<span id="cb10-9"><a href="#cb10-9"></a>my_dm_total<span class="op">$</span>total_loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 2]</span><span>
+#&gt; </span><span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span><span>
+#&gt;    account_id total_amount
+#&gt;         </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #555555;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
+#&gt; </span><span style="color: #555555;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #555555;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #555555;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
+#&gt; </span><span style="color: #555555;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
+#&gt; </span><span style="color: #555555;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
+#&gt; </span><span style="color: #555555;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
+#&gt; </span><span style="color: #555555;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
+#&gt; </span><span style="color: #555555;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
+#&gt; </span><span style="color: #555555;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
+#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
+</span></CODE></PRE>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2"></a>my_dm_total <span class="op">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg width="165pt" height="130pt" viewBox="0.00 0.00 165.00 130.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 126)">
+<title>%0</title>
+<g id="a_graph0"><a xlink:title="Data Model">
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-126 161,-126 161,4 -4,4"></polygon>
+</a>
+</g>
+<!-- accounts -->
+<g id="node1" class="node">
+<title>accounts</title>
+<polygon fill="#ffa500" stroke="transparent" points="104,-51 104,-71 156,-71 156,-51 104,-51"></polygon>
+<text text-anchor="start" x="105.5105" y="-56.4" font-family="Times,serif" font-size="14.00" fill="#000000">accounts</text>
+<polygon fill="#ffedcc" stroke="transparent" points="104,-31 104,-51 156,-51 156,-31 104,-31"></polygon>
+<text text-anchor="start" x="106" y="-37.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="103,-30 103,-72 157,-72 157,-30 103,-30"></polygon>
+</g>
+<!-- loans -->
+<g id="node2" class="node">
+<title>loans</title>
+<polygon fill="#00ff00" stroke="transparent" points="1.5,-101 1.5,-121 66.5,-121 66.5,-101 1.5,-101"></polygon>
+<text text-anchor="start" x="19.2251" y="-106.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">loans</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-81 1.5,-101 66.5,-101 66.5,-81 1.5,-81"></polygon>
+<text text-anchor="start" x="3.5" y="-87.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-61 1.5,-81 66.5,-81 66.5,-61 1.5,-61"></polygon>
+<text text-anchor="start" x="3.2875" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#00aa00" stroke-opacity="0.666667" points="0,-60 0,-122 67,-122 67,-60 0,-60"></polygon>
+</g>
+<!-- loans&#45;&gt;accounts -->
+<g id="edge1" class="edge">
+<title>loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-71C83.675,-71 83.6705,-51.5743 94.1348,-43.9862"></path>
+<polygon fill="#555555" stroke="#555555" points="95.4429,-47.2471 104,-41 93.4148,-40.5474 95.4429,-47.2471"></polygon>
+</g>
+<!-- total_loans -->
+<g id="node3" class="node">
+<title>total_loans</title>
+<polygon fill="#efebdd" stroke="transparent" points="1.5,-21 1.5,-41 66.5,-41 66.5,-21 1.5,-21"></polygon>
+<text text-anchor="start" x="3.2819" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">total_loans</text>
+<polygon fill="#ffffff" stroke="transparent" points="1.5,-1 1.5,-21 66.5,-21 66.5,-1 1.5,-1"></polygon>
+<text text-anchor="start" x="3.2875" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#555555" points="0,0 0,-42 67,-42 67,0 0,0"></polygon>
+</g>
+<!-- total_loans&#45;&gt;accounts -->
+<g id="edge2" class="edge">
+<title>total_loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-11C83.675,-11 83.6705,-30.4257 94.1348,-38.0138"></path>
+<polygon fill="#555555" stroke="#555555" points="93.4148,-41.4526 104,-41 95.4429,-34.7529 93.4148,-41.4526"></polygon>
+</g>
+</g>
+</svg>
+
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2"></a>my_dm_total<span class="op">$</span>total_loans <span class="op">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="st">  </span><span class="kw">sql_render</span>()</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `account_id`, SUM(`amount`) AS `total_amount`</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; FROM `loans`</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; GROUP BY `account_id`</span></span></code></pre></div>
+</div>
+<div id="persist" class="section level2">
+<h2>Persisting results</h2>
+<p>After adding columns to link tables or calculate summaries of data, we might want these changes to the database to persist.</p>
+<p>To force a dm to execute the SQL query generated by the operations it has performed, we call the <code>dplyr::compute()</code> method on the dm object.</p>
+<p><code>compute()</code> forces the computation of a query, in this case the query or multiple queries created by the dm to represent all operations that have been performed but not yet evaluated. The results of <code>compute()</code> are stored in temporary tables on the database server and will be deleted when your session ends. If you want results to persist across sessions in permanent tables, <code>compute()</code> must be called with the argument <code>temporary = FALSE</code> and a table name for the <code>name</code> argument. See the <code>compute()</code> documentation for more details.</p>
+<p>Calling <code>compute()</code> requires write access, otherwise an error is returned. Our example RDBMS, relational.fit.cvut.cz, does not allow write access. As a workaround to demonstrate the usage of <code>compute()</code>, we will use <code>dm_financial_sqlite()</code>, a convenience function that handles the copying of the dm from the remote RDBMS to a local SQLite database we can write to.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>my_dm_sqlite &lt;-<span class="st"> </span><span class="kw">dm_financial_sqlite</span>()</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; Keys could not be queried, use `learn_keys = FALSE` to mute this message.</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a>my_dm_total &lt;-</span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="st">  </span>my_dm_sqlite <span class="op">%&gt;%</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(loans) <span class="op">%&gt;%</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="st">  </span><span class="kw">group_by</span>(account_id) <span class="op">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_amount =</span> <span class="kw">sum</span>(amount, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
+<p>Two {<a href="https://dplyr.tidyverse.org/">dplyr</a>} verbs have been implemented for dm objects. <code>compute()</code>, as mentioned above, materializes all tables into new (temporary or persistent) tables.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_dm_total_computed &lt;-</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span>my_dm_total <span class="op">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">compute</span>()</span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a>my_dm_total_computed<span class="op">$</span>total_loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;dbplyr_049&gt; [?? x 2]</span><span>
+#&gt; </span><span style="color: #555555;"># Database: sqlite 3.30.1 []</span><span>
+#&gt;    account_id total_amount
+#&gt;         </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #555555;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
+#&gt; </span><span style="color: #555555;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #555555;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #555555;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
+#&gt; </span><span style="color: #555555;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
+#&gt; </span><span style="color: #555555;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
+#&gt; </span><span style="color: #555555;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
+#&gt; </span><span style="color: #555555;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
+#&gt; </span><span style="color: #555555;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
+#&gt; </span><span style="color: #555555;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
+#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
+</span></CODE></PRE>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2"></a>my_dm_total_computed<span class="op">$</span>total_loans <span class="op">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="st">  </span><span class="kw">sql_render</span>()</span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt; &lt;SQL&gt; SELECT *</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; FROM `dbplyr_049`</span></span></code></pre></div>
+<p><code>collect()</code> downloads all tables to local data frames.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>my_dm_local &lt;-</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="st">  </span>my_dm_total <span class="op">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="st">  </span><span class="kw">collect</span>()</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a>my_dm_local<span class="op">$</span>total_loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 682 x 2</span><span>
+#&gt;    account_id total_amount
+#&gt;         </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #555555;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
+#&gt; </span><span style="color: #555555;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #555555;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #555555;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
+#&gt; </span><span style="color: #555555;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
+#&gt; </span><span style="color: #555555;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
+#&gt; </span><span style="color: #555555;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
+#&gt; </span><span style="color: #555555;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
+#&gt; </span><span style="color: #555555;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
+#&gt; </span><span style="color: #555555;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
+#&gt; </span><span style="color: #555555;"># … with 672 more rows</span><span>
+</span></CODE></PRE>
+<p>There is a third {dbplyr} verb that has not yet been implemented. <code>collapse()</code> forces generation of the SQL query instead of computation (<a href="https://github.com/krlmlr/dm/issues/304">#304</a>).</p>
+<p><code>compute()</code> also works for a zoomed dm. Calling it during a chain of operations will execute all relevant SQL queries up to that point. Operations after the <code>compute()</code> will use the generated results.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>my_dm_total_inplace &lt;-</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="st">  </span>my_dm_sqlite <span class="op">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(loans) <span class="op">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="st">  </span><span class="kw">group_by</span>(account_id) <span class="op">%&gt;%</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_amount =</span> <span class="kw">sum</span>(amount, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="st">  </span><span class="kw">compute</span>() <span class="op">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb17-9"><a href="#cb17-9"></a></span>
+<span id="cb17-10"><a href="#cb17-10"></a>my_dm_total_inplace<span class="op">$</span>total_loans <span class="op">%&gt;%</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="st">  </span><span class="kw">sql_render</span>()</span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; &lt;SQL&gt; SELECT *</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="co">#&gt; FROM `dbplyr_050`</span></span></code></pre></div>
+</div>
+<div id="deploying-a-dm-to-a-database" class="section level2">
+<h2>Deploying a dm to a database</h2>
+<p>To deploy a dm we must copy it to a RDBMS. This is done using the method <code>copy_dm_to()</code>, which is used behind the scenes by our <code>dm_financial_sqlite()</code> function, the code for which appears below.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>dm_financial_sqlite</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="co">#&gt; Memoised Function:</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt; function () </span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt; {</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt;     stopifnot(rlang::is_installed(&quot;RSQLite&quot;))</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt;     my_dm &lt;- dm_financial() %&gt;% dm_select_tbl(-trans)</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt;     sqlite_db &lt;- DBI::dbConnect(RSQLite::SQLite())</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt;     sqlite_dm &lt;- copy_dm_to(sqlite_db, my_dm, temporary = FALSE)</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt;     sqlite_dm</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt; }</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt; &lt;bytecode: 0x556bc1d3ef50&gt;</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt; &lt;environment: namespace:dm&gt;</span></span></code></pre></div>
+<p>As demonstrated, <code>copy_dm_to()</code> takes as arguments a {DBI} connection that is the destination, the dm we wish to deploy, and here the <code>temporary</code> argument set to FALSE as this is a deployment and we want it to be permanent. The dm is copied to the DBI connection and a new dm, with the DBI connection as its source, is returned.</p>
+<p>The default behavior is to create temporary tables and, where possible (currently Postgres and SQL server), to set any key constraints.</p>
+</div>
+<div id="adding-local-data-frames-to-an-rdbms" class="section level2">
+<h2>Adding local data frames to an RDBMS</h2>
+<p>If you need to add local data frames to an existing database, the shortest path is to use <code>copy_to()</code>. It takes the same arguments as <code>copy_dm_to()</code>, except the second argument, instead of expecting a dm, expects a data frame.</p>
+<p>The example below estimates a linear model from attributes in the <code>loans</code> and <code>districts</code> tables, inserts residuals into the database, and links them to the <code>loans</code> table.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>loans_df &lt;-</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="st">  </span>my_dm_sqlite <span class="op">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="st">  </span><span class="kw">dm_squash_to_tbl</span>(loans) <span class="op">%&gt;%</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="st">  </span><span class="kw">select</span>(id, amount, duration, A3) <span class="op">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="st">  </span><span class="kw">collect</span>()</span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a></span>
+<span id="cb19-9"><a href="#cb19-9"></a>model &lt;-<span class="st"> </span><span class="kw">lm</span>(amount <span class="op">~</span><span class="st"> </span>duration <span class="op">+</span><span class="st"> </span>A3, <span class="dt">data =</span> loans_df)</span>
+<span id="cb19-10"><a href="#cb19-10"></a></span>
+<span id="cb19-11"><a href="#cb19-11"></a>loans_residuals &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tibble</span>(</span>
+<span id="cb19-12"><a href="#cb19-12"></a>  <span class="dt">id =</span> loans_df<span class="op">$</span>id,</span>
+<span id="cb19-13"><a href="#cb19-13"></a>  <span class="dt">resid =</span> <span class="kw">unname</span>(<span class="kw">residuals</span>(model))</span>
+<span id="cb19-14"><a href="#cb19-14"></a>)</span>
+<span id="cb19-15"><a href="#cb19-15"></a></span>
+<span id="cb19-16"><a href="#cb19-16"></a>my_dm_sqlite_resid &lt;-</span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="st">  </span><span class="kw">copy_to</span>(my_dm_sqlite, loans_residuals, <span class="dt">temporary =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb19-18"><a href="#cb19-18"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(loans_residuals, id) <span class="op">%&gt;%</span></span>
+<span id="cb19-19"><a href="#cb19-19"></a><span class="st">  </span><span class="kw">dm_add_fk</span>(loans_residuals, id, loans)</span>
+<span id="cb19-20"><a href="#cb19-20"></a></span>
+<span id="cb19-21"><a href="#cb19-21"></a>my_dm_sqlite_resid <span class="op">%&gt;%</span></span>
+<span id="cb19-22"><a href="#cb19-22"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg width="391pt" height="324pt" viewBox="0.00 0.00 391.00 324.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 320)">
+<title>%0</title>
+<g id="a_graph0"><a xlink:title="Data Model">
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-320 387,-320 387,4 -4,4"></polygon>
+</a>
+</g>
+<!-- accounts -->
+<g id="node1" class="node">
+<title>accounts</title>
+<polygon fill="#efebdd" stroke="transparent" points="232,-101 232,-121 292,-121 292,-101 232,-101"></polygon>
+<text text-anchor="start" x="237.5105" y="-106.4" font-family="Times,serif" font-size="14.00" fill="#000000">accounts</text>
+<polygon fill="#ffffff" stroke="transparent" points="232,-81 232,-101 292,-101 292,-81 232,-81"></polygon>
+<text text-anchor="start" x="234" y="-87.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ffffff" stroke="transparent" points="232,-61 232,-81 292,-81 292,-61 232,-61"></polygon>
+<text text-anchor="start" x="233.6136" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">district_id</text>
+<polygon fill="none" stroke="#555555" points="231,-60 231,-122 293,-122 293,-60 231,-60"></polygon>
+</g>
+<!-- districts -->
+<g id="node5" class="node">
+<title>districts</title>
+<polygon fill="#efebdd" stroke="transparent" points="332,-81 332,-101 380,-101 380,-81 332,-81"></polygon>
+<text text-anchor="start" x="333.8366" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#000000">districts</text>
+<polygon fill="#ffffff" stroke="transparent" points="332,-61 332,-81 380,-81 380,-61 332,-61"></polygon>
+<text text-anchor="start" x="334" y="-67.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#555555" points="331,-60 331,-102 381,-102 381,-60 331,-60"></polygon>
+</g>
+<!-- accounts&#45;&gt;districts -->
+<g id="edge6" class="edge">
+<title>accounts:district_id-&gt;districts:id</title>
+<path fill="none" stroke="#555555" d="M292,-71C305.8889,-71 311.6398,-71 321.9683,-71"></path>
+<polygon fill="#555555" stroke="#555555" points="322,-74.5001 332,-71 322,-67.5001 322,-74.5001"></polygon>
+</g>
+<!-- cards -->
+<g id="node2" class="node">
+<title>cards</title>
+<polygon fill="#efebdd" stroke="transparent" points="24,-241 24,-261 69,-261 69,-241 24,-241"></polygon>
+<text text-anchor="start" x="31.7328" y="-246.4" font-family="Times,serif" font-size="14.00" fill="#000000">cards</text>
+<polygon fill="#ffffff" stroke="transparent" points="24,-221 24,-241 69,-241 69,-221 24,-221"></polygon>
+<text text-anchor="start" x="26" y="-227.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ffffff" stroke="transparent" points="24,-201 24,-221 69,-221 69,-201 24,-201"></polygon>
+<text text-anchor="start" x="25.8871" y="-206.4" font-family="Times,serif" font-size="14.00" fill="#444444">disp_id</text>
+<polygon fill="none" stroke="#555555" points="22.5,-200 22.5,-262 69.5,-262 69.5,-200 22.5,-200"></polygon>
+</g>
+<!-- disps -->
+<g id="node4" class="node">
+<title>disps</title>
+<polygon fill="#efebdd" stroke="transparent" points="129.5,-221 129.5,-241 194.5,-241 194.5,-221 129.5,-221"></polygon>
+<text text-anchor="start" x="147.6101" y="-226.4" font-family="Times,serif" font-size="14.00" fill="#000000">disps</text>
+<polygon fill="#ffffff" stroke="transparent" points="129.5,-201 129.5,-221 194.5,-221 194.5,-201 129.5,-201"></polygon>
+<text text-anchor="start" x="131.5" y="-207.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ffffff" stroke="transparent" points="129.5,-181 129.5,-201 194.5,-201 194.5,-181 129.5,-181"></polygon>
+<text text-anchor="start" x="131.5" y="-186.4" font-family="Times,serif" font-size="14.00" fill="#444444">client_id</text>
+<polygon fill="#ffffff" stroke="transparent" points="129.5,-161 129.5,-181 194.5,-181 194.5,-161 129.5,-161"></polygon>
+<text text-anchor="start" x="131.2875" y="-166.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#555555" points="128,-160 128,-242 195,-242 195,-160 128,-160"></polygon>
+</g>
+<!-- cards&#45;&gt;disps -->
+<g id="edge5" class="edge">
+<title>cards:disp_id-&gt;disps:id</title>
+<path fill="none" stroke="#555555" d="M69,-211C92.2127,-211 100.396,-211 119.4991,-211"></path>
+<polygon fill="#555555" stroke="#555555" points="119.5,-214.5001 129.5,-211 119.5,-207.5001 119.5,-214.5001"></polygon>
+</g>
+<!-- clients -->
+<g id="node3" class="node">
+<title>clients</title>
+<polygon fill="#efebdd" stroke="transparent" points="242,-201 242,-221 282,-221 282,-201 242,-201"></polygon>
+<text text-anchor="start" x="243.7272" y="-206.4" font-family="Times,serif" font-size="14.00" fill="#000000">clients</text>
+<polygon fill="#ffffff" stroke="transparent" points="242,-181 242,-201 282,-201 282,-181 242,-181"></polygon>
+<text text-anchor="start" x="244" y="-187.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#555555" points="241,-180 241,-222 283,-222 283,-180 241,-180"></polygon>
+</g>
+<!-- disps&#45;&gt;accounts -->
+<g id="edge3" class="edge">
+<title>disps:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M194.5,-171C229.6264,-171 200.4948,-106.9851 222.0668,-93.482"></path>
+<polygon fill="#555555" stroke="#555555" points="223.1467,-96.8198 232,-91 221.4498,-90.0286 223.1467,-96.8198"></polygon>
+</g>
+<!-- disps&#45;&gt;clients -->
+<g id="edge4" class="edge">
+<title>disps:client_id-&gt;clients:id</title>
+<path fill="none" stroke="#555555" d="M194.5,-191C211.8177,-191 218.481,-191 231.9697,-191"></path>
+<polygon fill="#555555" stroke="#555555" points="232,-194.5001 242,-191 232,-187.5001 232,-194.5001"></polygon>
+</g>
+<!-- loans -->
+<g id="node6" class="node">
+<title>loans</title>
+<polygon fill="#006400" stroke="transparent" points="129.5,-121 129.5,-141 194.5,-141 194.5,-121 129.5,-121"></polygon>
+<text text-anchor="start" x="147.2251" y="-126.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">loans</text>
+<polygon fill="#cce0cc" stroke="transparent" points="129.5,-101 129.5,-121 194.5,-121 194.5,-101 129.5,-101"></polygon>
+<text text-anchor="start" x="131.5" y="-107.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#cce0cc" stroke="transparent" points="129.5,-81 129.5,-101 194.5,-101 194.5,-81 129.5,-81"></polygon>
+<text text-anchor="start" x="131.2875" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#004200" stroke-opacity="0.666667" points="128,-80 128,-142 195,-142 195,-80 128,-80"></polygon>
+</g>
+<!-- loans&#45;&gt;accounts -->
+<g id="edge1" class="edge">
+<title>loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M194.5,-91C207.1302,-91 212.5819,-91 221.735,-91"></path>
+<polygon fill="#555555" stroke="#555555" points="222,-94.5001 232,-91 222,-87.5001 222,-94.5001"></polygon>
+</g>
+<!-- loans_residuals -->
+<g id="node7" class="node">
+<title>loans_residuals</title>
+<polygon fill="#efebdd" stroke="transparent" points="1,-121 1,-141 91,-141 91,-121 1,-121"></polygon>
+<text text-anchor="start" x="2.845" y="-126.4" font-family="Times,serif" font-size="14.00" fill="#000000">loans_residuals</text>
+<polygon fill="#ffffff" stroke="transparent" points="1,-101 1,-121 91,-121 91,-101 1,-101"></polygon>
+<text text-anchor="start" x="3" y="-107.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#555555" points="0,-100 0,-142 92,-142 92,-100 0,-100"></polygon>
+</g>
+<!-- loans_residuals&#45;&gt;loans -->
+<g id="edge7" class="edge">
+<title>loans_residuals:id-&gt;loans:id</title>
+<path fill="none" stroke="#555555" d="M91,-111C104.1007,-111 109.6787,-111 119.2532,-111"></path>
+<polygon fill="#555555" stroke="#555555" points="119.5,-114.5001 129.5,-111 119.5,-107.5001 119.5,-114.5001"></polygon>
+</g>
+<!-- orders -->
+<g id="node8" class="node">
+<title>orders</title>
+<polygon fill="#efebdd" stroke="transparent" points="129.5,-41 129.5,-61 194.5,-61 194.5,-41 129.5,-41"></polygon>
+<text text-anchor="start" x="144.5098" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#000000">orders</text>
+<polygon fill="#ffffff" stroke="transparent" points="129.5,-21 129.5,-41 194.5,-41 194.5,-21 129.5,-21"></polygon>
+<text text-anchor="start" x="131.5" y="-27.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ffffff" stroke="transparent" points="129.5,-1 129.5,-21 194.5,-21 194.5,-1 129.5,-1"></polygon>
+<text text-anchor="start" x="131.2875" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#555555" points="128,0 128,-62 195,-62 195,0 128,0"></polygon>
+</g>
+<!-- orders&#45;&gt;accounts -->
+<g id="edge2" class="edge">
+<title>orders:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M194.5,-11C229.6264,-11 200.4948,-75.0149 222.0668,-88.518"></path>
+<polygon fill="#555555" stroke="#555555" points="221.4498,-91.9714 232,-91 223.1467,-85.1802 221.4498,-91.9714"></polygon>
+</g>
+<!-- tkeys -->
+<g id="node9" class="node">
+<title>tkeys</title>
+<polygon fill="#efebdd" stroke="transparent" points="30,-288 30,-308 63,-308 63,-288 30,-288"></polygon>
+<text text-anchor="start" x="31.7251" y="-293.4" font-family="Times,serif" font-size="14.00" fill="#000000">tkeys</text>
+<polygon fill="none" stroke="#555555" points="28.5,-287 28.5,-309 63.5,-309 63.5,-287 28.5,-287"></polygon>
+</g>
+</g>
+</svg>
+
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>my_dm_sqlite_resid <span class="op">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="st">  </span><span class="kw">dm_examine_constraints</span>()</span></code></pre></div>
+<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span><span> All constraints satisfied.
+</span></CODE></PRE>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>my_dm_sqlite_resid<span class="op">$</span>loans_residuals</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_2020_05_25_05_09_45_1&gt; [?? x 2]</span><span>
+#&gt; </span><span style="color: #555555;"># Database: sqlite 3.30.1 []</span><span>
+#&gt;       id   resid
+#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #555555;"> 1</span><span>  </span><span style="text-decoration: underline;">4</span><span>959 -</span><span style="color: #BB0000;text-decoration: underline;">31</span><span style="color: #BB0000;">912.</span><span>
+#&gt; </span><span style="color: #555555;"> 2</span><span>  </span><span style="text-decoration: underline;">4</span><span>961 -</span><span style="color: #BB0000;text-decoration: underline;">27</span><span style="color: #BB0000;">336.</span><span>
+#&gt; </span><span style="color: #555555;"> 3</span><span>  </span><span style="text-decoration: underline;">4</span><span>962 -</span><span style="color: #BB0000;text-decoration: underline;">30</span><span style="color: #BB0000;">699.</span><span>
+#&gt; </span><span style="color: #555555;"> 4</span><span>  </span><span style="text-decoration: underline;">4</span><span>967  </span><span style="text-decoration: underline;">63</span><span>621.
+#&gt; </span><span style="color: #555555;"> 5</span><span>  </span><span style="text-decoration: underline;">4</span><span>968 -</span><span style="color: #BB0000;text-decoration: underline;">94</span><span style="color: #BB0000;">811.</span><span>
+#&gt; </span><span style="color: #555555;"> 6</span><span>  </span><span style="text-decoration: underline;">4</span><span>973  </span><span style="text-decoration: underline;">59</span><span>036.
+#&gt; </span><span style="color: #555555;"> 7</span><span>  </span><span style="text-decoration: underline;">4</span><span>986  </span><span style="text-decoration: underline;">41</span><span>901.
+#&gt; </span><span style="color: #555555;"> 8</span><span>  </span><span style="text-decoration: underline;">4</span><span>988 </span><span style="text-decoration: underline;">123</span><span>392.
+#&gt; </span><span style="color: #555555;"> 9</span><span>  </span><span style="text-decoration: underline;">4</span><span>989 </span><span style="text-decoration: underline;">147</span><span>157.
+#&gt; </span><span style="color: #555555;">10</span><span>  </span><span style="text-decoration: underline;">4</span><span>990  </span><span style="text-decoration: underline;">33</span><span>377.
+#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
+</span></CODE></PRE>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>In this tutorial we have demonstrated how to use {dm} to work with existing databases and to construct your own from local tables, including specifying key constraints, and then deploy them to a RDBMS. If you would like more details an overview of all the methods available in {dm}, please see the <a href="https://krlmlr.github.io/dm/reference/index.html">reference documentation</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Support for compound keys (consisting of multiple columns) is <a href="https://github.com/krlmlr/dm/issues/3">planned</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
