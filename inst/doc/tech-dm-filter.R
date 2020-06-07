@@ -68,11 +68,11 @@ flights %>%
   semi_join(airports_filtered, by = c("origin" = "faa")) %>%
   filter(month == 5)
 
-## ---- warning=F----------------------------------------------------------
+## ---- warning=FALSE------------------------------------------------------
 dm %>%
   dm_select_tbl(flights, airlines, airports) %>%
   dm_filter(flights, month == 5) %>% 
-  copy_dm_to(dbplyr::src_memdb(), ., unique_table_names = TRUE) %>% 
+  copy_dm_to(dbplyr::src_memdb(), .) %>%
   dm_filter(airlines, name == "Delta Air Lines Inc.") %>%
   dm_filter(airports, name != "John F Kennedy Intl") %>%
   dm_apply_filters() %>% 

@@ -25,6 +25,9 @@ dplyr::count(fin_dm$trans)
 
 ## ----select--------------------------------------------------------------
 fin_dm_small <- fin_dm[c("loans", "accounts", "districts", "trans")]
+fin_dm_small <-
+  fin_dm %>%
+  dm_select_tbl(loans, accounts, districts, trans)
 
 ## ----keys----------------------------------------------------------------
 fin_dm_keys <-

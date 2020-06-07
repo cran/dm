@@ -5,10 +5,10 @@ source("setup/setup.R")
 library(RMariaDB)
 my_db <- dbConnect(
   MariaDB(),
-  username = 'guest',
-  password = 'relational',
-  dbname = 'Financial_ijs',
-  host = 'relational.fit.cvut.cz'
+  username = "guest",
+  password = "relational",
+  dbname = "Financial_ijs",
+  host = "relational.fit.cvut.cz"
 )
 
 ## ----message = FALSE-----------------------------------------------------

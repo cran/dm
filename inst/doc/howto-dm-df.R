@@ -12,6 +12,11 @@ library(dm)
 flights_dm_no_keys <- dm(airlines, airports, flights, planes, weather)
 flights_dm_no_keys
 
+## ----listlike------------------------------------------------------------
+names(flights_dm_no_keys)
+flights_dm_no_keys$airports
+flights_dm_no_keys[c("airports", "flights")]
+
 ## ------------------------------------------------------------------------
 dm_enum_pk_candidates(
   dm = flights_dm_no_keys,

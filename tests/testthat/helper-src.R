@@ -46,7 +46,7 @@ copy_to_my_test_src <- function(rhs, lhs) {
   } else if (is_dm(rhs)) {
     # We want all dm operations to work with key constraints on the database
     # message(name)
-    suppressMessages(copy_dm_to(src, rhs, unique_table_names = TRUE))
+    suppressMessages(copy_dm_to(src, rhs))
   } else if (inherits(rhs, "list")) {
     suppressMessages(
       map(rhs, ~ copy_to(src, .x, name = unique_db_table_name(name), temporary = TRUE))
@@ -56,7 +56,7 @@ copy_to_my_test_src <- function(rhs, lhs) {
   }
 }
 
-sqlite %<--% src_dbi(DBI::dbConnect(RSQLite::SQLite(), ":memory:"), auto_disconnect = TRUE)
+sqlite %<--% dbplyr::src_dbi(DBI::dbConnect(RSQLite::SQLite(), ":memory:"), auto_disconnect = TRUE)
 
 my_test_src_name <- {
   src <- Sys.getenv("DM_TEST_SRC", "df")
@@ -85,6 +85,23 @@ my_test_src <- function() {
       skip(paste0("Data source ", my_test_src_name, " not accessible: ", conditionMessage(e)))
     }
   )
+}
+
+test_src_frame <- function(...) {
+  src <- my_test_src()
+
+  df <- tibble(...)
+
+  if (inherits(src, "src_Microsoft SQL Server")) {
+    name <- paste0("##", unique_db_table_name("test_frame"))
+    temporary <- FALSE
+  } else {
+    name <- unique_db_table_name("test_frame")
+    temporary <- TRUE
+  }
+
+  copy_to(src, df, name = name, temporary = temporary)
+  tbl(src, name)
 }
 
 # for examine_cardinality...() ----------------------------------------------

@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-05-25" />
+<meta name="date" content="2020-06-07" />
 
 <title>Getting started with dm</title>
 
@@ -301,7 +301,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Getting started with dm</h1>
-<h4 class="date">2020-05-25</h4>
+<h4 class="date">2020-06-07</h4>
 
 
 
@@ -367,9 +367,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt;   </span><span style="color: #555555;font-style: italic;">&lt;int64&gt;</span><span>
 #&gt; </span><span style="color: #555555;">1</span><span> 1056320
 </span></CODE></PRE>
-<p>Here we focus on the <code>loans</code>, <code>accounts</code>, <code>districts</code> and <code>trans</code> tables:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>fin_dm_small &lt;-<span class="st"> </span>fin_dm[<span class="kw">c</span>(<span class="st">&quot;loans&quot;</span>, <span class="st">&quot;accounts&quot;</span>, <span class="st">&quot;districts&quot;</span>, <span class="st">&quot;trans&quot;</span>)]</span></code></pre></div>
-<p>The <code>dm_select_tbl()</code> verb offers a way to do the same in a <code>%&gt;%</code> pipe.</p>
+<p>At the same time, most <code>dm</code> functions are pipe-friendly and support tidy evaluation. We can use <code>[</code> or the <code>dm_select_tbl()</code> verb to derive a smaller dm with the <code>loans</code>, <code>accounts</code>, <code>districts</code> and <code>trans</code> tables:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>fin_dm_small &lt;-<span class="st"> </span>fin_dm[<span class="kw">c</span>(<span class="st">&quot;loans&quot;</span>, <span class="st">&quot;accounts&quot;</span>, <span class="st">&quot;districts&quot;</span>, <span class="st">&quot;trans&quot;</span>)]</span>
+<span id="cb5-2"><a href="#cb5-2"></a>fin_dm_small &lt;-</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span>fin_dm <span class="op">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">dm_select_tbl</span>(loans, accounts, districts, trans)</span></code></pre></div>
 </div>
 <div id="linking-tables-by-adding-keys" class="section level2">
 <h2>Linking tables by adding keys</h2>

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2020-05-25" />
+<meta name="date" content="2020-06-07" />
 
 <title>Introduction to relational data models</title>
 
@@ -303,7 +303,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2020-05-25</h4>
+<h4 class="date">2020-06-07</h4>
 
 
 
@@ -339,17 +339,25 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>The separation of data into multiple tables helps to improve data quality but in order to take full advantage of the approach, an associated data model is needed to overcome the difficulties that arise with joining multiple tables.</p>
+<p>Relational databases, unlike data frames, do not keep all data in one large table but instead split it into multiple smaller tables. That separation into sub-tables has several advantages:</p>
+<ul>
+<li>all information is stored only once, avoiding redundancy and conserving memory</li>
+<li>all information needs to be updated only once and in one place, improving consistency and avoiding errors that may result from updating the same value in multiple locations</li>
+<li>all information is organized by topic and segmented into smaller tables that are easier to handle</li>
+</ul>
+<p>It is for these reasons that separation of data helps with data quality, and they explain the popularity of relational databases in production-level data management.</p>
+<p>The downside of this approach is that it is harder to merge together information from different data sources and to identify which entities refer to the same object, a common task when modeling or plotting data.</p>
+<p>Thus, to take full advantage of the relational database approach, an associated data model is needed to overcome the challenges that arise when working with multiple tables.</p>
 <p>Let’s illustrate this challenge with the data from the <a href="https://github.com/hadley/nycflights13"><code>nycflights13</code> dataset</a> that contains detailed information about the 336776 flights that departed from New York City in 2013. The information is stored in five tables.</p>
 <p>Details like the full name of an airport are not available immediately; these can only be obtained by joining or merging the constituent tables, which can result in long and inflated pipe chains full of <code>left_join()</code>, <code>anti_join()</code> and other forms of data merging.</p>
 <p>In classical {dplyr} notation, you will need three <code>left_join()</code> calls to merge the <code>flights</code> table gradually to <code>airlines</code>, <code>planes</code> and <code>airports</code> tables to create one wide data frame.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Attaching packages</span><span> ────────────────────────────────── tidyverse 1.3.0 ──
 </span></CODE></PRE>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">ggplot2</span><span> 3.3.0           </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">purrr  </span><span> 0.3.4      
-#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tibble </span><span> 3.0.1           </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">dplyr  </span><span> 0.8.99.</span><span style="color: #BB0000;">9003</span><span>
-#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tidyr  </span><span> 1.1.0           </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">stringr</span><span> 1.4.0      
-#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">readr  </span><span> 1.3.1           </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">forcats</span><span> 0.5.0
+<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">ggplot2</span><span> 3.3.0.</span><span style="color: #BB0000;">9000</span><span>     </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">purrr  </span><span> 0.3.4     
+#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tibble </span><span> 3.0.1          </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">dplyr  </span><span> 1.0.0     
+#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tidyr  </span><span> 1.1.0          </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">stringr</span><span> 1.4.0     
+#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">readr  </span><span> 1.3.1          </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">forcats</span><span> 0.5.0
 </span></CODE></PRE>
 <PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Conflicts</span><span> ───────────────────────────────────── tidyverse_conflicts() ──
 #&gt; </span><span style="color: #BB0000;">x</span><span> </span><span style="color: #0000BB;">dplyr</span><span>::</span><span style="color: #00BB00;">filter()</span><span> masks </span><span style="color: #0000BB;">dm</span><span>::filter(), </span><span style="color: #0000BB;">stats</span><span>::filter()
@@ -651,15 +659,17 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb11-8"><a href="#cb11-8"></a></span>
 <span id="cb11-9"><a href="#cb11-9"></a><span class="kw">copy_dm_to</span>(con_sqlite, dm)</span>
 <span id="cb11-10"><a href="#cb11-10"></a>DBI<span class="op">::</span><span class="kw">dbListTables</span>(con_sqlite)</span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; [1] &quot;airlines&quot;     &quot;airports&quot;     &quot;flights&quot;      &quot;planes&quot;      </span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; [5] &quot;sqlite_stat1&quot; &quot;sqlite_stat4&quot; &quot;weather&quot;</span></span></code></pre></div>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; [1] &quot;airlines_2020_06_07_15_26_50_2&quot; &quot;airports_2020_06_07_15_26_50_2&quot;</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; [3] &quot;flights_2020_06_07_15_26_50_2&quot;  &quot;planes_2020_06_07_15_26_50_2&quot;  </span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; [5] &quot;sqlite_stat1&quot;                   &quot;sqlite_stat4&quot;                  </span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; [7] &quot;weather_2020_06_07_15_26_50_2&quot;</span></span></code></pre></div>
 <p>In the opposite direction, <code>dm</code> can also be populated with data from a DB. Unfortunately, keys currently can be learned only for MSSQL and Postgres, but not for SQLite. Therefore, the dm contains the tables but not the keys:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">dm_from_src</span>(con_sqlite)</span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; Keys could not be queried, use `learn_keys = FALSE` to mute this message.</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  sqlite 3.30.1 []
 #&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
+#&gt; Tables: `airlines_2020_06_07_15_26_50_2`, `airports_2020_06_07_15_26_50_2`, `flights_2020_06_07_15_26_50_2`, `planes_2020_06_07_15_26_50_2`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
