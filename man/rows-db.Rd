@@ -63,7 +63,7 @@ All operations expect that both existing and new data are presented
 in two compatible \link{tbl} objects.
 
 If \code{y} lives on a different data source than \code{x}, it can be copied automatically
-by setting \code{copy = TRUE}, just like for \code{\link[dplyr:left_join]{dplyr::left_join()}}.
+by setting \code{copy = TRUE}, just like for \code{\link[dplyr:mutate-joins]{dplyr::left_join()}}.
 
 On mutable backends like databases, these operations manipulate the
 underlying storage.
@@ -78,6 +78,7 @@ The \verb{sql_rows_*()} functions return the SQL used for the corresponding
 \code{y} needs to be located on the same data source as \code{x}.
 }
 \examples{
+\dontshow{if (rlang::is_installed("dbplyr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data <- dbplyr::memdb_frame(a = 1:3, b = letters[c(1:2, NA)], c = 0.5 + 0:2)
 data
 
@@ -89,4 +90,5 @@ rows_insert(data, dbplyr::memdb_frame(a = 4, b = "z"), in_place = TRUE)
 data
 rows_update(data, dbplyr::memdb_frame(a = 2:3, b = "w"), in_place = TRUE)
 data
+\dontshow{\}) # examplesIf}
 }

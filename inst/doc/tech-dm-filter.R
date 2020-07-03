@@ -33,6 +33,14 @@ rows_per_table
 sum(rows_per_table)
 
 ## ------------------------------------------------------------------------
+sum_nrow <- NA
+sum_nrow_filtered <- NA
+
+## ------------------------------------------------------------------------
+sum_nrow <- sum(dm_nrow(dm))
+sum_nrow_filtered <- sum(dm_nrow(dm_apply_filters(filtered_dm)))
+
+## ------------------------------------------------------------------------
 dm %>% 
   dm_filter(flights, dest == "IAD") %>% 
   dm_apply_filters() %>% 
