@@ -12,10 +12,26 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2020-07-02" />
+<meta name="date" content="2020-07-29" />
 
 <title>Create a dm object from a database</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -303,7 +319,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Create a dm object from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2020-07-02</h4>
+<h4 class="date">2020-07-29</h4>
 
 
 
@@ -328,7 +344,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb2-4"><a href="#cb2-4"></a>my_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (9 total)
 #&gt; Columns: 57
 #&gt; Primary keys: 0
@@ -351,7 +367,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb3-10"><a href="#cb3-10"></a>my_manual_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `loans`, `accounts`
 #&gt; Columns: 11
 #&gt; Primary keys: 0
@@ -426,7 +442,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">dm_add_tbl</span>(trans)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `loans`, `accounts`, `trans`
 #&gt; Columns: 21
 #&gt; Primary keys: 2
@@ -440,7 +456,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>my_dm_keys</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `loans`, `accounts`
 #&gt; Columns: 11
 #&gt; Primary keys: 2
@@ -454,7 +470,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb7-6"><a href="#cb7-6"></a>my_dm_trans</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `loans`, `accounts`, `trans`
 #&gt; Columns: 21
 #&gt; Primary keys: 2
@@ -465,22 +481,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">dm_flatten_to_tbl</span>(loans)</span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; Renamed columns:</span></span>
 <span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 10]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   lazy query [?? x 10]</span><span>
+#&gt; </span><span style="color: #949494;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span><span>
 #&gt;       id account_id loans.date amount duration payments status district_id
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
-#&gt; </span><span style="color: #555555;"> 1</span><span>  </span><span style="text-decoration: underline;">4</span><span>959          2 1994-01-05  </span><span style="text-decoration: underline;">80</span><span>952       24     </span><span style="text-decoration: underline;">3</span><span>373 A                1
-#&gt; </span><span style="color: #555555;"> 2</span><span>  </span><span style="text-decoration: underline;">4</span><span>961         19 1996-04-29  </span><span style="text-decoration: underline;">30</span><span>276       12     </span><span style="text-decoration: underline;">2</span><span>523 B               21
-#&gt; </span><span style="color: #555555;"> 3</span><span>  </span><span style="text-decoration: underline;">4</span><span>962         25 1997-12-08  </span><span style="text-decoration: underline;">30</span><span>276       12     </span><span style="text-decoration: underline;">2</span><span>523 A               68
-#&gt; </span><span style="color: #555555;"> 4</span><span>  </span><span style="text-decoration: underline;">4</span><span>967         37 1998-10-14 </span><span style="text-decoration: underline;">318</span><span>480       60     </span><span style="text-decoration: underline;">5</span><span>308 D               20
-#&gt; </span><span style="color: #555555;"> 5</span><span>  </span><span style="text-decoration: underline;">4</span><span>968         38 1998-04-19 </span><span style="text-decoration: underline;">110</span><span>736       48     </span><span style="text-decoration: underline;">2</span><span>307 C               19
-#&gt; </span><span style="color: #555555;"> 6</span><span>  </span><span style="text-decoration: underline;">4</span><span>973         67 1996-05-02 </span><span style="text-decoration: underline;">165</span><span>960       24     </span><span style="text-decoration: underline;">6</span><span>915 A               16
-#&gt; </span><span style="color: #555555;"> 7</span><span>  </span><span style="text-decoration: underline;">4</span><span>986         97 1997-08-10 </span><span style="text-decoration: underline;">102</span><span>876       12     </span><span style="text-decoration: underline;">8</span><span>573 A               74
-#&gt; </span><span style="color: #555555;"> 8</span><span>  </span><span style="text-decoration: underline;">4</span><span>988        103 1997-12-06 </span><span style="text-decoration: underline;">265</span><span>320       36     </span><span style="text-decoration: underline;">7</span><span>370 D               44
-#&gt; </span><span style="color: #555555;"> 9</span><span>  </span><span style="text-decoration: underline;">4</span><span>989        105 1998-12-05 </span><span style="text-decoration: underline;">352</span><span>704       48     </span><span style="text-decoration: underline;">7</span><span>348 C               21
-#&gt; </span><span style="color: #555555;">10</span><span>  </span><span style="text-decoration: underline;">4</span><span>990        110 1997-09-08 </span><span style="text-decoration: underline;">162</span><span>576       36     </span><span style="text-decoration: underline;">4</span><span>516 C               36
-#&gt; </span><span style="color: #555555;"># … with more rows, and 2 more variables: frequency </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span><span>
-#&gt; </span><span style="color: #555555;">#   accounts.date </span><span style="color: #555555;font-style: italic;">&lt;date&gt;</span><span>
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>  </span><span style="text-decoration: underline;">4</span><span>959          2 1994-01-05  </span><span style="text-decoration: underline;">80</span><span>952       24     </span><span style="text-decoration: underline;">3</span><span>373 A                1
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>  </span><span style="text-decoration: underline;">4</span><span>961         19 1996-04-29  </span><span style="text-decoration: underline;">30</span><span>276       12     </span><span style="text-decoration: underline;">2</span><span>523 B               21
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>  </span><span style="text-decoration: underline;">4</span><span>962         25 1997-12-08  </span><span style="text-decoration: underline;">30</span><span>276       12     </span><span style="text-decoration: underline;">2</span><span>523 A               68
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>  </span><span style="text-decoration: underline;">4</span><span>967         37 1998-10-14 </span><span style="text-decoration: underline;">318</span><span>480       60     </span><span style="text-decoration: underline;">5</span><span>308 D               20
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>  </span><span style="text-decoration: underline;">4</span><span>968         38 1998-04-19 </span><span style="text-decoration: underline;">110</span><span>736       48     </span><span style="text-decoration: underline;">2</span><span>307 C               19
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>  </span><span style="text-decoration: underline;">4</span><span>973         67 1996-05-02 </span><span style="text-decoration: underline;">165</span><span>960       24     </span><span style="text-decoration: underline;">6</span><span>915 A               16
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>  </span><span style="text-decoration: underline;">4</span><span>986         97 1997-08-10 </span><span style="text-decoration: underline;">102</span><span>876       12     </span><span style="text-decoration: underline;">8</span><span>573 A               74
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>  </span><span style="text-decoration: underline;">4</span><span>988        103 1997-12-06 </span><span style="text-decoration: underline;">265</span><span>320       36     </span><span style="text-decoration: underline;">7</span><span>370 D               44
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>  </span><span style="text-decoration: underline;">4</span><span>989        105 1998-12-05 </span><span style="text-decoration: underline;">352</span><span>704       48     </span><span style="text-decoration: underline;">7</span><span>348 C               21
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>  </span><span style="text-decoration: underline;">4</span><span>990        110 1997-09-08 </span><span style="text-decoration: underline;">162</span><span>576       36     </span><span style="text-decoration: underline;">4</span><span>516 C               36
+#&gt; </span><span style="color: #949494;"># … with more rows, and 2 more variables: frequency </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   accounts.date </span><span style="color: #949494;font-style: italic;">&lt;date&gt;</span><span>
 </span></CODE></PRE>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a></span>
 <span id="cb9-2"><a href="#cb9-2"></a>my_dm_keys <span class="op">%&gt;%</span></span>
@@ -508,21 +524,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb10-7"><a href="#cb10-7"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
 <span id="cb10-8"><a href="#cb10-8"></a></span>
 <span id="cb10-9"><a href="#cb10-9"></a>my_dm_total<span class="op">$</span>total_loans</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 2]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   lazy query [?? x 2]</span><span>
+#&gt; </span><span style="color: #949494;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span><span>
 #&gt;    account_id total_amount
-#&gt;         </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
-#&gt; </span><span style="color: #555555;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
-#&gt; </span><span style="color: #555555;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
-#&gt; </span><span style="color: #555555;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
-#&gt; </span><span style="color: #555555;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
-#&gt; </span><span style="color: #555555;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
-#&gt; </span><span style="color: #555555;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
-#&gt; </span><span style="color: #555555;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
-#&gt; </span><span style="color: #555555;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
-#&gt; </span><span style="color: #555555;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
-#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
+#&gt;         </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
+#&gt; </span><span style="color: #949494;"># … with more rows</span><span>
 </span></CODE></PRE>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a></span>
 <span id="cb11-2"><a href="#cb11-2"></a>my_dm_total <span class="op">%&gt;%</span></span>
@@ -597,36 +613,35 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><code>compute()</code> forces the computation of a query, in this case the query or multiple queries created by the dm to represent all operations that have been performed but not yet evaluated. The results of <code>compute()</code> are stored in temporary tables on the database server and will be deleted when your session ends. If you want results to persist across sessions in permanent tables, <code>compute()</code> must be called with the argument <code>temporary = FALSE</code> and a table name for the <code>name</code> argument. See the <code>compute()</code> documentation for more details.</p>
 <p>Calling <code>compute()</code> requires write access, otherwise an error is returned. Our example RDBMS, relational.fit.cvut.cz, does not allow write access. As a workaround to demonstrate the usage of <code>compute()</code>, we will use <code>dm_financial_sqlite()</code>, a convenience function that handles the copying of the dm from the remote RDBMS to a local SQLite database we can write to.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>my_dm_sqlite &lt;-<span class="st"> </span><span class="kw">dm_financial_sqlite</span>()</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; Keys could not be queried, use `learn_keys = FALSE` to mute this message.</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a></span>
-<span id="cb13-4"><a href="#cb13-4"></a>my_dm_total &lt;-</span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="st">  </span>my_dm_sqlite <span class="op">%&gt;%</span></span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(loans) <span class="op">%&gt;%</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a><span class="st">  </span><span class="kw">group_by</span>(account_id) <span class="op">%&gt;%</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_amount =</span> <span class="kw">sum</span>(amount, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a>my_dm_total &lt;-</span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="st">  </span>my_dm_sqlite <span class="op">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(loans) <span class="op">%&gt;%</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="st">  </span><span class="kw">group_by</span>(account_id) <span class="op">%&gt;%</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_amount =</span> <span class="kw">sum</span>(amount, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
 <p>Two {<a href="https://dplyr.tidyverse.org/">dplyr</a>} verbs have been implemented for dm objects. <code>compute()</code>, as mentioned above, materializes all tables into new (temporary or persistent) tables.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_dm_total_computed &lt;-</span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span>my_dm_total <span class="op">%&gt;%</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">compute</span>()</span>
 <span id="cb14-4"><a href="#cb14-4"></a></span>
 <span id="cb14-5"><a href="#cb14-5"></a>my_dm_total_computed<span class="op">$</span>total_loans</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;dbplyr_049&gt; [?? x 2]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.30.1 []</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   table&lt;dbplyr_049&gt; [?? x 2]</span><span>
+#&gt; </span><span style="color: #949494;"># Database: sqlite 3.30.1 []</span><span>
 #&gt;    account_id total_amount
-#&gt;         </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
-#&gt; </span><span style="color: #555555;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
-#&gt; </span><span style="color: #555555;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
-#&gt; </span><span style="color: #555555;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
-#&gt; </span><span style="color: #555555;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
-#&gt; </span><span style="color: #555555;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
-#&gt; </span><span style="color: #555555;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
-#&gt; </span><span style="color: #555555;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
-#&gt; </span><span style="color: #555555;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
-#&gt; </span><span style="color: #555555;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
-#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
+#&gt;         </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
+#&gt; </span><span style="color: #949494;"># … with more rows</span><span>
 </span></CODE></PRE>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a></span>
 <span id="cb15-2"><a href="#cb15-2"></a>my_dm_total_computed<span class="op">$</span>total_loans <span class="op">%&gt;%</span></span>
@@ -639,20 +654,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb16-3"><a href="#cb16-3"></a><span class="st">  </span><span class="kw">collect</span>()</span>
 <span id="cb16-4"><a href="#cb16-4"></a></span>
 <span id="cb16-5"><a href="#cb16-5"></a>my_dm_local<span class="op">$</span>total_loans</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 682 x 2</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 682 x 2</span><span>
 #&gt;    account_id total_amount
-#&gt;         </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
-#&gt; </span><span style="color: #555555;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
-#&gt; </span><span style="color: #555555;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
-#&gt; </span><span style="color: #555555;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
-#&gt; </span><span style="color: #555555;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
-#&gt; </span><span style="color: #555555;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
-#&gt; </span><span style="color: #555555;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
-#&gt; </span><span style="color: #555555;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
-#&gt; </span><span style="color: #555555;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
-#&gt; </span><span style="color: #555555;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
-#&gt; </span><span style="color: #555555;"># … with 672 more rows</span><span>
+#&gt;         </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>          2        </span><span style="text-decoration: underline;">80</span><span>952
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>         19        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>         25        </span><span style="text-decoration: underline;">30</span><span>276
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>         37       </span><span style="text-decoration: underline;">318</span><span>480
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>         38       </span><span style="text-decoration: underline;">110</span><span>736
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>         67       </span><span style="text-decoration: underline;">165</span><span>960
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>         97       </span><span style="text-decoration: underline;">102</span><span>876
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>        103       </span><span style="text-decoration: underline;">265</span><span>320
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>        105       </span><span style="text-decoration: underline;">352</span><span>704
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>        110       </span><span style="text-decoration: underline;">162</span><span>576
+#&gt; </span><span style="color: #949494;"># … with 672 more rows</span><span>
 </span></CODE></PRE>
 <p>There is a third {dbplyr} verb that has not yet been implemented. <code>collapse()</code> forces generation of the SQL query instead of computation (<a href="https://github.com/krlmlr/dm/issues/304">#304</a>).</p>
 <p><code>compute()</code> also works for a zoomed dm. Calling it during a chain of operations will execute all relevant SQL queries up to that point. Operations after the <code>compute()</code> will use the generated results.</p>
@@ -683,7 +698,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt;     sqlite_dm &lt;- copy_dm_to(sqlite_db, my_dm, temporary = FALSE)</span></span>
 <span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt;     sqlite_dm</span></span>
 <span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt; }</span></span>
-<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt; &lt;bytecode: 0x55945ef9ea90&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt; &lt;bytecode: 0x55f922b35860&gt;</span></span>
 <span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt; &lt;environment: namespace:dm&gt;</span></span></code></pre></div>
 <p>As demonstrated, <code>copy_dm_to()</code> takes as arguments a {DBI} connection that is the destination, the dm we wish to deploy, and here the <code>temporary</code> argument set to FALSE as this is a deployment and we want it to be permanent. The dm is copied to the DBI connection and a new dm, with the DBI connection as its source, is returned.</p>
 <p>The default behavior is to create temporary tables and, where possible (currently Postgres and SQL server), to set any key constraints.</p>
@@ -867,21 +882,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span><span> All constraints satisfied.
 </span></CODE></PRE>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>my_dm_sqlite_resid<span class="op">$</span>loans_residuals</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_2020_07_02_16_39_12_1&gt; [?? x 2]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.30.1 []</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   table&lt;loans_residuals_2020_07_29_23_34_47_1&gt; [?? x 2]</span><span>
+#&gt; </span><span style="color: #949494;"># Database: sqlite 3.30.1 []</span><span>
 #&gt;       id   resid
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;"> 1</span><span>  </span><span style="text-decoration: underline;">4</span><span>959 -</span><span style="color: #BB0000;text-decoration: underline;">31</span><span style="color: #BB0000;">912.</span><span>
-#&gt; </span><span style="color: #555555;"> 2</span><span>  </span><span style="text-decoration: underline;">4</span><span>961 -</span><span style="color: #BB0000;text-decoration: underline;">27</span><span style="color: #BB0000;">336.</span><span>
-#&gt; </span><span style="color: #555555;"> 3</span><span>  </span><span style="text-decoration: underline;">4</span><span>962 -</span><span style="color: #BB0000;text-decoration: underline;">30</span><span style="color: #BB0000;">699.</span><span>
-#&gt; </span><span style="color: #555555;"> 4</span><span>  </span><span style="text-decoration: underline;">4</span><span>967  </span><span style="text-decoration: underline;">63</span><span>621.
-#&gt; </span><span style="color: #555555;"> 5</span><span>  </span><span style="text-decoration: underline;">4</span><span>968 -</span><span style="color: #BB0000;text-decoration: underline;">94</span><span style="color: #BB0000;">811.</span><span>
-#&gt; </span><span style="color: #555555;"> 6</span><span>  </span><span style="text-decoration: underline;">4</span><span>973  </span><span style="text-decoration: underline;">59</span><span>036.
-#&gt; </span><span style="color: #555555;"> 7</span><span>  </span><span style="text-decoration: underline;">4</span><span>986  </span><span style="text-decoration: underline;">41</span><span>901.
-#&gt; </span><span style="color: #555555;"> 8</span><span>  </span><span style="text-decoration: underline;">4</span><span>988 </span><span style="text-decoration: underline;">123</span><span>392.
-#&gt; </span><span style="color: #555555;"> 9</span><span>  </span><span style="text-decoration: underline;">4</span><span>989 </span><span style="text-decoration: underline;">147</span><span>157.
-#&gt; </span><span style="color: #555555;">10</span><span>  </span><span style="text-decoration: underline;">4</span><span>990  </span><span style="text-decoration: underline;">33</span><span>377.
-#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>  </span><span style="text-decoration: underline;">4</span><span>959 -</span><span style="color: #BB0000;text-decoration: underline;">31</span><span style="color: #BB0000;">912.</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>  </span><span style="text-decoration: underline;">4</span><span>961 -</span><span style="color: #BB0000;text-decoration: underline;">27</span><span style="color: #BB0000;">336.</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>  </span><span style="text-decoration: underline;">4</span><span>962 -</span><span style="color: #BB0000;text-decoration: underline;">30</span><span style="color: #BB0000;">699.</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>  </span><span style="text-decoration: underline;">4</span><span>967  </span><span style="text-decoration: underline;">63</span><span>621.
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>  </span><span style="text-decoration: underline;">4</span><span>968 -</span><span style="color: #BB0000;text-decoration: underline;">94</span><span style="color: #BB0000;">811.</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>  </span><span style="text-decoration: underline;">4</span><span>973  </span><span style="text-decoration: underline;">59</span><span>036.
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>  </span><span style="text-decoration: underline;">4</span><span>986  </span><span style="text-decoration: underline;">41</span><span>901.
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>  </span><span style="text-decoration: underline;">4</span><span>988 </span><span style="text-decoration: underline;">123</span><span>392.
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>  </span><span style="text-decoration: underline;">4</span><span>989 </span><span style="text-decoration: underline;">147</span><span>157.
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>  </span><span style="text-decoration: underline;">4</span><span>990  </span><span style="text-decoration: underline;">33</span><span>377.
+#&gt; </span><span style="color: #949494;"># … with more rows</span><span>
 </span></CODE></PRE>
 </div>
 <div id="conclusion" class="section level2">

@@ -4,6 +4,11 @@ source("setup/setup.R")
 ## ------------------------------------------------------------------------
 library(nycflights13)
 library(dm)
+dm(airlines, airports, flights, planes, weather)
+
+## ------------------------------------------------------------------------
+library(nycflights13)
+library(dm)
 empty_dm <- dm()
 empty_dm
 dm_add_tbl(empty_dm, airlines, airports, flights, planes, weather) 
@@ -16,13 +21,17 @@ as_dm(list(airlines = airlines,
            weather = weather))
 
 ## ----message=FALSE-------------------------------------------------------
-library(dplyr)
-flights_dm <- dm_from_src(src_df(pkg = "nycflights13"))
+sqlite_src <- dbplyr::nycflights13_sqlite()
+
+flights_dm <- dm_from_src(sqlite_src)
 flights_dm
 
 ## ------------------------------------------------------------------------
-iris_dm <- new_dm(list("iris1" = iris, "iris2" = iris))
-iris_dm
+base_dm <- new_dm(list(trees = trees, mtcars = mtcars))
+base_dm
+
+## ------------------------------------------------------------------------
+validate_dm(base_dm)
 
 ## ------------------------------------------------------------------------
 tbl(flights_dm, "airports")
@@ -46,7 +55,7 @@ dm_rm_pk(flights_dm_with_key, airports) %>%
 dm_enum_pk_candidates(flights_dm_with_key, airports)
 
 ## ------------------------------------------------------------------------
-dm_enum_pk_candidates(flights_dm_with_key, flights) %>% count(candidate)
+dm_enum_pk_candidates(flights_dm_with_key, flights) %>% dplyr::count(candidate)
 
 ## ------------------------------------------------------------------------
 dm_get_all_pks(dm_nycflights13(cycle = TRUE))

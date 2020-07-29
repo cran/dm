@@ -12,10 +12,26 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2020-07-02" />
+<meta name="date" content="2020-07-29" />
 
 <title>Filtering in relational data models</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -303,7 +319,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Filtering in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2020-07-02</h4>
+<h4 class="date">2020-07-29</h4>
 
 
 
@@ -325,9 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>dm &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>()</span></code></pre></div>
 <p>The console output of the ’dm` object shows its data and metadata, and is colored for clarity:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>dm</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  &lt;environment: R_GlobalEnv&gt;
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 3
@@ -417,20 +431,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <p>You can look at a single table with <code>tbl</code>. To print the <code>airports</code> table, call</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">tbl</span>(dm, <span class="st">&quot;airports&quot;</span>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1,458 x 8</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1,458 x 8</span><span>
 #&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        
-#&gt; </span><span style="color: #555555;"> 1</span><span> 04G   Lansdowne Airport      41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 2</span><span> 06A   Moton Field Municipa…  32.5  -</span><span style="color: #BB0000;">85.7</span><span>   264    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
-#&gt; </span><span style="color: #555555;"> 3</span><span> 06C   Schaumburg Regional    42.0  -</span><span style="color: #BB0000;">88.1</span><span>   801    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
-#&gt; </span><span style="color: #555555;"> 4</span><span> 06N   Randall Airport        41.4  -</span><span style="color: #BB0000;">74.4</span><span>   523    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 5</span><span> 09J   Jekyll Island Airport  31.1  -</span><span style="color: #BB0000;">81.4</span><span>    11    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 6</span><span> 0A9   Elizabethton Municip…  36.4  -</span><span style="color: #BB0000;">82.2</span><span>  </span><span style="text-decoration: underline;">1</span><span>593    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 7</span><span> 0G6   Williams County Airp…  41.5  -</span><span style="color: #BB0000;">84.5</span><span>   730    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 8</span><span> 0G7   Finger Lakes Regiona…  42.9  -</span><span style="color: #BB0000;">76.8</span><span>   492    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 9</span><span> 0P2   Shoestring Aviation …  39.8  -</span><span style="color: #BB0000;">76.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>000    -</span><span style="color: #BB0000;">5</span><span> U     America/New_…
-#&gt; </span><span style="color: #555555;">10</span><span> 0S9   Jefferson County Intl  48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A     America/Los_…
-#&gt; </span><span style="color: #555555;"># … with 1,448 more rows</span><span>
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span> 04G   Lansdowne Airport      41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> 06A   Moton Field Municipa…  32.5  -</span><span style="color: #BB0000;">85.7</span><span>   264    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> 06C   Schaumburg Regional    42.0  -</span><span style="color: #BB0000;">88.1</span><span>   801    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> 06N   Randall Airport        41.4  -</span><span style="color: #BB0000;">74.4</span><span>   523    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> 09J   Jekyll Island Airport  31.1  -</span><span style="color: #BB0000;">81.4</span><span>    11    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> 0A9   Elizabethton Municip…  36.4  -</span><span style="color: #BB0000;">82.2</span><span>  </span><span style="text-decoration: underline;">1</span><span>593    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> 0G6   Williams County Airp…  41.5  -</span><span style="color: #BB0000;">84.5</span><span>   730    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> 0G7   Finger Lakes Regiona…  42.9  -</span><span style="color: #BB0000;">76.8</span><span>   492    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> 0P2   Shoestring Aviation …  39.8  -</span><span style="color: #BB0000;">76.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>000    -</span><span style="color: #BB0000;">5</span><span> U     America/New_…
+#&gt; </span><span style="color: #BCBCBC;">10</span><span> 0S9   Jefferson County Intl  48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A     America/Los_…
+#&gt; </span><span style="color: #949494;"># … with 1,448 more rows</span><span>
 </span></CODE></PRE>
 </div>
 <div id="filter" class="section level2">
@@ -459,14 +473,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span>dm <span class="op">%&gt;%</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">dm_filter</span>(airports, name <span class="op">==</span><span class="st"> &quot;John F Kennedy Intl&quot;</span>)</span>
 <span id="cb6-4"><a href="#cb6-4"></a>filtered_dm</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  &lt;environment: R_GlobalEnv&gt;
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 3
 #&gt; Foreign keys: 3
-#&gt; </span><span style="color: #BBBB00;">──</span><span> </span><span style="color: #BBBB00;">Filters</span><span> </span><span style="color: #BBBB00;">────────────────────────────────────────────────────────────────</span><span>
+#&gt; </span><span style="color: #FFAF00;">──</span><span> </span><span style="color: #FFAF00;">Filters</span><span> </span><span style="color: #FFAF00;">────────────────────────────────────────────────────────────────</span><span>
 #&gt; airports: name == &quot;John F Kennedy Intl&quot;
 </span></CODE></PRE>
 <p>The filter expression is listed in the print output.</p>
@@ -501,14 +513,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">dm_filter</span>(airports, name <span class="op">!=</span><span class="st"> &quot;John F Kennedy Intl&quot;</span>) <span class="op">%&gt;%</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a><span class="st">  </span><span class="kw">dm_filter</span>(flights, month <span class="op">==</span><span class="st"> </span><span class="dv">5</span>)</span>
 <span id="cb11-5"><a href="#cb11-5"></a>dm_delta_may</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  &lt;environment: R_GlobalEnv&gt;
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 3
 #&gt; Foreign keys: 3
-#&gt; </span><span style="color: #BBBB00;">──</span><span> </span><span style="color: #BBBB00;">Filters</span><span> </span><span style="color: #BBBB00;">────────────────────────────────────────────────────────────────</span><span>
+#&gt; </span><span style="color: #FFAF00;">──</span><span> </span><span style="color: #FFAF00;">Filters</span><span> </span><span style="color: #FFAF00;">────────────────────────────────────────────────────────────────</span><span>
 #&gt; airlines: name == &quot;Delta Air Lines Inc.&quot;
 #&gt; airports: name != &quot;John F Kennedy Intl&quot;
 #&gt; flights: month == 5
@@ -522,49 +532,49 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>In the <code>airlines</code> table, Delta is the only remaining carrier:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>dm_delta_may <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="st">  </span><span class="kw">dm_apply_filters_to_tbl</span>(<span class="st">&quot;airlines&quot;</span>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1 x 2</span><span>
 #&gt;   carrier name                
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>               
-#&gt; </span><span style="color: #555555;">1</span><span> DL      Delta Air Lines Inc.
+#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>               
+#&gt; </span><span style="color: #BCBCBC;">1</span><span> DL      Delta Air Lines Inc.
 </span></CODE></PRE>
 <p>Which planes were used to service these flights?</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>dm_delta_may <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span><span class="kw">dm_apply_filters_to_tbl</span>(<span class="st">&quot;planes&quot;</span>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 61 x 9</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 61 x 9</span><span>
 #&gt;    tailnum  year type       manufacturer  model  engines seats speed engine
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>         </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> 
-#&gt; </span><span style="color: #555555;"> 1</span><span> N305DQ   </span><span style="text-decoration: underline;">2</span><span>008 Fixed win… BOEING        737-7…       2   149    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 2</span><span> N310DE   </span><span style="text-decoration: underline;">2</span><span>009 Fixed win… BOEING        737-7…       2   149    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 3</span><span> N312US   </span><span style="text-decoration: underline;">1</span><span>990 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 4</span><span> N313US   </span><span style="text-decoration: underline;">1</span><span>990 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 5</span><span> N314US   </span><span style="text-decoration: underline;">1</span><span>991 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 6</span><span> N318NB   </span><span style="text-decoration: underline;">2</span><span>000 Fixed win… AIRBUS INDUS… A319-…       2   145    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 7</span><span> N322NB   </span><span style="text-decoration: underline;">2</span><span>001 Fixed win… AIRBUS INDUS… A319-…       2   145    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 8</span><span> N325NB   </span><span style="text-decoration: underline;">2</span><span>001 Fixed win… AIRBUS INDUS… A319-…       2   145    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"> 9</span><span> N329NW   </span><span style="text-decoration: underline;">1</span><span>992 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;">10</span><span> N332NW   </span><span style="text-decoration: underline;">1</span><span>992 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
-#&gt; </span><span style="color: #555555;"># … with 51 more rows</span><span>
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>         </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> 
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span> N305DQ   </span><span style="text-decoration: underline;">2</span><span>008 Fixed win… BOEING        737-7…       2   149    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> N310DE   </span><span style="text-decoration: underline;">2</span><span>009 Fixed win… BOEING        737-7…       2   149    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> N312US   </span><span style="text-decoration: underline;">1</span><span>990 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> N313US   </span><span style="text-decoration: underline;">1</span><span>990 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> N314US   </span><span style="text-decoration: underline;">1</span><span>991 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> N318NB   </span><span style="text-decoration: underline;">2</span><span>000 Fixed win… AIRBUS INDUS… A319-…       2   145    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> N322NB   </span><span style="text-decoration: underline;">2</span><span>001 Fixed win… AIRBUS INDUS… A319-…       2   145    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> N325NB   </span><span style="text-decoration: underline;">2</span><span>001 Fixed win… AIRBUS INDUS… A319-…       2   145    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> N329NW   </span><span style="text-decoration: underline;">1</span><span>992 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #BCBCBC;">10</span><span> N332NW   </span><span style="text-decoration: underline;">1</span><span>992 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
+#&gt; </span><span style="color: #949494;"># … with 51 more rows</span><span>
 </span></CODE></PRE>
 <p>And indeed, all included flights departed in May (<code>month == 5</code>):</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>dm_delta_may <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="st">  </span><span class="kw">dm_apply_filters_to_tbl</span>(<span class="st">&quot;flights&quot;</span>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 79 x 19</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 79 x 19</span><span>
 #&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
-#&gt; </span><span style="color: #555555;"> 1</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      554            600        -</span><span style="color: #BB0000;">6</span><span>      739
-#&gt; </span><span style="color: #555555;"> 2</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      556            600        -</span><span style="color: #BB0000;">4</span><span>      825
-#&gt; </span><span style="color: #555555;"> 3</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      606            610        -</span><span style="color: #BB0000;">4</span><span>      743
-#&gt; </span><span style="color: #555555;"> 4</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      625            630        -</span><span style="color: #BB0000;">5</span><span>      843
-#&gt; </span><span style="color: #555555;"> 5</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      653            700        -</span><span style="color: #BB0000;">7</span><span>      923
-#&gt; </span><span style="color: #555555;"> 6</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      656            700        -</span><span style="color: #BB0000;">4</span><span>      911
-#&gt; </span><span style="color: #555555;"> 7</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      700            700         0      958
-#&gt; </span><span style="color: #555555;"> 8</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      701            705        -</span><span style="color: #BB0000;">4</span><span>      952
-#&gt; </span><span style="color: #555555;"> 9</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      714            715        -</span><span style="color: #BB0000;">1</span><span>      908
-#&gt; </span><span style="color: #555555;">10</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      743            745        -</span><span style="color: #BB0000;">2</span><span>      956
-#&gt; </span><span style="color: #555555;"># … with 69 more rows, and 12 more variables: sched_arr_time </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,</span><span>
-#&gt; </span><span style="color: #555555;">#   arr_delay </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, carrier </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, flight </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, tailnum </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span><span>
-#&gt; </span><span style="color: #555555;">#   origin </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, dest </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, air_time </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, distance </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, hour </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span><span>
-#&gt; </span><span style="color: #555555;">#   minute </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, time_hour </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span>
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      554            600        -</span><span style="color: #BB0000;">6</span><span>      739
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      556            600        -</span><span style="color: #BB0000;">4</span><span>      825
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      606            610        -</span><span style="color: #BB0000;">4</span><span>      743
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      625            630        -</span><span style="color: #BB0000;">5</span><span>      843
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      653            700        -</span><span style="color: #BB0000;">7</span><span>      923
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      656            700        -</span><span style="color: #BB0000;">4</span><span>      911
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      700            700         0      958
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      701            705        -</span><span style="color: #BB0000;">4</span><span>      952
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      714            715        -</span><span style="color: #BB0000;">1</span><span>      908
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5    10      743            745        -</span><span style="color: #BB0000;">2</span><span>      956
+#&gt; </span><span style="color: #949494;"># … with 69 more rows, and 12 more variables: sched_arr_time </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   arr_delay </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, carrier </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, flight </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">, tailnum </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   origin </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, dest </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, air_time </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, distance </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, hour </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   minute </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, time_hour </span><span style="color: #949494;font-style: italic;">&lt;dttm&gt;</span><span>
 </span></CODE></PRE>
 <p>For comparison, let’s review the equivalent manual query for <code>flights</code> in <code>dplyr</code> syntax:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>airlines_filtered &lt;-<span class="st"> </span><span class="kw">filter</span>(airlines, name <span class="op">==</span><span class="st"> &quot;Delta Air Lines Inc.&quot;</span>)</span>
@@ -573,23 +583,23 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb16-4"><a href="#cb16-4"></a><span class="st">  </span><span class="kw">semi_join</span>(airlines_filtered, <span class="dt">by =</span> <span class="st">&quot;carrier&quot;</span>) <span class="op">%&gt;%</span></span>
 <span id="cb16-5"><a href="#cb16-5"></a><span class="st">  </span><span class="kw">semi_join</span>(airports_filtered, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;origin&quot;</span> =<span class="st"> &quot;faa&quot;</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb16-6"><a href="#cb16-6"></a><span class="st">  </span><span class="kw">filter</span>(month <span class="op">==</span><span class="st"> </span><span class="dv">5</span>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 2,340 x 19</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 2,340 x 19</span><span>
 #&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
-#&gt; </span><span style="color: #555555;"> 1</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      554            600        -</span><span style="color: #BB0000;">6</span><span>      731
-#&gt; </span><span style="color: #555555;"> 2</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      555            600        -</span><span style="color: #BB0000;">5</span><span>      819
-#&gt; </span><span style="color: #555555;"> 3</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      603            610        -</span><span style="color: #BB0000;">7</span><span>      754
-#&gt; </span><span style="color: #555555;"> 4</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      622            630        -</span><span style="color: #BB0000;">8</span><span>      848
-#&gt; </span><span style="color: #555555;"> 5</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      654            700        -</span><span style="color: #BB0000;">6</span><span>      931
-#&gt; </span><span style="color: #555555;"> 6</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      655            700        -</span><span style="color: #BB0000;">5</span><span>      944
-#&gt; </span><span style="color: #555555;"> 7</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      656            705        -</span><span style="color: #BB0000;">9</span><span>     </span><span style="text-decoration: underline;">1</span><span>005
-#&gt; </span><span style="color: #555555;"> 8</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      658            700        -</span><span style="color: #BB0000;">2</span><span>      925
-#&gt; </span><span style="color: #555555;"> 9</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      743            745        -</span><span style="color: #BB0000;">2</span><span>     </span><span style="text-decoration: underline;">1</span><span>014
-#&gt; </span><span style="color: #555555;">10</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      755            800        -</span><span style="color: #BB0000;">5</span><span>      929
-#&gt; </span><span style="color: #555555;"># … with 2,330 more rows, and 12 more variables: sched_arr_time </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">,</span><span>
-#&gt; </span><span style="color: #555555;">#   arr_delay </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, carrier </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, flight </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span style="color: #555555;">, tailnum </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">,</span><span>
-#&gt; </span><span style="color: #555555;">#   origin </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, dest </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span style="color: #555555;">, air_time </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, distance </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, hour </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">,</span><span>
-#&gt; </span><span style="color: #555555;">#   minute </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span style="color: #555555;">, time_hour </span><span style="color: #555555;font-style: italic;">&lt;dttm&gt;</span><span>
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      554            600        -</span><span style="color: #BB0000;">6</span><span>      731
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      555            600        -</span><span style="color: #BB0000;">5</span><span>      819
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      603            610        -</span><span style="color: #BB0000;">7</span><span>      754
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      622            630        -</span><span style="color: #BB0000;">8</span><span>      848
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      654            700        -</span><span style="color: #BB0000;">6</span><span>      931
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      655            700        -</span><span style="color: #BB0000;">5</span><span>      944
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      656            705        -</span><span style="color: #BB0000;">9</span><span>     </span><span style="text-decoration: underline;">1</span><span>005
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      658            700        -</span><span style="color: #BB0000;">2</span><span>      925
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      743            745        -</span><span style="color: #BB0000;">2</span><span>     </span><span style="text-decoration: underline;">1</span><span>014
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>  </span><span style="text-decoration: underline;">2</span><span>013     5     1      755            800        -</span><span style="color: #BB0000;">5</span><span>      929
+#&gt; </span><span style="color: #949494;"># … with 2,330 more rows, and 12 more variables: sched_arr_time </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   arr_delay </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, carrier </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, flight </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">, tailnum </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   origin </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, dest </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, air_time </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, distance </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, hour </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   minute </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, time_hour </span><span style="color: #949494;font-style: italic;">&lt;dttm&gt;</span><span>
 </span></CODE></PRE>
 <p>The {dm} code is leaner because the foreign key information is encoded in the object.</p>
 </div>
@@ -612,29 +622,29 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb17-8"><a href="#cb17-8"></a><span class="st">  </span><span class="kw">dm_get_tables</span>() <span class="op">%&gt;%</span></span>
 <span id="cb17-9"><a href="#cb17-9"></a><span class="st">  </span><span class="kw">map</span>(dbplyr<span class="op">::</span>sql_render)</span>
 <span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt; $flights</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT * FROM `flights_2020_07_02_16_39_31_3` AS `LHS`</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT * FROM `flights_2020_07_29_23_35_43_3` AS `LHS`</span></span>
 <span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-13"><a href="#cb17-13"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt; FROM `airlines_2020_07_02_16_39_31_3`</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt; FROM `airlines_2020_07_29_23_35_43_3`</span></span>
 <span id="cb17-15"><a href="#cb17-15"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `RHS`</span></span>
 <span id="cb17-16"><a href="#cb17-16"></a><span class="co">#&gt;   WHERE (`LHS`.`carrier` = `RHS`.`carrier`)</span></span>
 <span id="cb17-17"><a href="#cb17-17"></a><span class="co">#&gt; )) AS `LHS`</span></span>
 <span id="cb17-18"><a href="#cb17-18"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-19"><a href="#cb17-19"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-20"><a href="#cb17-20"></a><span class="co">#&gt; FROM `airports_2020_07_02_16_39_31_3`</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a><span class="co">#&gt; FROM `airports_2020_07_29_23_35_43_3`</span></span>
 <span id="cb17-21"><a href="#cb17-21"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `RHS`</span></span>
 <span id="cb17-22"><a href="#cb17-22"></a><span class="co">#&gt;   WHERE (`LHS`.`origin` = `RHS`.`faa`)</span></span>
 <span id="cb17-23"><a href="#cb17-23"></a><span class="co">#&gt; )</span></span>
 <span id="cb17-24"><a href="#cb17-24"></a><span class="co">#&gt; </span></span>
 <span id="cb17-25"><a href="#cb17-25"></a><span class="co">#&gt; $airlines</span></span>
 <span id="cb17-26"><a href="#cb17-26"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT *</span></span>
-<span id="cb17-27"><a href="#cb17-27"></a><span class="co">#&gt; FROM `airlines_2020_07_02_16_39_31_3`</span></span>
+<span id="cb17-27"><a href="#cb17-27"></a><span class="co">#&gt; FROM `airlines_2020_07_29_23_35_43_3`</span></span>
 <span id="cb17-28"><a href="#cb17-28"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `LHS`</span></span>
 <span id="cb17-29"><a href="#cb17-29"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
-<span id="cb17-30"><a href="#cb17-30"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_07_02_16_39_31_3` AS `LHS`</span></span>
+<span id="cb17-30"><a href="#cb17-30"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_07_29_23_35_43_3` AS `LHS`</span></span>
 <span id="cb17-31"><a href="#cb17-31"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-32"><a href="#cb17-32"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-33"><a href="#cb17-33"></a><span class="co">#&gt; FROM `airports_2020_07_02_16_39_31_3`</span></span>
+<span id="cb17-33"><a href="#cb17-33"></a><span class="co">#&gt; FROM `airports_2020_07_29_23_35_43_3`</span></span>
 <span id="cb17-34"><a href="#cb17-34"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `RHS`</span></span>
 <span id="cb17-35"><a href="#cb17-35"></a><span class="co">#&gt;   WHERE (`LHS`.`origin` = `RHS`.`faa`)</span></span>
 <span id="cb17-36"><a href="#cb17-36"></a><span class="co">#&gt; )) AS `RHS`</span></span>
@@ -643,13 +653,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb17-39"><a href="#cb17-39"></a><span class="co">#&gt; </span></span>
 <span id="cb17-40"><a href="#cb17-40"></a><span class="co">#&gt; $airports</span></span>
 <span id="cb17-41"><a href="#cb17-41"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT *</span></span>
-<span id="cb17-42"><a href="#cb17-42"></a><span class="co">#&gt; FROM `airports_2020_07_02_16_39_31_3`</span></span>
+<span id="cb17-42"><a href="#cb17-42"></a><span class="co">#&gt; FROM `airports_2020_07_29_23_35_43_3`</span></span>
 <span id="cb17-43"><a href="#cb17-43"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `LHS`</span></span>
 <span id="cb17-44"><a href="#cb17-44"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
-<span id="cb17-45"><a href="#cb17-45"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_07_02_16_39_31_3` AS `LHS`</span></span>
+<span id="cb17-45"><a href="#cb17-45"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_07_29_23_35_43_3` AS `LHS`</span></span>
 <span id="cb17-46"><a href="#cb17-46"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-47"><a href="#cb17-47"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-48"><a href="#cb17-48"></a><span class="co">#&gt; FROM `airlines_2020_07_02_16_39_31_3`</span></span>
+<span id="cb17-48"><a href="#cb17-48"></a><span class="co">#&gt; FROM `airlines_2020_07_29_23_35_43_3`</span></span>
 <span id="cb17-49"><a href="#cb17-49"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `RHS`</span></span>
 <span id="cb17-50"><a href="#cb17-50"></a><span class="co">#&gt;   WHERE (`LHS`.`carrier` = `RHS`.`carrier`)</span></span>
 <span id="cb17-51"><a href="#cb17-51"></a><span class="co">#&gt; )) AS `RHS`</span></span>
