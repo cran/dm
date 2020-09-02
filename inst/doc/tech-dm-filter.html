@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2020-07-29" />
+<meta name="date" content="2020-09-02" />
 
 <title>Filtering in relational data models</title>
 
@@ -319,7 +319,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Filtering in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2020-07-29</h4>
+<h4 class="date">2020-09-02</h4>
 
 
 
@@ -622,29 +622,29 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb17-8"><a href="#cb17-8"></a><span class="st">  </span><span class="kw">dm_get_tables</span>() <span class="op">%&gt;%</span></span>
 <span id="cb17-9"><a href="#cb17-9"></a><span class="st">  </span><span class="kw">map</span>(dbplyr<span class="op">::</span>sql_render)</span>
 <span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt; $flights</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT * FROM `flights_2020_07_29_23_35_43_3` AS `LHS`</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT * FROM `flights_2020_09_02_04_53_10_3` AS `LHS`</span></span>
 <span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-13"><a href="#cb17-13"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt; FROM `airlines_2020_07_29_23_35_43_3`</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt; FROM `airlines_2020_09_02_04_53_10_3`</span></span>
 <span id="cb17-15"><a href="#cb17-15"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `RHS`</span></span>
 <span id="cb17-16"><a href="#cb17-16"></a><span class="co">#&gt;   WHERE (`LHS`.`carrier` = `RHS`.`carrier`)</span></span>
 <span id="cb17-17"><a href="#cb17-17"></a><span class="co">#&gt; )) AS `LHS`</span></span>
 <span id="cb17-18"><a href="#cb17-18"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-19"><a href="#cb17-19"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-20"><a href="#cb17-20"></a><span class="co">#&gt; FROM `airports_2020_07_29_23_35_43_3`</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a><span class="co">#&gt; FROM `airports_2020_09_02_04_53_10_3`</span></span>
 <span id="cb17-21"><a href="#cb17-21"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `RHS`</span></span>
 <span id="cb17-22"><a href="#cb17-22"></a><span class="co">#&gt;   WHERE (`LHS`.`origin` = `RHS`.`faa`)</span></span>
 <span id="cb17-23"><a href="#cb17-23"></a><span class="co">#&gt; )</span></span>
 <span id="cb17-24"><a href="#cb17-24"></a><span class="co">#&gt; </span></span>
 <span id="cb17-25"><a href="#cb17-25"></a><span class="co">#&gt; $airlines</span></span>
 <span id="cb17-26"><a href="#cb17-26"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT *</span></span>
-<span id="cb17-27"><a href="#cb17-27"></a><span class="co">#&gt; FROM `airlines_2020_07_29_23_35_43_3`</span></span>
+<span id="cb17-27"><a href="#cb17-27"></a><span class="co">#&gt; FROM `airlines_2020_09_02_04_53_10_3`</span></span>
 <span id="cb17-28"><a href="#cb17-28"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `LHS`</span></span>
 <span id="cb17-29"><a href="#cb17-29"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
-<span id="cb17-30"><a href="#cb17-30"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_07_29_23_35_43_3` AS `LHS`</span></span>
+<span id="cb17-30"><a href="#cb17-30"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_09_02_04_53_10_3` AS `LHS`</span></span>
 <span id="cb17-31"><a href="#cb17-31"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-32"><a href="#cb17-32"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-33"><a href="#cb17-33"></a><span class="co">#&gt; FROM `airports_2020_07_29_23_35_43_3`</span></span>
+<span id="cb17-33"><a href="#cb17-33"></a><span class="co">#&gt; FROM `airports_2020_09_02_04_53_10_3`</span></span>
 <span id="cb17-34"><a href="#cb17-34"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `RHS`</span></span>
 <span id="cb17-35"><a href="#cb17-35"></a><span class="co">#&gt;   WHERE (`LHS`.`origin` = `RHS`.`faa`)</span></span>
 <span id="cb17-36"><a href="#cb17-36"></a><span class="co">#&gt; )) AS `RHS`</span></span>
@@ -653,13 +653,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb17-39"><a href="#cb17-39"></a><span class="co">#&gt; </span></span>
 <span id="cb17-40"><a href="#cb17-40"></a><span class="co">#&gt; $airports</span></span>
 <span id="cb17-41"><a href="#cb17-41"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT *</span></span>
-<span id="cb17-42"><a href="#cb17-42"></a><span class="co">#&gt; FROM `airports_2020_07_29_23_35_43_3`</span></span>
+<span id="cb17-42"><a href="#cb17-42"></a><span class="co">#&gt; FROM `airports_2020_09_02_04_53_10_3`</span></span>
 <span id="cb17-43"><a href="#cb17-43"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `LHS`</span></span>
 <span id="cb17-44"><a href="#cb17-44"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
-<span id="cb17-45"><a href="#cb17-45"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_07_29_23_35_43_3` AS `LHS`</span></span>
+<span id="cb17-45"><a href="#cb17-45"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2020_09_02_04_53_10_3` AS `LHS`</span></span>
 <span id="cb17-46"><a href="#cb17-46"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb17-47"><a href="#cb17-47"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb17-48"><a href="#cb17-48"></a><span class="co">#&gt; FROM `airlines_2020_07_29_23_35_43_3`</span></span>
+<span id="cb17-48"><a href="#cb17-48"></a><span class="co">#&gt; FROM `airlines_2020_09_02_04_53_10_3`</span></span>
 <span id="cb17-49"><a href="#cb17-49"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `RHS`</span></span>
 <span id="cb17-50"><a href="#cb17-50"></a><span class="co">#&gt;   WHERE (`LHS`.`carrier` = `RHS`.`carrier`)</span></span>
 <span id="cb17-51"><a href="#cb17-51"></a><span class="co">#&gt; )) AS `RHS`</span></span>
