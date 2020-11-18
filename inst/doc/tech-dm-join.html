@@ -12,43 +12,87 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2020-09-02" />
+<meta name="date" content="2020-11-18" />
 
 <title>Joining in relational data models</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -68,7 +112,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -319,7 +363,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Joining in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2020-09-02</h4>
+<h4 class="date">2020-11-18</h4>
 
 
 
@@ -327,8 +371,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>This document introduces you to the joining functions of {dm} and shows how to apply them using data from the <a href="https://github.com/hadley/nycflights13">{nycflights13}</a> package.</p>
 <p><a href="https://krlmlr.github.io/dm/articles/howto-dm-theory#model">Relational data models</a> consist of multiple tables that are linked with <a href="https://krlmlr.github.io/dm/articles/howto-dm-theory#fk">foreign keys</a>. They are the building blocks for joining tables. Read more about relational data models in the vignette <a href="https://krlmlr.github.io/dm/articles/howto-dm-theory">“Introduction to Relational Data Models”</a>.</p>
 <p>First, we load the packages that we need:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <div id="data-nycflights13" class="section level2">
 <h2>Data: nycflights13</h2>
 <p>To explore filtering with {dm}, we’ll use the {nycflights13} data with its tables <code>flights</code>, <code>planes</code>, <code>airlines</code> and <code>airports</code>.</p>
@@ -336,7 +380,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>First, we have to create a <code>dm</code> object from the {nycflights13} data. This is implemented with <code>dm::dm_nycflights13()</code>.</p>
 <p>A <a href="https://krlmlr.github.io/dm/articles/tech-dm-class.html#class-dm">data model object</a> contains the data as well as metadata.</p>
 <p>If you would like to create a <code>dm</code> from other tables, please look at <code>?dm</code> and the function <code>new_dm()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>dm &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>()</span></code></pre></div>
 </div>
 <div id="join" class="section level2">
 <h2>Joining a <code>dm</code> object</h2>
@@ -348,8 +392,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <ol style="list-style-type: decimal">
 <li>Visually, by drawing the data model with <code>dm_draw()</code></li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -434,8 +478,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <ol start="2" style="list-style-type: decimal">
 <li>Printed to the console by calling <code>dm_get_all_fks()</code></li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span><span class="kw">dm_get_all_fks</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>()</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 3 x 3</span><span>
 #&gt;   child_table child_fk_cols parent_table
 #&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       
@@ -448,9 +492,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>Joining Examples</h3>
 <p>Let’s look at some examples:</p>
 <p><strong>Add a column with airline names from the <code>airlines</code> table to the <code>flights</code> table.</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>dm_joined &lt;-<span class="st"> </span>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">dm_join_to_tbl</span>(flights, airlines, <span class="dt">join =</span> left_join)</span>
-<span id="cb5-3"><a href="#cb5-3"></a>dm_joined</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dm_joined <span class="ot">&lt;-</span> dm <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_join_to_tbl</span>(flights, airlines, <span class="at">join =</span> left_join)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dm_joined</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 11,227 x 20</span><span>
 #&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
@@ -470,36 +514,36 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #949494;">#   minute </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, time_hour </span><span style="color: #949494;font-style: italic;">&lt;dttm&gt;</span><span style="color: #949494;">, name </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>
 </span></CODE></PRE>
 <p>As you can see below, the <code>dm_joined</code> dataframe has one more column than the <code>flights</code> table. The difference is the <code>name</code> column from the <code>airlines</code> table.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">tbl</span>(<span class="st">&quot;flights&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">names</span>()</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a></span>
-<span id="cb6-10"><a href="#cb6-10"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="st">  </span><span class="kw">tbl</span>(<span class="st">&quot;airlines&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="st">  </span><span class="kw">names</span>()</span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt; [1] &quot;carrier&quot; &quot;name&quot;</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a></span>
-<span id="cb6-15"><a href="#cb6-15"></a>dm_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="st">  </span><span class="kw">names</span>()</span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
-<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
-<span id="cb6-21"><a href="#cb6-21"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;      &quot;name&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl</span>(<span class="st">&quot;flights&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl</span>(<span class="st">&quot;airlines&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;carrier&quot; &quot;name&quot;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>dm_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;      &quot;name&quot;</span></span></code></pre></div>
 <p>The result is not a <code>dm</code> object anymore, but a conventional dataframe:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>dm_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">class</span>()</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dm_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</span></span></code></pre></div>
 <p>Another example:</p>
 <p><strong>Get all flights that can’t be matched with airlines names.</strong></p>
 <p>We expect the flights data from {nycflights13} package to be clean and well organized, so no flights should remain. You can check this with an <code>anti_join</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">dm_join_to_tbl</span>(flights, airlines, <span class="dt">join =</span> anti_join)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_join_to_tbl</span>(flights, airlines, <span class="at">join =</span> anti_join)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 0 x 19</span><span>
 #&gt; </span><span style="color: #949494;"># … with 19 variables: year </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">, month </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">, day </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">, dep_time </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">,</span><span>
 #&gt; </span><span style="color: #949494;">#   sched_dep_time </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">, dep_delay </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, arr_time </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">,</span><span>
@@ -510,11 +554,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>An example with filtering on a <code>dm</code> and then merging:</p>
 <p><strong>Get all flights from Delta Air Lines which didn’t depart from John F. Kennedy International Airport in May 2013 - and join all the airports data into the <code>flights</code> table.</strong></p>
 <p>Currently, it is important to call <code>dm_apply_filters()</code> after piping your conditions. Only then the underlying tables and key relations are updated and you can perform a join on the filtered data. We are working towards removing this inconvenience <a href="https://github.com/krlmlr/dm/issues/62">#62</a>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">dm_nycflights13</span>() <span class="op">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span><span class="kw">dm_filter</span>(airlines, name <span class="op">==</span><span class="st"> &quot;Delta Air Lines Inc.&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="st">  </span><span class="kw">dm_filter</span>(flights, month <span class="op">==</span><span class="st"> </span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="st">  </span><span class="kw">dm_apply_filters</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="st">  </span><span class="kw">dm_join_to_tbl</span>(flights, airports, <span class="dt">join =</span> left_join)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_nycflights13</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_filter</span>(airlines, name <span class="sc">==</span> <span class="st">&quot;Delta Air Lines Inc.&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_filter</span>(flights, month <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_apply_filters</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_join_to_tbl</span>(flights, airports, <span class="at">join =</span> left_join)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 136 x 26</span><span>
 #&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
@@ -537,12 +581,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>A last example:</p>
 <p><strong>Merge all tables into one big table.</strong></p>
 <p>Sometimes you need everything in one place. In this case you can use the <code>dm_flatten_to_tbl()</code> function. It joins all the tables of your <code>dm</code> object together into one wide table. All you have to do is to specify the starting table. The following joins are determined by the foreign key links.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">dm_nycflights13</span>() <span class="op">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="st">  </span><span class="kw">dm_select_tbl</span>(<span class="op">-</span>weather) <span class="op">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="st">  </span><span class="kw">dm_flatten_to_tbl</span>(<span class="dt">start =</span> flights)</span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; Renamed columns:</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; * year -&gt; flights.year, planes.year</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; * name -&gt; airlines.name, airports.name</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_nycflights13</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>weather) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(<span class="at">start =</span> flights)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * year -&gt; flights.year, planes.year</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * name -&gt; airlines.name, airports.name</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 11,227 x 35</span><span>
 #&gt;    flights.year month   day dep_time sched_dep_time dep_delay arr_time
 #&gt;           </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>

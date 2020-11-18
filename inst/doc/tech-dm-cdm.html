@@ -11,43 +11,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-09-02" />
+<meta name="date" content="2020-11-18" />
 
 <title>Migration guide: ‘cdm’ -&gt; ‘dm’</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -67,7 +111,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -317,7 +361,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Migration guide: ‘cdm’ -&gt; ‘dm’</h1>
-<h4 class="date">2020-09-02</h4>
+<h4 class="date">2020-11-18</h4>
 
 
 
@@ -339,9 +383,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>The methods are of course not to be avoided in general, if no filters are set anyway the result will not change after the update.</p>
 <p>Here a short example for the different cases:</p>
 <p>Formerly you would access the “filtered” tables using the following syntax:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>flights_dm &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>()</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">tbl</span>(flights_dm, <span class="st">&quot;airports&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(flights_dm, <span class="st">&quot;airports&quot;</span>)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1,458 x 8</span><span>
 #&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        
@@ -357,7 +401,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">10</span><span> 0S9   Jefferson County Intl  48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A     America/Los_…
 #&gt; </span><span style="color: #949494;"># … with 1,448 more rows</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>flights_dm<span class="op">$</span>planes</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>flights_dm<span class="sc">$</span>planes</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 3,322 x 9</span><span>
 #&gt;    tailnum  year type       manufacturer  model  engines seats speed engine
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>         </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> 
@@ -373,7 +417,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">10</span><span> N110UW   </span><span style="text-decoration: underline;">1</span><span>999 Fixed win… AIRBUS INDUS… A320-…       2   182    </span><span style="color: #BB0000;">NA</span><span> Turbo…
 #&gt; </span><span style="color: #949494;"># … with 3,312 more rows</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>flights_dm[[<span class="st">&quot;weather&quot;</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flights_dm[[<span class="st">&quot;weather&quot;</span>]]</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 861 x 15</span><span>
 #&gt;    origin  year month   day  hour  temp  dewp humid wind_dir wind_speed
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
@@ -391,7 +435,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #949494;">#   precip </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, pressure </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, visib </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, time_hour </span><span style="color: #949494;font-style: italic;">&lt;dttm&gt;</span><span>
 </span></CODE></PRE>
 <p>After the update the same result is achieved by this type of function call:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">dm_apply_filters_to_tbl</span>(flights_dm, airlines)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_apply_filters_to_tbl</span>(flights_dm, airlines)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 16 x 2</span><span>
 #&gt;    carrier name                       
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                      

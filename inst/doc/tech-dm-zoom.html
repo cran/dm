@@ -14,39 +14,83 @@
 
 <title>Zooming and manipulating tables</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -66,7 +110,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -342,21 +386,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="use-case-1-add-a-new-column-to-an-existing-table" class="section level3">
 <h3>Use case 1: Add a new column to an existing table</h3>
 <p>Imagine you want to have a column in <code>flights</code>, specifying if a flight left before noon or after. Just like with {dplyr}, we can tackle this with <code>mutate()</code>. Let us do this step by step:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>flights_dm &lt;-<span class="st"> </span><span class="kw">dm_nycflights13</span>()</span>
-<span id="cb1-4"><a href="#cb1-4"></a>flights_dm</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 3
 #&gt; Foreign keys: 3
 </span></CODE></PRE>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>flights_zoomed &lt;-<span class="st"> </span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span>flights_dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(flights)</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># The print output for a `zoomed_dm` looks very much like that from a normal `tibble`.</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>flights_zoomed</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>flights_zoomed <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(flights)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The print output for a `zoomed_dm` looks very much like that from a normal `tibble`.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>flights_zoomed</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Zoomed table: flights</span><span>
 #&gt; </span><span style="color: #949494;"># A tibble:     11,227 x 19</span><span>
 #&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
@@ -376,13 +420,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #949494;">#   origin </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, dest </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, air_time </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, distance </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, hour </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">,</span><span>
 #&gt; </span><span style="color: #949494;">#   minute </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, time_hour </span><span style="color: #949494;font-style: italic;">&lt;dttm&gt;</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2"></a>flights_zoomed_mutate &lt;-<span class="st"> </span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span>flights_zoomed <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">am_pm_dep =</span> <span class="kw">if_else</span>(dep_time <span class="op">&lt;</span><span class="st"> </span><span class="dv">1200</span>, <span class="st">&quot;am&quot;</span>, <span class="st">&quot;pm&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span><span class="co"># in order to see our changes in the output we use `select()` for reordering the columns</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="st">  </span><span class="kw">select</span>(year<span class="op">:</span>dep_time, am_pm_dep, <span class="kw">everything</span>())</span>
-<span id="cb3-7"><a href="#cb3-7"></a>flights_zoomed_mutate</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>flights_zoomed_mutate <span class="ot">&lt;-</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  flights_zoomed <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">am_pm_dep =</span> <span class="fu">if_else</span>(dep_time <span class="sc">&lt;</span> <span class="dv">1200</span>, <span class="st">&quot;am&quot;</span>, <span class="st">&quot;pm&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># in order to see our changes in the output we use `select()` for reordering the columns</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year<span class="sc">:</span>dep_time, am_pm_dep, <span class="fu">everything</span>())</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>flights_zoomed_mutate</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Zoomed table: flights</span><span>
 #&gt; </span><span style="color: #949494;"># A tibble:     11,227 x 20</span><span>
 #&gt;     year month   day dep_time am_pm_dep sched_dep_time dep_delay arr_time
@@ -402,21 +446,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #949494;">#   origin </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, dest </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">, air_time </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, distance </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, hour </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">,</span><span>
 #&gt; </span><span style="color: #949494;">#   minute </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, time_hour </span><span style="color: #949494;font-style: italic;">&lt;dttm&gt;</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># To update the original `dm` with a new `flights` table we use `dm_update_zoomed()`:</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>updated_flights_dm &lt;-<span class="st"> </span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span>flights_zoomed_mutate <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  </span><span class="kw">dm_update_zoomed</span>()</span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># The only difference in the `dm` print output is the increased number of columns</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>updated_flights_dm</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># To update the original `dm` with a new `flights` table we use `dm_update_zoomed()`:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>updated_flights_dm <span class="ot">&lt;-</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  flights_zoomed_mutate <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_update_zoomed</span>()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># The only difference in the `dm` print output is the increased number of columns</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>updated_flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 54
 #&gt; Primary keys: 3
 #&gt; Foreign keys: 3
 </span></CODE></PRE>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># The schematic view of the data model remains unchanged</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">dm_draw</span>(updated_flights_dm)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The schematic view of the data model remains unchanged</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(updated_flights_dm)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -501,11 +545,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="use-case-2-creation-of-a-surrogate-key" class="section level3">
 <h3>Use case 2: Creation of a surrogate key</h3>
 <p>The same course of action could, for example, be employed to create a surrogate key for a table. We can do this for the <code>weather</code> table.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">library</span>(tidyr)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>weather_zoomed &lt;-<span class="st"> </span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span>flights_dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(weather)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>weather_zoomed</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>weather_zoomed <span class="ot">&lt;-</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(weather)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>weather_zoomed</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Zoomed table: weather</span><span>
 #&gt; </span><span style="color: #949494;"># A tibble:     861 x 15</span><span>
 #&gt;    origin  year month   day  hour  temp  dewp humid wind_dir wind_speed
@@ -523,8 +567,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #949494;"># … with 851 more rows, and 5 more variables: wind_gust </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">,</span><span>
 #&gt; </span><span style="color: #949494;">#   precip </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, pressure </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, visib </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, time_hour </span><span style="color: #949494;font-style: italic;">&lt;dttm&gt;</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Maybe there is some hidden candidate for a primary key that we overlooked</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">enum_pk_candidates</span>(weather_zoomed)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Maybe there is some hidden candidate for a primary key that we overlooked</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">enum_pk_candidates</span>(weather_zoomed)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 15 x 3</span><span>
 #&gt;    columns    candidate why                                                
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                              
@@ -544,44 +588,44 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">14</span><span> wind_speed FALSE     has duplicate values: 0.00000, 3.45234, 4.60312, 5…
 #&gt; </span><span style="color: #BCBCBC;">15</span><span> year       FALSE     has duplicate values: 2013
 </span></CODE></PRE>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Seems we have to construct a column with unique values</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># This can be done by combining column `origin` with `time_hour`, if the latter </span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># is converted to a single time zone first; all within the `dm`:</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>weather_zoomed_mutate &lt;-<span class="st"> </span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="st">  </span>weather_zoomed <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="st">  </span><span class="co"># first convert all times to the same time zone:</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time_hour_fmt =</span> <span class="kw">format</span>(time_hour, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="st">  </span><span class="co"># paste together as character the airport code and the time</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="st">  </span><span class="kw">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="st">  </span><span class="kw">select</span>(origin_slot_id, <span class="kw">everything</span>())</span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># check if we the result is as expected:</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="kw">enum_pk_candidates</span>(weather_zoomed_mutate) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(candidate)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seems we have to construct a column with unique values</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This can be done by combining column `origin` with `time_hour`, if the latter </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># is converted to a single time zone first; all within the `dm`:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>weather_zoomed_mutate <span class="ot">&lt;-</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  weather_zoomed <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># first convert all times to the same time zone:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_hour_fmt =</span> <span class="fu">format</span>(time_hour, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># paste together as character the airport code and the time</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(origin_slot_id, <span class="fu">everything</span>())</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># check if we the result is as expected:</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">enum_pk_candidates</span>(weather_zoomed_mutate) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(candidate)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1 x 3</span><span>
 #&gt;   columns        candidate why  
 #&gt;   </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>         </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>
 #&gt; </span><span style="color: #BCBCBC;">1</span><span> origin_slot_id TRUE      </span><span style="color: #949494;">&quot;&quot;</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>flights_upd_weather_dm &lt;-<span class="st"> </span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span>weather_zoomed_mutate <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="st">  </span><span class="kw">dm_update_zoomed</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(weather, origin_slot_id)</span>
-<span id="cb9-5"><a href="#cb9-5"></a>flights_upd_weather_dm</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>flights_upd_weather_dm <span class="ot">&lt;-</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  weather_zoomed_mutate <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_update_zoomed</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(weather, origin_slot_id)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>flights_upd_weather_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 4
 #&gt; Foreign keys: 3
 </span></CODE></PRE>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># creating the coveted FK relation between `flights` and `weather`</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>extended_flights_dm &lt;-<span class="st"> </span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="st">  </span>flights_upd_weather_dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(flights) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time_hour_fmt =</span> <span class="kw">format</span>(time_hour, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="st">  </span><span class="co"># need to keep `origin` as FK to airports, so `remove = FALSE`</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="st">  </span><span class="kw">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt, <span class="dt">remove =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="st">  </span><span class="kw">dm_update_zoomed</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="st">  </span><span class="kw">dm_add_fk</span>(flights, origin_slot_id, weather)</span>
-<span id="cb10-10"><a href="#cb10-10"></a>extended_flights_dm <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creating the coveted FK relation between `flights` and `weather`</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>extended_flights_dm <span class="ot">&lt;-</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  flights_upd_weather_dm <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(flights) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_hour_fmt =</span> <span class="fu">format</span>(time_hour, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># need to keep `origin` as FK to airports, so `remove = FALSE`</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_update_zoomed</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin_slot_id, weather)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>extended_flights_dm <span class="sc">%&gt;%</span> <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -676,7 +720,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="use-case-3-disentangle-dm" class="section level3">
 <h3>Use case 3: Disentangle <code>dm</code></h3>
 <p>If you look at the <code>dm</code> created by <code>dm_nycflights13(cycle = TRUE)</code>, you see that two columns of <code>flights</code> relate to one and the same table, <code>airports</code>. One column stands for the departure airport and the other for the arrival airport.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">dm_draw</span>(<span class="kw">dm_nycflights13</span>(<span class="dt">cycle =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -766,18 +810,18 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </svg>
 
 <p>In such cases it can be beneficial, to “disentangle” the <code>dm</code> by duplicating the referred table. One way to do this in the {dm}-framework is as follows:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>disentangled_flights_dm &lt;-<span class="st"> </span></span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw">dm_nycflights13</span>(<span class="dt">cycle =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="st">  </span><span class="co"># zooming and immediately inserting essentially creates a copy of the original table</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(airports) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="st">  </span><span class="co"># reinserting the `airports` table under the name `destination`</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;destination&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="st">  </span><span class="co"># renaming the originally zoomed table</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="st">  </span><span class="kw">dm_rename_tbl</span>(<span class="dt">origin =</span> airports) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="st">  </span><span class="co"># Key relations are also duplicated, so the wrong ones need to be removed</span></span>
-<span id="cb12-10"><a href="#cb12-10"></a><span class="st">  </span><span class="kw">dm_rm_fk</span>(flights, dest, origin) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="st">  </span><span class="kw">dm_rm_fk</span>(flights, origin, destination)</span>
-<span id="cb12-12"><a href="#cb12-12"></a><span class="kw">dm_draw</span>(disentangled_flights_dm)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>disentangled_flights_dm <span class="ot">&lt;-</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># zooming and immediately inserting essentially creates a copy of the original table</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(airports) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># reinserting the `airports` table under the name `destination`</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;destination&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># renaming the originally zoomed table</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rename_tbl</span>(<span class="at">origin =</span> airports) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Key relations are also duplicated, so the wrong ones need to be removed</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, dest, origin) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, destination)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(disentangled_flights_dm)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -880,12 +924,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="use-case-4-add-summary-table-to-dm" class="section level3">
 <h3>Use case 4: Add summary table to <code>dm</code></h3>
 <p>Here is an example for adding a summary of a table as a new table to a <code>dm</code> (FK-relations are taken care of automatically):</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>dm_with_summary &lt;-<span class="st"> </span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="st">  </span>flights_dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(flights) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="st">  </span><span class="kw">count</span>(origin, carrier) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;dep_carrier_count&quot;</span>)</span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="kw">dm_draw</span>(dm_with_summary)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dm_with_summary <span class="ot">&lt;-</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(flights) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(origin, carrier) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;dep_carrier_count&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(dm_with_summary)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -993,16 +1037,16 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="use-case-5-joining-tables" class="section level3">
 <h3>Use case 5: Joining tables</h3>
 <p>If you would like to join some or all of the columns of one table to another, you can make use of one of the <code>join</code>-methods for a <code>zoomed_dm</code>. In addition to the usual arguments for the {dplyr}-joins, by supplying the <code>select</code> argument you can specify which columns of the RHS-table you want to be included in the join. For the syntax please see the example below. The LHS-table of a join is always the zoomed table.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>joined_flights_dm &lt;-<span class="st"> </span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span>flights_dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(flights) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="st">  </span><span class="co"># let&#39;s first reduce the number of columns of flights</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>dep_delay<span class="op">:-</span>arr_delay, <span class="op">-</span>air_time<span class="op">:-</span>time_hour) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="st">  </span><span class="co"># in the {dm}-method for the joins you can specify which columns you want to add to the zoomed table</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a><span class="st">  </span><span class="kw">left_join</span>(planes, <span class="dt">select =</span> <span class="kw">c</span>(tailnum, <span class="dt">plane_type =</span> type)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb14-8"><a href="#cb14-8"></a><span class="st">  </span><span class="kw">dm_insert_zoomed</span>(<span class="st">&quot;flights_plane_type&quot;</span>)</span>
-<span id="cb14-9"><a href="#cb14-9"></a><span class="co"># this is how the table looks now</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a>joined_flights_dm<span class="op">$</span>flights_plane_type</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>joined_flights_dm <span class="ot">&lt;-</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(flights) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># let&#39;s first reduce the number of columns of flights</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dep_delay<span class="sc">:-</span>arr_delay, <span class="sc">-</span>air_time<span class="sc">:-</span>time_hour) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># in the {dm}-method for the joins you can specify which columns you want to add to the zoomed table</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(planes, <span class="at">select =</span> <span class="fu">c</span>(tailnum, <span class="at">plane_type =</span> type)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;flights_plane_type&quot;</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># this is how the table looks now</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>joined_flights_dm<span class="sc">$</span>flights_plane_type</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 11,227 x 11</span><span>
 #&gt;     year month   day dep_time sched_dep_time carrier flight tailnum origin
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> 
@@ -1019,8 +1063,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #949494;"># … with 11,217 more rows, and 2 more variables: dest </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span style="color: #949494;">,</span><span>
 #&gt; </span><span style="color: #949494;">#   plane_type </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># also here, the FK-relations are transferred to the new table</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">dm_draw</span>(joined_flights_dm)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># also here, the FK-relations are transferred to the new table</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(joined_flights_dm)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -1136,11 +1180,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="tip-accessing-the-zoomed-table" class="section level3">
 <h3>Tip: Accessing the zoomed table</h3>
 <p>At each point you can retrieve the zoomed table by calling <code>pull_tbl()</code> on a <code>zoomed_dm</code>. To use our last example once more:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>flights_dm <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="st">  </span><span class="kw">dm_zoom_to</span>(flights) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>dep_delay<span class="op">:-</span>arr_delay, <span class="op">-</span>air_time<span class="op">:-</span>time_hour) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="st">  </span><span class="kw">left_join</span>(planes, <span class="dt">select =</span> <span class="kw">c</span>(tailnum, <span class="dt">plane_type =</span> type)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="st">  </span><span class="kw">pull_tbl</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(flights) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dep_delay<span class="sc">:-</span>arr_delay, <span class="sc">-</span>air_time<span class="sc">:-</span>time_hour) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(planes, <span class="at">select =</span> <span class="fu">c</span>(tailnum, <span class="at">plane_type =</span> type)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull_tbl</span>()</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 11,227 x 11</span><span>
 #&gt;     year month   day dep_time sched_dep_time carrier flight tailnum origin
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>          </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> 

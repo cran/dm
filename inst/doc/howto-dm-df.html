@@ -11,43 +11,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-09-02" />
+<meta name="date" content="2020-11-18" />
 
 <title>Create a dm object from data frames</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -67,7 +111,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -317,13 +361,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Create a dm object from data frames</h1>
-<h4 class="date">2020-09-02</h4>
+<h4 class="date">2020-11-18</h4>
 
 
 
 <div id="building-data-models-from-data-frames-with-dm" class="section level1">
 <h1>Building data models from data frames with dm</h1>
-<p>dm allows you to create your own relational data models from local data frames. Once your data model is complete, you can deploy it a range of DBMSs using dm.</p>
+<p>dm allows you to create your own relational data models from local data frames. Once your data model is complete, you can deploy it to a range of DBMSs using dm.</p>
 <div id="creating-a-dm-object-from-data-frames" class="section level2">
 <h2>Creating a dm object from data frames</h2>
 <p>The example data set that we will be using is available through the <a href="https://github.com/hadley/nycflights13"><code>nycflights13</code></a> package. The five tables that we are working with contain information about all flights that departed from the airports of New York to other destinations in the United States in 2013:</p>
@@ -339,9 +383,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><code>planes</code> describes characteristics of the aircraft</li>
 </ul>
 <p>Once we’ve loaded {nycflights13}, the aforementioned tables are all in our work environment, ready to be accessed.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(nycflights13)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>airports</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>airports</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1,458 x 8</span><span>
 #&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        
@@ -362,10 +406,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="adding-tables" class="section level2">
 <h2>Adding Tables</h2>
 <p>Our first step will be to tell <code>dm</code> which tables we want to work with and how they are connected. For that we can use <code>dm()</code>, passing in the table names as arguments.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(dm)</span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a>flights_dm_no_keys &lt;-<span class="st"> </span><span class="kw">dm</span>(airlines, airports, flights, planes, weather)</span>
-<span id="cb2-4"><a href="#cb2-4"></a>flights_dm_no_keys</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="ot">&lt;-</span> <span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
@@ -378,9 +422,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>A dm is a list</h2>
 <p>dm objects behave like lists with a user- and console-friendly print format. In fact, using a dm as a nicer list for organizing your data frames in your environment is an easy first step towards using dm and its data modeling functionality.</p>
 <p>Member referencing, by subscript and by name, and list and slice manipulation functions work just as you would expect on a dm object.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">names</span>(flights_dm_no_keys)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] &quot;airlines&quot; &quot;airports&quot; &quot;flights&quot;  &quot;planes&quot;   &quot;weather&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>flights_dm_no_keys<span class="op">$</span>airports</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(flights_dm_no_keys)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines&quot; &quot;airports&quot; &quot;flights&quot;  &quot;planes&quot;   &quot;weather&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys<span class="sc">$</span>airports</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1,458 x 8</span><span>
 #&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        
@@ -396,7 +440,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">10</span><span> 0S9   Jefferson County Intl  48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A     America/Los_…
 #&gt; </span><span style="color: #949494;"># … with 1,448 more rows</span><span>
 </span></CODE></PRE>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>flights_dm_no_keys[<span class="kw">c</span>(<span class="st">&quot;airports&quot;</span>, <span class="st">&quot;flights&quot;</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys[<span class="fu">c</span>(<span class="st">&quot;airports&quot;</span>, <span class="st">&quot;flights&quot;</span>)]</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airports`, `flights`
 #&gt; Columns: 27
@@ -412,10 +456,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="primary-keys" class="section level2">
 <h2>Primary Keys</h2>
 <p><code>dm</code> offers <code>dm_enum_pk_candidates()</code> to identify viable primary keys, and <code>dm_add_pk()</code> to add them.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">dm_enum_pk_candidates</span>(</span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="dt">dm =</span> flights_dm_no_keys,</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">table =</span> planes</span>
-<span id="cb5-4"><a href="#cb5-4"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_no_keys,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> planes</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 9 x 3</span><span>
 #&gt;   columns     candidate why                                                
 #&gt;   </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                              
@@ -430,12 +474,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">9</span><span> year        FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: 1959, 1963, 1975, 1976, 197…
 </span></CODE></PRE>
 <p>Now, we add the primary keys that we have identified:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>flights_dm_only_pks &lt;-</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span>flights_dm_no_keys <span class="op">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(<span class="dt">table =</span> airlines, <span class="dt">columns =</span> carrier) <span class="op">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(airports, faa) <span class="op">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(planes, tailnum)</span>
-<span id="cb6-6"><a href="#cb6-6"></a>flights_dm_only_pks</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="ot">&lt;-</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(<span class="at">table =</span> airlines, <span class="at">columns =</span> carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airports, faa) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(planes, tailnum)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
@@ -447,11 +491,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="foreign-keys" class="section level2">
 <h2>Foreign Keys</h2>
 <p>To define how our tables are related, we use <code>dm_add_fk()</code> to add foreign keys. In calling <code>dm_add_fk()</code> the <code>table</code> argument is the table that needs a foreign key to link it to a second table. <code>ref_table</code> is the table to be linked to and it needs a primary key already defined for it.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">dm_enum_fk_candidates</span>(</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">dm =</span> flights_dm_only_pks,</span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">table =</span> flights,</span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="dt">ref_table =</span> airlines</span>
-<span id="cb7-5"><a href="#cb7-5"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_only_pks,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> flights,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_table =</span> airlines</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 19 x 3</span><span>
 #&gt;    columns      candidate why                                              
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                            
@@ -476,12 +520,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">19</span><span> year         FALSE     </span><span style="color: #949494;">&quot;</span><span>Can&#39;t join on `x$value` x `y$value` because of …
 </span></CODE></PRE>
 <p>Having chosen a column from the successful candidates provided by <code>dm_enum_fk_candidates()</code>, we use the <code>dm_add_fk()</code> function to establish the foreign key linking the tables. In the second call to <code>dm_add_fk()</code> we complete the process for the <code>flights</code> and <code>airlines</code> tables that we started above. The <code>carrier</code> column in the <code>airlines</code> table will be added as the foreign key in <code>flights</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>flights_dm_all_keys &lt;-</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span>flights_dm_only_pks <span class="op">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="st">  </span><span class="kw">dm_add_fk</span>(<span class="dt">table =</span> flights, <span class="dt">columns =</span> tailnum, <span class="dt">ref_table =</span> planes) <span class="op">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="st">  </span><span class="kw">dm_add_fk</span>(flights, carrier, airlines) <span class="op">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="st">  </span><span class="kw">dm_add_fk</span>(flights, origin, airports)</span>
-<span id="cb8-6"><a href="#cb8-6"></a>flights_dm_all_keys</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="ot">&lt;-</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(<span class="at">table =</span> flights, <span class="at">columns =</span> tailnum, <span class="at">ref_table =</span> planes) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, carrier, airlines) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
@@ -493,8 +537,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
 <p>Visualizing a data model is a quick and easy way to verify that we have successfully created the model we were aiming for. We can use <code>dm_draw()</code> at any stage of the process to generate a visual representation of the tables and the links between them:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>flights_dm_no_keys <span class="op">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="st">  </span><span class="kw">dm_draw</span>(<span class="dt">rankdir =</span> <span class="st">&quot;TB&quot;</span>, <span class="dt">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">rankdir =</span> <span class="st">&quot;TB&quot;</span>, <span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -651,10 +695,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </g>
 </svg>
 
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a></span>
-<span id="cb10-2"><a href="#cb10-2"></a>flights_dm_no_keys <span class="op">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="st">  </span><span class="kw">dm_add_pk</span>(airlines, carrier) <span class="op">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airlines, carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -707,10 +751,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </g>
 </svg>
 
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a></span>
-<span id="cb11-2"><a href="#cb11-2"></a>flights_dm_only_pks <span class="op">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">dm_add_fk</span>(flights, tailnum, planes) <span class="op">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, tailnum, planes) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -775,9 +819,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </g>
 </svg>
 
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a></span>
-<span id="cb12-2"><a href="#cb12-2"></a>flights_dm_all_keys <span class="op">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="st">  </span><span class="kw">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -862,18 +906,18 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="integrity-checks" class="section level2">
 <h2>Integrity Checks</h2>
 <p>As well as checking our data model visually, dm can examine the constraints we have created by the addition of keys and verify that they are sensible.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>flights_dm_no_keys <span class="op">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="st">  </span><span class="kw">dm_examine_constraints</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span><span> No constraints defined.
 </span></CODE></PRE>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a></span>
-<span id="cb14-2"><a href="#cb14-2"></a>flights_dm_only_pks <span class="op">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">dm_examine_constraints</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span><span> All constraints satisfied.
 </span></CODE></PRE>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a></span>
-<span id="cb15-2"><a href="#cb15-2"></a>flights_dm_all_keys <span class="op">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="st">  </span><span class="kw">dm_examine_constraints</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #BBBB00;">!</span><span> Unsatisfied constraints:
 </span></CODE></PRE>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #BB0000;">●</span><span> Table `flights`: foreign key tailnum into table `planes`: 50094 entries (14.9%) of `flights$tailnum` not in `planes$tailnum`: N725MQ (575), N722MQ (513), N723MQ (507), N713MQ (483), N735MQ (396), …
@@ -884,8 +928,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>Programming</h2>
 <p>Helper functions are available to access details on keys and check results.</p>
 <p><code>dm_get_all_pks()</code> returns a data frame with our primary keys:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>flights_dm_only_pks <span class="op">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="st">  </span><span class="kw">dm_get_all_pks</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_pks</span>()</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 3 x 2</span><span>
 #&gt;   table    pk_col 
 #&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span> 
@@ -894,8 +938,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">3</span><span> planes   tailnum
 </span></CODE></PRE>
 <p>A data frame of foreign keys is retrieved with <code>dm_get_all_fks()</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>flights_dm_all_keys <span class="op">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="st">  </span><span class="kw">dm_get_all_pks</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_pks</span>()</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 3 x 2</span><span>
 #&gt;   table    pk_col 
 #&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span> 
@@ -904,9 +948,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">3</span><span> planes   tailnum
 </span></CODE></PRE>
 <p>We can use <code>tibble::as_tibble()</code> on the result of <code>dm_examine_constraints()</code> to programmatically inspect which constraints are not satisfied:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>flights_dm_all_keys <span class="op">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="st">  </span><span class="kw">dm_examine_constraints</span>() <span class="op">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="st">  </span>tibble<span class="op">::</span><span class="kw">as_tibble</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 6 x 6</span><span>
 #&gt;   table   kind  columns ref_table is_key problem                           
 #&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                             
