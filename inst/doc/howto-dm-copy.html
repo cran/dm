@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2020-11-18" />
+<meta name="date" content="2021-01-07" />
 
 <title>Copy tables to and from a database</title>
 
@@ -27,45 +27,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
     a = h.attributes;
     while (a.length > 0) h.removeAttribute(a[0].name);
   }
-});
-</script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
 });
 </script>
 
@@ -166,6 +127,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -363,7 +325,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Copy tables to and from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2020-11-18</h4>
+<h4 class="date">2021-01-07</h4>
 
 
 
@@ -376,10 +338,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Attaching packages</span><span> ────────────────────────────────── tidyverse 1.3.0 ──
 </span></CODE></PRE>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">ggplot2</span><span> 3.3.2     </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">purrr  </span><span> 0.3.4
-#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tibble </span><span> 3.0.4     </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">dplyr  </span><span> 1.0.2
-#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tidyr  </span><span> 1.1.2     </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">stringr</span><span> 1.4.0
-#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">readr  </span><span> 1.3.1     </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">forcats</span><span> 0.5.0
+<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">ggplot2</span><span> 3.3.3          </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">purrr  </span><span> 0.3.4.</span><span style="color: #BB0000;">9000</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tibble </span><span> 3.0.4          </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">dplyr  </span><span> 1.0.2.</span><span style="color: #BB0000;">9000</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">tidyr  </span><span> 1.1.2          </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">stringr</span><span> 1.4.0.</span><span style="color: #BB0000;">9000</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">readr  </span><span> 1.4.0          </span><span style="color: #00BB00;">✓</span><span> </span><span style="color: #0000BB;">forcats</span><span> 0.5.0
 </span></CODE></PRE>
 <PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Conflicts</span><span> ───────────────────────────────────── tidyverse_conflicts() ──
 #&gt; </span><span style="color: #BB0000;">x</span><span> </span><span style="color: #0000BB;">dplyr</span><span>::</span><span style="color: #00BB00;">filter()</span><span> masks </span><span style="color: #0000BB;">dm</span><span>::filter(), </span><span style="color: #0000BB;">stats</span><span>::filter()
@@ -636,8 +598,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span><span> All constraints satisfied.
 </span></CODE></PRE>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid<span class="sc">$</span>loans_residuals</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   table&lt;loans_residuals_2020_11_18_14_32_54_1&gt; [?? x 2]</span><span>
-#&gt; </span><span style="color: #949494;"># Database: sqlite 3.31.1 []</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   table&lt;loans_residuals_2021_01_07_14_58_07_1&gt; [?? x 2]</span><span>
+#&gt; </span><span style="color: #949494;"># Database: sqlite 3.34.0 []</span><span>
 #&gt;       id   resid
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
 #&gt; </span><span style="color: #BCBCBC;"> 1</span><span>  </span><span style="text-decoration: underline;">4</span><span>959 -</span><span style="color: #BB0000;text-decoration: underline;">31</span><span style="color: #BB0000;">912.</span><span>
@@ -683,7 +645,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>deployed_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.31.1 []
+#&gt; src:  sqlite 3.34.0 []
 #&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (8 total)
 #&gt; Columns: 47
@@ -699,7 +661,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>dup_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.31.1 []
+#&gt; src:  sqlite 3.34.0 []
 #&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (8 total)
 #&gt; Columns: 47

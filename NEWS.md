@@ -1,3 +1,12 @@
+# dm 0.1.10
+
+- Columns with missing values are no longer primary keys (#469).
+- Fix `dm_from_src()` for MSSQL when `learn_keys = FALSE` (#427).
+- Tests use `expect_snapshot()` everywhere (#456).
+- Fix compatibility with testthat 3.0.1 (#457).
+
+
+
 # dm 0.1.9
 
 - New `vignette("howto-dm-copy", package = "dm")` and `vignette("howto-dm-rows", package = "dm")` discuss updating data on the database. In part derived from `vignette("howto-dm-db", package = "dm")` (#411, @jawond).

@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-11-18" />
+<meta name="date" content="2021-01-07" />
 
 <title>Class dm and basic operations</title>
 
@@ -26,45 +26,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
     a = h.attributes;
     while (a.length > 0) h.removeAttribute(a[0].name);
   }
-});
-</script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
 });
 </script>
 
@@ -165,6 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -361,7 +323,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2020-11-18</h4>
+<h4 class="date">2021-01-07</h4>
 
 
 
@@ -440,10 +402,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.31.1 [/tmp/RtmpoVIOb1/nycflights13.sqlite]
+#&gt; src:  sqlite 3.34.0 [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]
 #&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
-#&gt; Columns: 62
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, `weather`
+#&gt; Columns: 55
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
 </span></CODE></PRE>
@@ -469,20 +431,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>We can get the list of tables with <code>dm_get_tables()</code> and the <code>src</code> object with <code>dm_get_src()</code>.</p>
 <p>In order to pull a specific table from a <code>dm</code>, use:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(flights_dm, <span class="st">&quot;airports&quot;</span>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   table&lt;`airports`&gt; [?? x 8]</span><span>
-#&gt; </span><span style="color: #949494;"># Database: sqlite 3.31.1 [/tmp/RtmpoVIOb1/nycflights13.sqlite]</span><span>
-#&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
-#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>        
-#&gt; </span><span style="color: #BCBCBC;"> 1</span><span> 04G   Lansdowne Airport      41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> 06A   Moton Field Municipa…  32.5  -</span><span style="color: #BB0000;">85.7</span><span>   264    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
-#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> 06C   Schaumburg Regional    42.0  -</span><span style="color: #BB0000;">88.1</span><span>   801    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
-#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> 06N   Randall Airport        41.4  -</span><span style="color: #BB0000;">74.4</span><span>   523    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> 09J   Jekyll Island Airport  31.1  -</span><span style="color: #BB0000;">81.4</span><span>    11    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> 0A9   Elizabethton Municip…  36.4  -</span><span style="color: #BB0000;">82.2</span><span>  </span><span style="text-decoration: underline;">1</span><span>593    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> 0G6   Williams County Airp…  41.5  -</span><span style="color: #BB0000;">84.5</span><span>   730    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> 0G7   Finger Lakes Regiona…  42.9  -</span><span style="color: #BB0000;">76.8</span><span>   492    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> 0P2   Shoestring Aviation …  39.8  -</span><span style="color: #BB0000;">76.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>000    -</span><span style="color: #BB0000;">5</span><span> U     America/New_…
-#&gt; </span><span style="color: #BCBCBC;">10</span><span> 0S9   Jefferson County Intl  48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A     America/Los_…
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   table&lt;`airports`&gt; [?? x 7]</span><span>
+#&gt; </span><span style="color: #949494;"># Database: sqlite 3.34.0
+#&gt; #   [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]</span><span>
+#&gt;    faa   name                             lat    lon   alt    tz dst  
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                          </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span> 04G   Lansdowne Airport               41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> 06A   Moton Field Municipal Airport   32.5  -</span><span style="color: #BB0000;">85.7</span><span>   264    -</span><span style="color: #BB0000;">5</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> 06C   Schaumburg Regional             42.0  -</span><span style="color: #BB0000;">88.1</span><span>   801    -</span><span style="color: #BB0000;">6</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> 06N   Randall Airport                 41.4  -</span><span style="color: #BB0000;">74.4</span><span>   523    -</span><span style="color: #BB0000;">5</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> 09J   Jekyll Island Airport           31.1  -</span><span style="color: #BB0000;">81.4</span><span>    11    -</span><span style="color: #BB0000;">4</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> 0A9   Elizabethton Municipal Airport  36.4  -</span><span style="color: #BB0000;">82.2</span><span>  </span><span style="text-decoration: underline;">1</span><span>593    -</span><span style="color: #BB0000;">4</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> 0G6   Williams County Airport         41.5  -</span><span style="color: #BB0000;">84.5</span><span>   730    -</span><span style="color: #BB0000;">5</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> 0G7   Finger Lakes Regional Airport   42.9  -</span><span style="color: #BB0000;">76.8</span><span>   492    -</span><span style="color: #BB0000;">5</span><span> A    
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> 0P2   Shoestring Aviation Airfield    39.8  -</span><span style="color: #BB0000;">76.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>000    -</span><span style="color: #BB0000;">5</span><span> U    
+#&gt; </span><span style="color: #BCBCBC;">10</span><span> 0S9   Jefferson County Intl           48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A    
 #&gt; </span><span style="color: #949494;"># … with more rows</span><span>
 </span></CODE></PRE>
 <p>But how can we use {dm}-functions to manage the primary keys of the tables in a <code>dm</code> object?</p>
@@ -505,10 +468,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.31.1 [/tmp/RtmpoVIOb1/nycflights13.sqlite]
+#&gt; src:  sqlite 3.34.0 [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]
 #&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
-#&gt; Columns: 62
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, `weather`
+#&gt; Columns: 55
 #&gt; Primary keys: 1
 #&gt; Foreign keys: 0
 </span></CODE></PRE>
@@ -526,7 +489,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>If you still need to get to know your data better, and it is already available in the form of a <code>dm</code> object, you can use the <code>dm_enum_pk_candidates()</code> function in order to get information about which columns of the table are unique keys:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, airports)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 8 x 3</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 7 x 3</span><span>
 #&gt;   columns candidate why                                                    
 #&gt;   </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                                  
 #&gt; </span><span style="color: #BCBCBC;">1</span><span> faa     TRUE      </span><span style="color: #949494;">&quot;&quot;</span><span>                                                     
@@ -535,14 +498,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">4</span><span> dst     FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: A, N, U</span><span style="color: #949494;">&quot;</span><span>                        
 #&gt; </span><span style="color: #BCBCBC;">5</span><span> lat     FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: 38.88944, 40.63975</span><span style="color: #949494;">&quot;</span><span>             
 #&gt; </span><span style="color: #BCBCBC;">6</span><span> name    FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: All Airports, Capital City Airp…
-#&gt; </span><span style="color: #BCBCBC;">7</span><span> tz      FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: -10, -9, -8, -7, -6, …</span><span style="color: #949494;">&quot;</span><span>         
-#&gt; </span><span style="color: #BCBCBC;">8</span><span> tzone   FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: NA, America/Anchorage, America/…
+#&gt; </span><span style="color: #BCBCBC;">7</span><span> tz      FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: -11, -10, -9, -8, -7, …</span><span style="color: #949494;">&quot;</span><span>
 </span></CODE></PRE>
 <p>The <code>flights</code> table does not have any one-column primary key candidates:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1 x 2</span><span>
 #&gt;   candidate     n
-#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;">*</span><span> </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
 #&gt; </span><span style="color: #BCBCBC;">1</span><span> FALSE        19
 </span></CODE></PRE>
 <p>To get an overview over all tables with primary keys, use <code>dm_get_all_pks()</code>:</p>
@@ -571,10 +533,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>This is done by choosing a foreign key from one table that will point to a primary key of another table. The primary key of the referred table must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will find the primary key column of the referenced table by itself and make the indicated column of the child table point to it.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.31.1 [/tmp/RtmpoVIOb1/nycflights13.sqlite]
+#&gt; src:  sqlite 3.34.0 [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]
 #&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
-#&gt; Columns: 62
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, `weather`
+#&gt; Columns: 55
 #&gt; Primary keys: 1
 #&gt; Foreign keys: 1
 </span></CODE></PRE>
@@ -619,20 +581,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt;    columns    candidate why                                                
 #&gt;    </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                              
 #&gt; </span><span style="color: #BCBCBC;"> 1</span><span> origin     TRUE      </span><span style="color: #949494;">&quot;&quot;</span><span>                                                 
-#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> wind_gust  FALSE     </span><span style="color: #949494;">&quot;</span><span>5337 entries (20.4%) of `weather$wind_gust` not i…
-#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> pressure   FALSE     </span><span style="color: #949494;">&quot;</span><span>23386 entries (89.6%) of `weather$pressure` not i…
-#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> wind_dir   FALSE     </span><span style="color: #949494;">&quot;</span><span>25655 entries (98.2%) of `weather$wind_dir` not i…
-#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> wind_speed FALSE     </span><span style="color: #949494;">&quot;</span><span>26111 entries (100%) of `weather$wind_speed` not …
-#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> dewp       FALSE     </span><span style="color: #949494;">&quot;</span><span>26114 entries (100%) of `weather$dewp` not in `ai…
-#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> humid      FALSE     </span><span style="color: #949494;">&quot;</span><span>26114 entries (100%) of `weather$humid` not in `a…
-#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> temp       FALSE     </span><span style="color: #949494;">&quot;</span><span>26114 entries (100%) of `weather$temp` not in `ai…
-#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> day        FALSE     </span><span style="color: #949494;">&quot;</span><span>26115 entries (100%) of `weather$day` not in `air…
-#&gt; </span><span style="color: #BCBCBC;">10</span><span> hour       FALSE     </span><span style="color: #949494;">&quot;</span><span>26115 entries (100%) of `weather$hour` not in `ai…
-#&gt; </span><span style="color: #BCBCBC;">11</span><span> month      FALSE     </span><span style="color: #949494;">&quot;</span><span>26115 entries (100%) of `weather$month` not in `a…
-#&gt; </span><span style="color: #BCBCBC;">12</span><span> precip     FALSE     </span><span style="color: #949494;">&quot;</span><span>26115 entries (100%) of `weather$precip` not in `…
-#&gt; </span><span style="color: #BCBCBC;">13</span><span> time_hour  FALSE     </span><span style="color: #949494;">&quot;</span><span>26115 entries (100%) of `weather$time_hour` not i…
-#&gt; </span><span style="color: #BCBCBC;">14</span><span> visib      FALSE     </span><span style="color: #949494;">&quot;</span><span>26115 entries (100%) of `weather$visib` not in `a…
-#&gt; </span><span style="color: #BCBCBC;">15</span><span> year       FALSE     </span><span style="color: #949494;">&quot;</span><span>26115 entries (100%) of `weather$year` not in `ai…
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> pressure   FALSE     </span><span style="color: #949494;">&quot;</span><span>23400 entries (89.6%) of `weather$pressure` not i…
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> wind_dir   FALSE     </span><span style="color: #949494;">&quot;</span><span>25712 entries (98.4%) of `weather$wind_dir` not i…
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> wind_gust  FALSE     </span><span style="color: #949494;">&quot;</span><span>26127 entries (100%) of `weather$wind_gust` not i…
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> wind_speed FALSE     </span><span style="color: #949494;">&quot;</span><span>26127 entries (100%) of `weather$wind_speed` not …
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> dewp       FALSE     </span><span style="color: #949494;">&quot;</span><span>26129 entries (100%) of `weather$dewp` not in `ai…
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> humid      FALSE     </span><span style="color: #949494;">&quot;</span><span>26129 entries (100%) of `weather$humid` not in `a…
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> temp       FALSE     </span><span style="color: #949494;">&quot;</span><span>26129 entries (100%) of `weather$temp` not in `ai…
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> day        FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$day` not in `air…
+#&gt; </span><span style="color: #BCBCBC;">10</span><span> hour       FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$hour` not in `ai…
+#&gt; </span><span style="color: #BCBCBC;">11</span><span> month      FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$month` not in `a…
+#&gt; </span><span style="color: #BCBCBC;">12</span><span> precip     FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$precip` not in `…
+#&gt; </span><span style="color: #BCBCBC;">13</span><span> time_hour  FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$time_hour` not i…
+#&gt; </span><span style="color: #BCBCBC;">14</span><span> visib      FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$visib` not in `a…
+#&gt; </span><span style="color: #BCBCBC;">15</span><span> year       FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$year` not in `ai…
 </span></CODE></PRE>
 <p>Get an overview of all foreign key relations with<code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2020-11-18" />
+<meta name="date" content="2021-01-07" />
 
 <title>Introduction to relational data models</title>
 
@@ -27,45 +27,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
     a = h.attributes;
     while (a.length > 0) h.removeAttribute(a[0].name);
   }
-});
-</script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
 });
 </script>
 
@@ -166,6 +127,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -363,7 +325,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2020-11-18</h4>
+<h4 class="date">2021-01-07</h4>
 
 
 
@@ -573,7 +535,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; </span><span style="color: #BCBCBC;">5</span><span> lat     FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: 38.88944, 40.63975</span><span style="color: #949494;">&quot;</span><span>             
 #&gt; </span><span style="color: #BCBCBC;">6</span><span> name    FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: All Airports, Capital City Airp…
 #&gt; </span><span style="color: #BCBCBC;">7</span><span> tz      FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: -10, -9, -8, -7, -6, …</span><span style="color: #949494;">&quot;</span><span>         
-#&gt; </span><span style="color: #BCBCBC;">8</span><span> tzone   FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: America/Anchorage, America/Chic…
+#&gt; </span><span style="color: #BCBCBC;">8</span><span> tzone   FALSE     </span><span style="color: #949494;">&quot;</span><span>has missing values, and duplicate values: America/Anc…
 </span></CODE></PRE>
 <p>Further Reading: The {dm} package offers several functions for dealing with <a href="https://krlmlr.github.io/dm/articles/tech-dm-class.html#pk">primary keys</a>.</p>
 </div>
@@ -712,17 +674,17 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_dm_to</span>(con_sqlite, dm)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbListTables</span>(con_sqlite)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines_2020_11_18_14_33_27_5&quot; &quot;airports_2020_11_18_14_33_27_5&quot;</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;flights_2020_11_18_14_33_27_5&quot;  &quot;planes_2020_11_18_14_33_27_5&quot;  </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines_2021_01_07_14_58_42_5&quot; &quot;airports_2021_01_07_14_58_42_5&quot;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;flights_2021_01_07_14_58_42_5&quot;  &quot;planes_2021_01_07_14_58_42_5&quot;  </span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;sqlite_stat1&quot;                   &quot;sqlite_stat4&quot;                  </span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;weather_2020_11_18_14_33_27_5&quot;</span></span></code></pre></div>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;weather_2021_01_07_14_58_42_5&quot;</span></span></code></pre></div>
 <p>In the opposite direction, <code>dm</code> can also be populated with data from a DB. Unfortunately, keys currently can be learned only for MSSQL and Postgres, but not for SQLite. Therefore, the dm contains the tables but not the keys:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_from_src</span>(con_sqlite)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Keys could not be queried, use `learn_keys = FALSE` to mute this message.</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.31.1 []
+#&gt; src:  sqlite 3.34.0 []
 #&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines_2020_11_18_14_33_27_5`, `airports_2020_11_18_14_33_27_5`, `flights_2020_11_18_14_33_27_5`, `planes_2020_11_18_14_33_27_5`, `sqlite_stat1`, … (7 total)
+#&gt; Tables: `airlines_2021_01_07_14_58_42_5`, `airports_2021_01_07_14_58_42_5`, `flights_2021_01_07_14_58_42_5`, `planes_2021_01_07_14_58_42_5`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
