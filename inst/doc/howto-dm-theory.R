@@ -34,6 +34,10 @@ dm %>%
   dm_get_fk(flights, airlines)
 
 ## ------------------------------------------------------------------------
+dm %>%
+  dm_examine_constraints()
+
+## ------------------------------------------------------------------------
 #  Update in one single location...
 airlines[airlines$carrier == "UA", "name"] <- "United broke my guitar"
 

@@ -11,23 +11,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-01-07" />
+<meta name="date" content="2021-02-14" />
 
 <title>Class dm and basic operations</title>
 
-<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
-// be compatible with the behavior of Pandoc < 2.8).
-document.addEventListener('DOMContentLoaded', function(e) {
-  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
-  var i, h, a;
-  for (i = 0; i < hs.length; i++) {
-    h = hs[i];
-    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
-    a = h.attributes;
-    while (a.length > 0) h.removeAttribute(a[0].name);
-  }
-});
-</script>
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -130,187 +118,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
-
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -323,7 +131,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2021-01-07</h4>
+<h4 class="date">2021-02-14</h4>
 
 
 
@@ -356,7 +164,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 0
@@ -372,7 +180,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>empty_dm</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dm()</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_tbl</span>(empty_dm, airlines, airports, flights, planes, weather) </span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 0
@@ -387,7 +195,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">flights =</span> flights, </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">planes =</span> planes, </span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">weather =</span> weather))</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
 #&gt; Primary keys: 0
@@ -402,10 +210,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.34.0 [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]
-#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, `weather`
-#&gt; Columns: 55
+#&gt; src:  sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
+#&gt; Columns: 62
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
 </span></CODE></PRE>
@@ -416,7 +224,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Another way of creating a <code>dm</code> object is calling <code>new_dm()</code> on a list of <code>tbl</code> objects:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_dm <span class="ot">&lt;-</span> <span class="fu">new_dm</span>(<span class="fu">list</span>(<span class="at">trees =</span> trees, <span class="at">mtcars =</span> mtcars))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>base_dm</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `trees`, `mtcars`
 #&gt; Columns: 14
 #&gt; Primary keys: 0
@@ -431,22 +239,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>We can get the list of tables with <code>dm_get_tables()</code> and the <code>src</code> object with <code>dm_get_src()</code>.</p>
 <p>In order to pull a specific table from a <code>dm</code>, use:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(flights_dm, <span class="st">&quot;airports&quot;</span>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># Source:   table&lt;`airports`&gt; [?? x 7]</span><span>
-#&gt; </span><span style="color: #949494;"># Database: sqlite 3.34.0
-#&gt; #   [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]</span><span>
-#&gt;    faa   name                             lat    lon   alt    tz dst  
-#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                          </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>
-#&gt; </span><span style="color: #BCBCBC;"> 1</span><span> 04G   Lansdowne Airport               41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> 06A   Moton Field Municipal Airport   32.5  -</span><span style="color: #BB0000;">85.7</span><span>   264    -</span><span style="color: #BB0000;">5</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> 06C   Schaumburg Regional             42.0  -</span><span style="color: #BB0000;">88.1</span><span>   801    -</span><span style="color: #BB0000;">6</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> 06N   Randall Airport                 41.4  -</span><span style="color: #BB0000;">74.4</span><span>   523    -</span><span style="color: #BB0000;">5</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> 09J   Jekyll Island Airport           31.1  -</span><span style="color: #BB0000;">81.4</span><span>    11    -</span><span style="color: #BB0000;">4</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> 0A9   Elizabethton Municipal Airport  36.4  -</span><span style="color: #BB0000;">82.2</span><span>  </span><span style="text-decoration: underline;">1</span><span>593    -</span><span style="color: #BB0000;">4</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> 0G6   Williams County Airport         41.5  -</span><span style="color: #BB0000;">84.5</span><span>   730    -</span><span style="color: #BB0000;">5</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> 0G7   Finger Lakes Regional Airport   42.9  -</span><span style="color: #BB0000;">76.8</span><span>   492    -</span><span style="color: #BB0000;">5</span><span> A    
-#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> 0P2   Shoestring Aviation Airfield    39.8  -</span><span style="color: #BB0000;">76.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>000    -</span><span style="color: #BB0000;">5</span><span> U    
-#&gt; </span><span style="color: #BCBCBC;">10</span><span> 0S9   Jefferson County Intl           48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A    
-#&gt; </span><span style="color: #949494;"># … with more rows</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`airports`&gt; [?? x 8]</span><span>
+#&gt; </span><span style="color: #555555;"># Database: sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]</span><span>
+#&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
+#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        
+#&gt; </span><span style="color: #555555;"> 1</span><span> 04G   Lansdowne Airport      41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #555555;"> 2</span><span> 06A   Moton Field Municipa…  32.5  -</span><span style="color: #BB0000;">85.7</span><span>   264    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
+#&gt; </span><span style="color: #555555;"> 3</span><span> 06C   Schaumburg Regional    42.0  -</span><span style="color: #BB0000;">88.1</span><span>   801    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
+#&gt; </span><span style="color: #555555;"> 4</span><span> 06N   Randall Airport        41.4  -</span><span style="color: #BB0000;">74.4</span><span>   523    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #555555;"> 5</span><span> 09J   Jekyll Island Airport  31.1  -</span><span style="color: #BB0000;">81.4</span><span>    11    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #555555;"> 6</span><span> 0A9   Elizabethton Municip…  36.4  -</span><span style="color: #BB0000;">82.2</span><span>  </span><span style="text-decoration: underline;">1</span><span>593    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #555555;"> 7</span><span> 0G6   Williams County Airp…  41.5  -</span><span style="color: #BB0000;">84.5</span><span>   730    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #555555;"> 8</span><span> 0G7   Finger Lakes Regiona…  42.9  -</span><span style="color: #BB0000;">76.8</span><span>   492    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
+#&gt; </span><span style="color: #555555;"> 9</span><span> 0P2   Shoestring Aviation …  39.8  -</span><span style="color: #BB0000;">76.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>000    -</span><span style="color: #BB0000;">5</span><span> U     America/New_…
+#&gt; </span><span style="color: #555555;">10</span><span> 0S9   Jefferson County Intl  48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A     America/Los_…
+#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
 </span></CODE></PRE>
 <p>But how can we use {dm}-functions to manage the primary keys of the tables in a <code>dm</code> object?</p>
 </div>
@@ -468,10 +275,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.34.0 [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]
-#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, `weather`
-#&gt; Columns: 55
+#&gt; src:  sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
+#&gt; Columns: 62
 #&gt; Primary keys: 1
 #&gt; Foreign keys: 0
 </span></CODE></PRE>
@@ -489,32 +296,33 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>If you still need to get to know your data better, and it is already available in the form of a <code>dm</code> object, you can use the <code>dm_enum_pk_candidates()</code> function in order to get information about which columns of the table are unique keys:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, airports)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 7 x 3</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 8 x 3</span><span>
 #&gt;   columns candidate why                                                    
-#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                                  
-#&gt; </span><span style="color: #BCBCBC;">1</span><span> faa     TRUE      </span><span style="color: #949494;">&quot;&quot;</span><span>                                                     
-#&gt; </span><span style="color: #BCBCBC;">2</span><span> lon     TRUE      </span><span style="color: #949494;">&quot;&quot;</span><span>                                                     
-#&gt; </span><span style="color: #BCBCBC;">3</span><span> alt     FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: 0, 1, 3, 4, 5, …</span><span style="color: #949494;">&quot;</span><span>               
-#&gt; </span><span style="color: #BCBCBC;">4</span><span> dst     FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: A, N, U</span><span style="color: #949494;">&quot;</span><span>                        
-#&gt; </span><span style="color: #BCBCBC;">5</span><span> lat     FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: 38.88944, 40.63975</span><span style="color: #949494;">&quot;</span><span>             
-#&gt; </span><span style="color: #BCBCBC;">6</span><span> name    FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: All Airports, Capital City Airp…
-#&gt; </span><span style="color: #BCBCBC;">7</span><span> tz      FALSE     </span><span style="color: #949494;">&quot;</span><span>has duplicate values: -11, -10, -9, -8, -7, …</span><span style="color: #949494;">&quot;</span><span>
+#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                                  
+#&gt; </span><span style="color: #555555;">1</span><span> faa     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
+#&gt; </span><span style="color: #555555;">2</span><span> lon     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
+#&gt; </span><span style="color: #555555;">3</span><span> alt     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 0, 1, 3, 4, 5, …</span><span style="color: #555555;">&quot;</span><span>               
+#&gt; </span><span style="color: #555555;">4</span><span> dst     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: A, N, U</span><span style="color: #555555;">&quot;</span><span>                        
+#&gt; </span><span style="color: #555555;">5</span><span> lat     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 38.88944, 40.63975</span><span style="color: #555555;">&quot;</span><span>             
+#&gt; </span><span style="color: #555555;">6</span><span> name    FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: All Airports, Capital City Airp…
+#&gt; </span><span style="color: #555555;">7</span><span> tz      FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: -10, -9, -8, -7, -6, …</span><span style="color: #555555;">&quot;</span><span>         
+#&gt; </span><span style="color: #555555;">8</span><span> tzone   FALSE     </span><span style="color: #555555;">&quot;</span><span>has missing values, and duplicate values: America/Anc…
 </span></CODE></PRE>
 <p>The <code>flights</code> table does not have any one-column primary key candidates:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 1 x 2</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
 #&gt;   candidate     n
-#&gt; </span><span style="color: #BCBCBC;">*</span><span> </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
-#&gt; </span><span style="color: #BCBCBC;">1</span><span> FALSE        19
+#&gt; </span><span style="color: #555555;">*</span><span> </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #555555;">1</span><span> FALSE        19
 </span></CODE></PRE>
 <p>To get an overview over all tables with primary keys, use <code>dm_get_all_pks()</code>:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_pks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 3 x 2</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 2</span><span>
 #&gt;   table    pk_col 
-#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span> 
-#&gt; </span><span style="color: #BCBCBC;">1</span><span> airlines carrier
-#&gt; </span><span style="color: #BCBCBC;">2</span><span> airports faa    
-#&gt; </span><span style="color: #BCBCBC;">3</span><span> planes   tailnum
+#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span> 
+#&gt; </span><span style="color: #555555;">1</span><span> airlines carrier
+#&gt; </span><span style="color: #555555;">2</span><span> airports faa    
+#&gt; </span><span style="color: #555555;">3</span><span> planes   tailnum
 </span></CODE></PRE>
 <p>Here we used the prepared <code>dm</code> object <code>dm_nycflights13(cycle = TRUE)</code> as an example. This object already has all keys pre-set.</p>
 </div>
@@ -533,10 +341,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>This is done by choosing a foreign key from one table that will point to a primary key of another table. The primary key of the referred table must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will find the primary key column of the referenced table by itself and make the indicated column of the child table point to it.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.34.0 [/home/kirill/R-dev/dplyr/db/nycflights13.sqlite]
-#&gt; </span><span style="color: #FFAFFF;">──</span><span> </span><span style="color: #FFAFFF;">Metadata</span><span> </span><span style="color: #FFAFFF;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, `weather`
-#&gt; Columns: 55
+#&gt; src:  sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]
+#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
+#&gt; Columns: 62
 #&gt; Primary keys: 1
 #&gt; Foreign keys: 1
 </span></CODE></PRE>
@@ -577,34 +385,34 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Since the primary keys are defined in the <code>dm</code> object, you do not need to provide the referenced column name of <code>ref_table</code>. This is always the primary key column of the table.</p>
 <p>Another function for getting to know your data better (cf. <code>dm_enum_pk_candidates()</code> in <a href="#pk">“Primary keys of <code>dm</code> objects”</a>) is <code>dm_enum_fk_candidates()</code>. Use it to get an overview over foreign key candidates that point from one table to another:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(flights_dm_with_key, weather, airports)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 15 x 3</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 15 x 3</span><span>
 #&gt;    columns    candidate why                                                
-#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>                                              
-#&gt; </span><span style="color: #BCBCBC;"> 1</span><span> origin     TRUE      </span><span style="color: #949494;">&quot;&quot;</span><span>                                                 
-#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> pressure   FALSE     </span><span style="color: #949494;">&quot;</span><span>23400 entries (89.6%) of `weather$pressure` not i…
-#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> wind_dir   FALSE     </span><span style="color: #949494;">&quot;</span><span>25712 entries (98.4%) of `weather$wind_dir` not i…
-#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> wind_gust  FALSE     </span><span style="color: #949494;">&quot;</span><span>26127 entries (100%) of `weather$wind_gust` not i…
-#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> wind_speed FALSE     </span><span style="color: #949494;">&quot;</span><span>26127 entries (100%) of `weather$wind_speed` not …
-#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> dewp       FALSE     </span><span style="color: #949494;">&quot;</span><span>26129 entries (100%) of `weather$dewp` not in `ai…
-#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> humid      FALSE     </span><span style="color: #949494;">&quot;</span><span>26129 entries (100%) of `weather$humid` not in `a…
-#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> temp       FALSE     </span><span style="color: #949494;">&quot;</span><span>26129 entries (100%) of `weather$temp` not in `ai…
-#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> day        FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$day` not in `air…
-#&gt; </span><span style="color: #BCBCBC;">10</span><span> hour       FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$hour` not in `ai…
-#&gt; </span><span style="color: #BCBCBC;">11</span><span> month      FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$month` not in `a…
-#&gt; </span><span style="color: #BCBCBC;">12</span><span> precip     FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$precip` not in `…
-#&gt; </span><span style="color: #BCBCBC;">13</span><span> time_hour  FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$time_hour` not i…
-#&gt; </span><span style="color: #BCBCBC;">14</span><span> visib      FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$visib` not in `a…
-#&gt; </span><span style="color: #BCBCBC;">15</span><span> year       FALSE     </span><span style="color: #949494;">&quot;</span><span>26130 entries (100%) of `weather$year` not in `ai…
+#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                              
+#&gt; </span><span style="color: #555555;"> 1</span><span> origin     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                 
+#&gt; </span><span style="color: #555555;"> 2</span><span> wind_gust  FALSE     </span><span style="color: #555555;">&quot;</span><span>5337 entries (20.4%) of `weather$wind_gust` not i…
+#&gt; </span><span style="color: #555555;"> 3</span><span> pressure   FALSE     </span><span style="color: #555555;">&quot;</span><span>23386 entries (89.6%) of `weather$pressure` not i…
+#&gt; </span><span style="color: #555555;"> 4</span><span> wind_dir   FALSE     </span><span style="color: #555555;">&quot;</span><span>25655 entries (98.2%) of `weather$wind_dir` not i…
+#&gt; </span><span style="color: #555555;"> 5</span><span> wind_speed FALSE     </span><span style="color: #555555;">&quot;</span><span>26111 entries (100%) of `weather$wind_speed` not …
+#&gt; </span><span style="color: #555555;"> 6</span><span> dewp       FALSE     </span><span style="color: #555555;">&quot;</span><span>26114 entries (100%) of `weather$dewp` not in `ai…
+#&gt; </span><span style="color: #555555;"> 7</span><span> humid      FALSE     </span><span style="color: #555555;">&quot;</span><span>26114 entries (100%) of `weather$humid` not in `a…
+#&gt; </span><span style="color: #555555;"> 8</span><span> temp       FALSE     </span><span style="color: #555555;">&quot;</span><span>26114 entries (100%) of `weather$temp` not in `ai…
+#&gt; </span><span style="color: #555555;"> 9</span><span> day        FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$day` not in `air…
+#&gt; </span><span style="color: #555555;">10</span><span> hour       FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$hour` not in `ai…
+#&gt; </span><span style="color: #555555;">11</span><span> month      FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$month` not in `a…
+#&gt; </span><span style="color: #555555;">12</span><span> precip     FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$precip` not in `…
+#&gt; </span><span style="color: #555555;">13</span><span> time_hour  FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$time_hour` not i…
+#&gt; </span><span style="color: #555555;">14</span><span> visib      FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$visib` not in `a…
+#&gt; </span><span style="color: #555555;">15</span><span> year       FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$year` not in `ai…
 </span></CODE></PRE>
 <p>Get an overview of all foreign key relations with<code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #949494;"># A tibble: 4 x 3</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 x 3</span><span>
 #&gt;   child_table child_fk_cols parent_table
-#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #949494;font-style: italic;">&lt;keys&gt;</span><span>        </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>       
-#&gt; </span><span style="color: #BCBCBC;">1</span><span> flights     carrier       airlines    
-#&gt; </span><span style="color: #BCBCBC;">2</span><span> flights     dest          airports    
-#&gt; </span><span style="color: #BCBCBC;">3</span><span> flights     origin        airports    
-#&gt; </span><span style="color: #BCBCBC;">4</span><span> flights     tailnum       planes
+#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       
+#&gt; </span><span style="color: #555555;">1</span><span> flights     carrier       airlines    
+#&gt; </span><span style="color: #555555;">2</span><span> flights     dest          airports    
+#&gt; </span><span style="color: #555555;">3</span><span> flights     origin        airports    
+#&gt; </span><span style="color: #555555;">4</span><span> flights     tailnum       planes
 </span></CODE></PRE>
 </div>
 
