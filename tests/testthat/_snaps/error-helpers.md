@@ -237,9 +237,46 @@
     Error <dm_error_parameter_not_correct_length>
       Parameter `length_1_parameter` needs to be of length `1` but is of length 26 (`a`, `b`, `c`, `d`, `e`, ... (26 total)).
     Code
-      warn_if_not_null("NULL", "dbms_dependent_arg")
-    Warning <dm_warning_non_null_param>
+      warn_if_arg_not("NULL", "dbms_dependent_arg")
+    Warning <dm_warning_arg_not>
       Argument `dbms_dependent_arg` ignored: currently only supported for MSSQL and Postgres.
     Output
       NULL
+    Code
+      abort_schema_exists("silhouette")
+    Error <dm_error_schema_exists>
+      A schema named `silhouette` already exists.
+    Code
+      abort_schema_exists("silhouette", "exhibition")
+    Error <dm_error_schema_exists>
+      A schema named `silhouette` already exists on database `exhibition`.
+    Code
+      abort_no_schema_exists("table_1")
+    Error <dm_error_no_schema_exists>
+      No schema named `table_1` exists.
+    Code
+      abort_no_schema_exists("fastfood", "gala_dinner")
+    Error <dm_error_no_schema_exists>
+      No schema named `fastfood` exists on database `gala_dinner`.
+    Code
+      abort_no_schemas_supported("FantasticDatabaseManagementSystem",
+        "hyperconnection")
+    Error <dm_error_no_schemas_supported>
+      The concept of schemas is not supported for DBMS `FantasticDatabaseManagementSystem`.
+    Code
+      abort_no_schemas_supported(con = 1)
+    Error <dm_error_no_schemas_supported>
+      Currently schemas are not supported for a connection of class `numeric`.
+    Code
+      abort_no_schemas_supported()
+    Error <dm_error_no_schemas_supported>
+      Schemas are not available locally.
+    Code
+      abort_temporary_not_in_schema()
+    Error <dm_error_temporary_not_in_schema>
+      If argument `temporary = TRUE`, argument `schema` has to be `NULL`.
+    Code
+      abort_one_of_schema_table_names()
+    Error <dm_error_one_of_schema_table_names>
+      Only one of the arguments `schema` and `table_names` can be different from `NULL`.
 

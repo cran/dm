@@ -71,8 +71,8 @@ my_dm_total <-
   dm_insert_zoomed("total_loans")
 
 ## ------------------------------------------------------------------------
-my_dm_total %>% 
-  dm_set_colors(violet = total_loans) %>% 
+my_dm_total %>%
+  dm_set_colors(violet = total_loans) %>%
   dm_draw()
 
 ## ------------------------------------------------------------------------

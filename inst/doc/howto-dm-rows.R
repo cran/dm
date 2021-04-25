@@ -14,8 +14,8 @@ demo_dm <-
   dm_add_pk(child, pk) %>%
   dm_add_fk(child, fk, parent)
 
-demo_dm %>% 
-  dm_draw(view_type = "full")
+demo_dm %>%
+  dm_draw(view_type = "all")
 
 ## ------------------------------------------------------------------------
 dm_examine_constraints(demo_dm)

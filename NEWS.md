@@ -1,3 +1,32 @@
+<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+
+# dm 0.1.13
+
+## Features
+
+- `dm_draw()` gains `column_types` argument, if `TRUE` the column type is shown for each displayed column (#444, @samssann).
+- `copy_dm_to()` gains `schema` argument (#432).
+- `dm_from_src()` gains `dbname` argument for MSSQL (#472).
+
+## Bug fixes
+
+- Fix `rows_update()` when multiple columns are updated (#488, @samssann).
+
+## Performance
+
+- `enum_fk_candidates()` now only checks distinct values, this improves performance for large tables. As a consequence, only the number of distinct values is reported for mismatches, not the number of mismatching rows/entries (#494).
+
+## Documentation
+
+- Fix description of filtering behavior in `?dm_zoom_to` (#403).
+
+## Internal
+
+- Move repository to <https://github.com/cynkra/dm> (#500).
+- Enable more Postgres tests (#497).
+- Test DuckDB on GitHub Actions (#498).
+
+
 # dm 0.1.12
 
 - `dm_from_src()` gains `dbname` argument for MSSQL (#472).
@@ -387,7 +416,7 @@ Initial GitHub release.
 - `cdm_check_for_pk_candidates()`
 
 ## Foreign keys
-  
+
 - `cdm_add_fk()`
 - `cdm_has_fk()`
 - `cdm_get_fk()`
@@ -403,7 +432,7 @@ Initial GitHub release.
 - `cdm_get_available_colors()`
 
 ## Flattening
-  
+
 - `cdm_join_tbl()`
 
 ## Filtering

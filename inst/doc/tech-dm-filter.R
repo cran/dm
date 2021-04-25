@@ -19,20 +19,20 @@ dm_draw(dm)
 tbl(dm, "airports")
 
 ## ------------------------------------------------------------------------
-filtered_dm <- 
+filtered_dm <-
   dm %>%
   dm_filter(airports, name == "John F Kennedy Intl")
 filtered_dm
 
 ## ------------------------------------------------------------------------
-rows_per_table <- 
-  filtered_dm %>% 
-  dm_apply_filters() %>% 
+rows_per_table <-
+  filtered_dm %>%
+  dm_apply_filters() %>%
   dm_nrow()
 rows_per_table
 sum(rows_per_table)
 
-## ------------------------------------------------------------------------
+## ----echo = FALSE, eval = TRUE-------------------------------------------
 sum_nrow <- NA
 sum_nrow_filtered <- NA
 
@@ -41,9 +41,9 @@ sum_nrow <- sum(dm_nrow(dm))
 sum_nrow_filtered <- sum(dm_nrow(dm_apply_filters(filtered_dm)))
 
 ## ------------------------------------------------------------------------
-dm %>% 
-  dm_filter(flights, dest == "IAD") %>% 
-  dm_apply_filters() %>% 
+dm %>%
+  dm_filter(flights, dest == "IAD") %>%
+  dm_apply_filters() %>%
   dm_nrow()
 
 ## ------------------------------------------------------------------------
@@ -52,20 +52,20 @@ dm_delta_may <- dm %>%
   dm_filter(airports, name != "John F Kennedy Intl") %>%
   dm_filter(flights, month == 5)
 dm_delta_may
-dm_delta_may %>% 
-  dm_apply_filters() %>% 
+dm_delta_may %>%
+  dm_apply_filters() %>%
   dm_nrow()
 
 ## ------------------------------------------------------------------------
-dm_delta_may %>% 
+dm_delta_may %>%
   dm_apply_filters_to_tbl("airlines")
 
 ## ------------------------------------------------------------------------
-dm_delta_may %>% 
+dm_delta_may %>%
   dm_apply_filters_to_tbl("planes")
 
 ## ------------------------------------------------------------------------
-dm_delta_may %>% 
+dm_delta_may %>%
   dm_apply_filters_to_tbl("flights")
 
 ## ------------------------------------------------------------------------
@@ -79,11 +79,11 @@ flights %>%
 ## ---- warning=FALSE------------------------------------------------------
 dm %>%
   dm_select_tbl(flights, airlines, airports) %>%
-  dm_filter(flights, month == 5) %>% 
+  dm_filter(flights, month == 5) %>%
   copy_dm_to(dbplyr::src_memdb(), .) %>%
   dm_filter(airlines, name == "Delta Air Lines Inc.") %>%
   dm_filter(airports, name != "John F Kennedy Intl") %>%
-  dm_apply_filters() %>% 
+  dm_apply_filters() %>%
   dm_get_tables() %>%
   map(dbplyr::sql_render)
 

@@ -11,13 +11,13 @@ library(nycflights13)
 library(dm)
 empty_dm <- dm()
 empty_dm
-dm_add_tbl(empty_dm, airlines, airports, flights, planes, weather) 
+dm_add_tbl(empty_dm, airlines, airports, flights, planes, weather)
 
 ## ------------------------------------------------------------------------
-as_dm(list(airlines = airlines, 
-           airports = airports, 
-           flights = flights, 
-           planes = planes, 
+as_dm(list(airlines = airlines,
+           airports = airports,
+           flights = flights,
+           planes = planes,
            weather = weather))
 
 ## ----message=FALSE-------------------------------------------------------
@@ -48,7 +48,7 @@ dm_has_pk(flights_dm_with_key, airports)
 dm_get_pk(flights_dm_with_key, airports)
 
 ## ------------------------------------------------------------------------
-dm_rm_pk(flights_dm_with_key, airports) %>% 
+dm_rm_pk(flights_dm_with_key, airports) %>%
   dm_has_pk(airports)
 
 ## ------------------------------------------------------------------------
@@ -81,14 +81,14 @@ flights_dm_with_fk %>% dm_get_fk(flights, planes)
 flights_dm_with_fk %>% dm_get_fk(flights, airports)
 
 ## ----error=TRUE----------------------------------------------------------
-flights_dm_with_fk %>% 
-  dm_rm_fk(table = flights, column = dest, ref_table = airports) %>% 
+flights_dm_with_fk %>%
+  dm_rm_fk(table = flights, column = dest, ref_table = airports) %>%
   dm_get_fk(flights, airports)
-flights_dm_with_fk %>% 
-  dm_rm_fk(flights, origin, airports) %>% 
+flights_dm_with_fk %>%
+  dm_rm_fk(flights, origin, airports) %>%
   dm_get_fk(flights, airports)
-flights_dm_with_fk %>% 
-  dm_rm_fk(flights, NULL, airports) %>% 
+flights_dm_with_fk %>%
+  dm_rm_fk(flights, NULL, airports) %>%
   dm_get_fk(flights, airports)
 
 ## ------------------------------------------------------------------------

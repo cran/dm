@@ -40,7 +40,7 @@ my_dm_total_computed <-
 my_dm_total_computed$total_loans %>%
   sql_render()
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE, eval = TRUE-------------------------------------------
 remote_name_total_loans <- ""
 remote_name_total_loans <- remote_name(my_dm_total_computed$total_loans)
 
@@ -73,7 +73,7 @@ my_dm_sqlite_resid <-
   dm_add_fk(loans_residuals, id, loans)
 
 my_dm_sqlite_resid %>%
-  dm_set_colors(violet = loans_residuals) %>% 
+  dm_set_colors(violet = loans_residuals) %>%
   dm_draw()
 my_dm_sqlite_resid %>%
   dm_examine_constraints()

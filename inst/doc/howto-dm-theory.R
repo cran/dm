@@ -6,15 +6,15 @@ library(tidyverse)
 library(dm)
 library(nycflights13)
 
-flights %>% 
+flights %>%
   left_join(airlines, by = "carrier") %>%
   left_join(planes, by = "tailnum") %>%
   left_join(airports, by = c("origin" = "faa"))
 
 ## ----warning=F, message=F------------------------------------------------
-dm <- dm_nycflights13(cycle = TRUE) 
+dm <- dm_nycflights13(cycle = TRUE)
 
-dm %>% 
+dm %>%
   dm_draw()
 
 ## ------------------------------------------------------------------------
@@ -22,15 +22,15 @@ dm %>%
   dm_get_all_pks()
 
 ## ------------------------------------------------------------------------
-dm %>% 
+dm %>%
   dm_enum_pk_candidates(airports)
 
 ## ------------------------------------------------------------------------
-dm %>% 
+dm %>%
   dm_enum_fk_candidates(flights, airlines)
 
 ## ------------------------------------------------------------------------
-dm %>% 
+dm %>%
   dm_get_fk(flights, airlines)
 
 ## ------------------------------------------------------------------------
@@ -46,7 +46,7 @@ airlines %>%
 
 # ...propagates to all related records
 flights %>%
-  left_join(airlines) %>% 
+  left_join(airlines) %>%
   select(flight, name)
 
 ## ------------------------------------------------------------------------

@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-02-14" />
+<meta name="date" content="2021-04-25" />
 
 <title>Class dm and basic operations</title>
 
@@ -27,7 +27,14 @@
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -131,7 +138,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2021-02-14</h4>
+<h4 class="date">2021-04-25</h4>
 
 
 
@@ -179,7 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>empty_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>()</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>empty_dm</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dm()</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_tbl</span>(empty_dm, airlines, airports, flights, planes, weather) </span></code></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_tbl</span>(empty_dm, airlines, airports, flights, planes, weather)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
@@ -190,10 +197,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="coerce-a-list-of-tables" class="section level3">
 <h3>Coerce a list of tables</h3>
 <p>Turn a named list of tables into a <code>dm</code> with <code>as_dm()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_dm</span>(<span class="fu">list</span>(<span class="at">airlines =</span> airlines, </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">airports =</span> airports, </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">flights =</span> flights, </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">planes =</span> planes, </span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_dm</span>(<span class="fu">list</span>(<span class="at">airlines =</span> airlines,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">airports =</span> airports,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">flights =</span> flights,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">planes =</span> planes,</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">weather =</span> weather))</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
@@ -210,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]
+#&gt; src:  sqlite 3.35.5 [/tmp/RtmpKQVMnO/nycflights13.sqlite]
 #&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -240,7 +247,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In order to pull a specific table from a <code>dm</code>, use:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(flights_dm, <span class="st">&quot;airports&quot;</span>)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`airports`&gt; [?? x 8]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]</span><span>
+#&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 [/tmp/RtmpKQVMnO/nycflights13.sqlite]</span><span>
 #&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
 #&gt;    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        
 #&gt; </span><span style="color: #555555;"> 1</span><span> 04G   Lansdowne Airport      41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
@@ -275,7 +282,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]
+#&gt; src:  sqlite 3.35.5 [/tmp/RtmpKQVMnO/nycflights13.sqlite]
 #&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -291,7 +298,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;faa&quot;</span></span></code></pre></div>
 <p>Remove a primary key:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_rm_pk</span>(flights_dm_with_key, airports) <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_rm_pk</span>(flights_dm_with_key, airports) <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_has_pk</span>(airports)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>If you still need to get to know your data better, and it is already available in the form of a <code>dm</code> object, you can use the <code>dm_enum_pk_candidates()</code> function in order to get information about which columns of the table are unique keys:</p>
@@ -312,7 +319,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
 #&gt;   candidate     n
-#&gt; </span><span style="color: #555555;">*</span><span> </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
+#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
 #&gt; </span><span style="color: #555555;">1</span><span> FALSE        19
 </span></CODE></PRE>
 <p>To get an overview over all tables with primary keys, use <code>dm_get_all_pks()</code>:</p>
@@ -341,7 +348,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This is done by choosing a foreign key from one table that will point to a primary key of another table. The primary key of the referred table must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will find the primary key column of the referenced table by itself and make the indicated column of the child table point to it.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.34.1 [/tmp/Rtmp43ihT1/nycflights13.sqlite]
+#&gt; src:  sqlite 3.35.5 [/tmp/RtmpKQVMnO/nycflights13.sqlite]
 #&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -370,16 +377,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;origin&quot;</span></span></code></pre></div>
 <p>Remove foreign key relations with <code>dm_rm_fk()</code> (parameter <code>column = NULL</code> means that all relations will be removed):</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(<span class="at">table =</span> flights, <span class="at">column =</span> dest, <span class="at">ref_table =</span> airports) <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(<span class="at">table =</span> flights, <span class="at">column =</span> dest, <span class="at">ref_table =</span> airports) <span class="sc">%&gt;%</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: (`dest`) is not a foreign key of table `flights` into table `airports`.</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span> </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;list_of&lt;character&gt;[0]&gt;</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span> </span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span></span>
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;list_of&lt;character&gt;[0]&gt;</span></span></code></pre></div>
 <p>Since the primary keys are defined in the <code>dm</code> object, you do not need to provide the referenced column name of <code>ref_table</code>. This is always the primary key column of the table.</p>
@@ -389,20 +396,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt;    columns    candidate why                                                
 #&gt;    </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                              
 #&gt; </span><span style="color: #555555;"> 1</span><span> origin     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                 
-#&gt; </span><span style="color: #555555;"> 2</span><span> wind_gust  FALSE     </span><span style="color: #555555;">&quot;</span><span>5337 entries (20.4%) of `weather$wind_gust` not i…
-#&gt; </span><span style="color: #555555;"> 3</span><span> pressure   FALSE     </span><span style="color: #555555;">&quot;</span><span>23386 entries (89.6%) of `weather$pressure` not i…
-#&gt; </span><span style="color: #555555;"> 4</span><span> wind_dir   FALSE     </span><span style="color: #555555;">&quot;</span><span>25655 entries (98.2%) of `weather$wind_dir` not i…
-#&gt; </span><span style="color: #555555;"> 5</span><span> wind_speed FALSE     </span><span style="color: #555555;">&quot;</span><span>26111 entries (100%) of `weather$wind_speed` not …
-#&gt; </span><span style="color: #555555;"> 6</span><span> dewp       FALSE     </span><span style="color: #555555;">&quot;</span><span>26114 entries (100%) of `weather$dewp` not in `ai…
-#&gt; </span><span style="color: #555555;"> 7</span><span> humid      FALSE     </span><span style="color: #555555;">&quot;</span><span>26114 entries (100%) of `weather$humid` not in `a…
-#&gt; </span><span style="color: #555555;"> 8</span><span> temp       FALSE     </span><span style="color: #555555;">&quot;</span><span>26114 entries (100%) of `weather$temp` not in `ai…
-#&gt; </span><span style="color: #555555;"> 9</span><span> day        FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$day` not in `air…
-#&gt; </span><span style="color: #555555;">10</span><span> hour       FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$hour` not in `ai…
-#&gt; </span><span style="color: #555555;">11</span><span> month      FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$month` not in `a…
-#&gt; </span><span style="color: #555555;">12</span><span> precip     FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$precip` not in `…
-#&gt; </span><span style="color: #555555;">13</span><span> time_hour  FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$time_hour` not i…
-#&gt; </span><span style="color: #555555;">14</span><span> visib      FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$visib` not in `a…
-#&gt; </span><span style="color: #555555;">15</span><span> year       FALSE     </span><span style="color: #555555;">&quot;</span><span>26115 entries (100%) of `weather$year` not in `ai…
+#&gt; </span><span style="color: #555555;"> 2</span><span> year       FALSE     </span><span style="color: #555555;">&quot;</span><span>1 values (100%) of `weather$year` not in `airport…
+#&gt; </span><span style="color: #555555;"> 3</span><span> month      FALSE     </span><span style="color: #555555;">&quot;</span><span>12 values (100%) of `weather$month` not in `airpo…
+#&gt; </span><span style="color: #555555;"> 4</span><span> visib      FALSE     </span><span style="color: #555555;">&quot;</span><span>20 values (100%) of `weather$visib` not in `airpo…
+#&gt; </span><span style="color: #555555;"> 5</span><span> hour       FALSE     </span><span style="color: #555555;">&quot;</span><span>24 values (100%) of `weather$hour` not in `airpor…
+#&gt; </span><span style="color: #555555;"> 6</span><span> day        FALSE     </span><span style="color: #555555;">&quot;</span><span>31 values (100%) of `weather$day` not in `airport…
+#&gt; </span><span style="color: #555555;"> 7</span><span> wind_speed FALSE     </span><span style="color: #555555;">&quot;</span><span>36 values (97.3%) of `weather$wind_speed` not in …
+#&gt; </span><span style="color: #555555;"> 8</span><span> wind_dir   FALSE     </span><span style="color: #555555;">&quot;</span><span>37 values (97.4%) of `weather$wind_dir` not in `a…
+#&gt; </span><span style="color: #555555;"> 9</span><span> wind_gust  FALSE     </span><span style="color: #555555;">&quot;</span><span>37 values (97.4%) of `weather$wind_gust` not in `…
+#&gt; </span><span style="color: #555555;">10</span><span> precip     FALSE     </span><span style="color: #555555;">&quot;</span><span>59 values (100%) of `weather$precip` not in `airp…
+#&gt; </span><span style="color: #555555;">11</span><span> dewp       FALSE     </span><span style="color: #555555;">&quot;</span><span>153 values (99.4%) of `weather$dewp` not in `airp…
+#&gt; </span><span style="color: #555555;">12</span><span> temp       FALSE     </span><span style="color: #555555;">&quot;</span><span>173 values (99.4%) of `weather$temp` not in `airp…
+#&gt; </span><span style="color: #555555;">13</span><span> pressure   FALSE     </span><span style="color: #555555;">&quot;</span><span>468 values (99.8%) of `weather$pressure` not in `…
+#&gt; </span><span style="color: #555555;">14</span><span> humid      FALSE     </span><span style="color: #555555;">&quot;</span><span>2499 values (100%) of `weather$humid` not in `air…
+#&gt; </span><span style="color: #555555;">15</span><span> time_hour  FALSE     </span><span style="color: #555555;">&quot;</span><span>8714 values (100%) of `weather$time_hour` not in …
 </span></CODE></PRE>
 <p>Get an overview of all foreign key relations with<code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>

@@ -3,7 +3,7 @@ unique_db_table_name <- local({
 
   function(table_name) {
     i <<- i + 1
-    glue("{table_name}_", systime_convenient(), "_", as.character(i))
+    glue("{table_name}_", systime_convenient(), "_", get_pid(), "_", as.character(i))
   }
 })
 
@@ -13,6 +13,14 @@ systime_convenient <- function() {
   } else {
     time <- as.character(Sys.time())
     gsub("[-: ]", "_", time)
+  }
+}
+
+get_pid <- function() {
+  if (Sys.getenv("IN_PKGDOWN") != "") {
+    "12345"
+  } else {
+    as.character(Sys.getpid())
   }
 }
 
@@ -151,8 +159,11 @@ con_from_src_or_con <- function(dest) {
   if (is.src(dest)) dest$con else dest
 }
 
-repair_table_names_for_db <- function(table_names, temporary, con) {
+repair_table_names_for_db <- function(table_names, temporary, con, schema = NULL) {
   if (temporary) {
+    if (!is.null(schema)) {
+      abort_temporary_not_in_schema()
+    }
     # FIXME: Better logic for temporary table names
     if (is_mssql(con)) {
       names <- paste0("#", table_names)
@@ -161,16 +172,20 @@ repair_table_names_for_db <- function(table_names, temporary, con) {
     }
     names <- unique_db_table_name(names)
   } else {
+    # permanent tables
+    if (!is.null(schema) && !is_mssql(con) && !is_postgres(con)) {
+      abort_no_schemas_supported(con = con)
+    }
     names <- table_names
   }
   names <- set_names(names, table_names)
-  quote_ids(names, con)
+  quote_ids(names, con, schema)
 }
 
 get_src_tbl_names <- function(src, schema = NULL, dbname = NULL) {
   if (!is_mssql(src) && !is_postgres(src)) {
-    warn_if_not_null(schema)
-    warn_if_not_null(dbname, only_on = "MSSQL")
+    warn_if_arg_not(schema)
+    warn_if_arg_not(dbname, only_on = "MSSQL")
     return(src_tbls(src))
   }
 
@@ -185,7 +200,7 @@ get_src_tbl_names <- function(src, schema = NULL, dbname = NULL) {
   } else if (is_postgres(src)) {
     # Postgres
     schema <- schema_postgres(con, schema)
-    dbname <- warn_if_not_null(dbname, only_on = "MSSQL")
+    dbname <- warn_if_arg_not(dbname, only_on = "MSSQL")
     names_table <- get_names_table_postgres(con)
   }
   check_param_class(schema, "character")
