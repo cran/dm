@@ -9,7 +9,8 @@ library(nycflights13)
 flights %>%
   left_join(airlines, by = "carrier") %>%
   left_join(planes, by = "tailnum") %>%
-  left_join(airports, by = c("origin" = "faa"))
+  left_join(airports, by = c("origin" = "faa")) %>%
+  left_join(weather, by = c("origin", "time_hour"))
 
 ## ----warning=F, message=F------------------------------------------------
 dm <- dm_nycflights13(cycle = TRUE)
@@ -28,10 +29,6 @@ dm %>%
 ## ------------------------------------------------------------------------
 dm %>%
   dm_enum_fk_candidates(flights, airlines)
-
-## ------------------------------------------------------------------------
-dm %>%
-  dm_get_fk(flights, airlines)
 
 ## ------------------------------------------------------------------------
 dm %>%
