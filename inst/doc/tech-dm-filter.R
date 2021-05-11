@@ -47,7 +47,8 @@ dm %>%
   dm_nrow()
 
 ## ------------------------------------------------------------------------
-dm_delta_may <- dm %>%
+dm_delta_may <-
+  dm %>%
   dm_filter(airlines, name == "Delta Air Lines Inc.") %>%
   dm_filter(airports, name != "John F Kennedy Intl") %>%
   dm_filter(flights, month == 5)

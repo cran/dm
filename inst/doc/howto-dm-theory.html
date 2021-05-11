@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2021-05-03" />
+<meta name="date" content="2021-05-11" />
 
 <title>Introduction to relational data models</title>
 
@@ -140,7 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Introduction to relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2021-05-03</h4>
+<h4 class="date">2021-05-11</h4>
 
 
 
@@ -359,13 +359,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt;   columns candidate why                                                    
 #&gt;   </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                                  
 #&gt; </span><span style="color: #555555;">1</span><span> faa     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
-#&gt; </span><span style="color: #555555;">2</span><span> lon     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
-#&gt; </span><span style="color: #555555;">3</span><span> name    FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: Municipal Airport (5), All Airp…
-#&gt; </span><span style="color: #555555;">4</span><span> lat     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 38.88944 (2), 40.63975 (2)</span><span style="color: #555555;">&quot;</span><span>     
-#&gt; </span><span style="color: #555555;">5</span><span> alt     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 0 (51), 13 (13), 14 (12), 15 (1…
-#&gt; </span><span style="color: #555555;">6</span><span> tz      FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: -5 (521), -6 (342), -9 (240), -…
-#&gt; </span><span style="color: #555555;">7</span><span> dst     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: A (1388), U (47), N (23)</span><span style="color: #555555;">&quot;</span><span>       
-#&gt; </span><span style="color: #555555;">8</span><span> tzone   FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: America/New_York (519), America…
+#&gt; </span><span style="color: #555555;">2</span><span> name    TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
+#&gt; </span><span style="color: #555555;">3</span><span> lat     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
+#&gt; </span><span style="color: #555555;">4</span><span> lon     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
+#&gt; </span><span style="color: #555555;">5</span><span> alt     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 30 (4), 13 (3), 9 (2), 19 (2), …
+#&gt; </span><span style="color: #555555;">6</span><span> tz      FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: -5 (48), -6 (21), -8 (12), -7 (…
+#&gt; </span><span style="color: #555555;">7</span><span> dst     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: A (84), N (2)</span><span style="color: #555555;">&quot;</span><span>                  
+#&gt; </span><span style="color: #555555;">8</span><span> tzone   FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: America/New_York (48), America/…
 </span></CODE></PRE>
 <p>Further Reading: The {dm} package offers several functions for dealing with <a href="https://cynkra.github.io/dm/articles/tech-dm-class.html#pk">primary keys</a>.</p>
 </div>
@@ -415,8 +415,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #BBBB00;">!</span><span> Unsatisfied constraints:
 </span></CODE></PRE>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #BB0000;">●</span><span> Table `flights`: foreign key dest into table `airports`: values of `flights$dest` not in `airports$faa`: SJU (187), BQN (28), STT (15), PSE (12)
-#&gt; </span><span style="color: #BB0000;">●</span><span> Table `flights`: foreign key tailnum into table `planes`: values of `flights$tailnum` not in `planes$tailnum`: N722MQ (27), N725MQ (20), N520MQ (19), N723MQ (19), N508MQ (16), …
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #BB0000;">●</span><span> Table `flights`: foreign key dest into table `airports`: values of `flights$dest` not in `airports$faa`: SJU (30), BQN (6), STT (4), PSE (2)
+#&gt; </span><span style="color: #BB0000;">●</span><span> Table `flights`: foreign key tailnum into table `planes`: values of `flights$tailnum` not in `planes$tailnum`: N725MQ (6), N537MQ (5), N722MQ (5), N730MQ (5), N736MQ (5), …
 </span></CODE></PRE>
 <p>Establishing referential integrity is important for providing clean data for analysis or downstream users. See <code>vignette(&quot;howto-dm-rows&quot;)</code> for more information on adding, deleting or updating individual rows, and <code>vignette(&quot;tech-dm-zoom&quot;)</code> for operations on the data in a data model.</p>
 </div>
@@ -513,20 +513,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_dm_to</span>(con_sqlite, dm)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbListTables</span>(con_sqlite)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines_2021_05_03_15_02_14_2032118_5&quot;</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;airports_2021_05_03_15_02_14_2032118_5&quot;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;flights_2021_05_03_15_02_14_2032118_5&quot; </span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;planes_2021_05_03_15_02_14_2032118_5&quot;  </span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;sqlite_stat1&quot;                          </span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] &quot;sqlite_stat4&quot;                          </span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;weather_2021_05_03_15_02_14_2032118_5&quot;</span></span></code></pre></div>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines_2021_05_11_09_50_33_247259_5&quot;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;airports_2021_05_11_09_50_33_247259_5&quot;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;flights_2021_05_11_09_50_33_247259_5&quot; </span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;planes_2021_05_11_09_50_33_247259_5&quot;  </span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;sqlite_stat1&quot;                         </span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] &quot;sqlite_stat4&quot;                         </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;weather_2021_05_11_09_50_33_247259_5&quot;</span></span></code></pre></div>
 <p>In the opposite direction, <code>dm</code> can also be populated with data from a DB. Unfortunately, keys currently can be learned only for MSSQL and Postgres, but not for SQLite. Therefore, the dm contains the tables but not the keys:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_from_src</span>(con_sqlite)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Keys could not be queried, use `learn_keys = FALSE` to mute this message.</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
 #&gt; src:  sqlite 3.35.5 []
 #&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines_2021_05_03_15_02_14_2032118_5`, `airports_2021_05_03_15_02_14_2032118_5`, `flights_2021_05_03_15_02_14_2032118_5`, `planes_2021_05_03_15_02_14_2032118_5`, `sqlite_stat1`, … (7 total)
+#&gt; Tables: `airlines_2021_05_11_09_50_33_247259_5`, `airports_2021_05_11_09_50_33_247259_5`, `flights_2021_05_11_09_50_33_247259_5`, `planes_2021_05_11_09_50_33_247259_5`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0

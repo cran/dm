@@ -41,8 +41,9 @@ my_dm_total_computed$total_loans %>%
   sql_render()
 
 ## ----echo = FALSE, eval = TRUE-------------------------------------------
-remote_name_total_loans <- ""
-remote_name_total_loans <- remote_name(my_dm_total_computed$total_loans)
+# https://github.com/tidyverse/dbplyr/issues/639, https://github.com/tidyverse/dbplyr/pull/649
+remote_name_total_loans <- "dbplyr_001"
+stopifnot(grepl(remote_name_total_loans, sql_render(my_dm_total_computed$total_loans), fixed = TRUE))
 
 ## ------------------------------------------------------------------------
 my_dm_total_snapshot <-

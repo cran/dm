@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2021-05-03" />
+<meta name="date" content="2021-05-11" />
 
 <title>Copy tables to and from a database</title>
 
@@ -140,7 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Copy tables to and from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2021-05-03</h4>
+<h4 class="date">2021-05-11</h4>
 
 
 
@@ -207,7 +207,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT *</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `dbplyr_001`</span></span></code></pre></div>
-<p>Note the differences in queries returned by <code>sql_render()</code>. <code>my_dm_total$total_loans</code> is still being lazily evaluated and the full query constructed from the chain of operations that generated it, and is required to run to access it, is still in place. Contrast that with <code>my_dm_total_computed$total_loans</code> where the query has been realized and accessing its rows requires a simple <code>SELECT *</code> statement. The table name, <code></code>, was automatically generated as the <code>name</code> argument was not supplied.</p>
+<p>Note the differences in queries returned by <code>sql_render()</code>. <code>my_dm_total$total_loans</code> is still being lazily evaluated and the full query constructed from the chain of operations that generated it, and is required to run to access it, is still in place. Contrast that with <code>my_dm_total_computed$total_loans</code> where the query has been realized and accessing its rows requires a simple <code>SELECT *</code> statement. The table name, <code>dbplyr_001</code>, was automatically generated as the <code>name</code> argument was not supplied to <code>compute()</code>.</p>
 <p>The default is to create a temporary table. If you want results to persist across sessions in permanent tables, <code>compute()</code> must be called with the argument <code>temporary = FALSE</code> and a table name for the <code>name</code> argument. See <code>?compute</code> for more details.</p>
 <p>When called on a whole dm object (without zoom), <code>compute()</code> materializes all tables into new (temporary or persistent) tables by executing the associated SQL query and storing the full results. Depending on the size of your data this may take considerable time or be infeasible. It may be useful occasionally to create snapshots of data that is subject to change.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_dm_total_snapshot <span class="ot">&lt;-</span></span>
@@ -295,7 +295,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <polygon fill="none" stroke="#555555" points="331,-60 331,-102 381,-102 381,-60 331,-60"></polygon>
 </g>
 <!-- accounts&#45;&gt;districts -->
-<g id="edge1" class="edge">
+<g id="edge6" class="edge">
 <title>accounts:district_id-&gt;districts:id</title>
 <path fill="none" stroke="#555555" d="M292,-71C305.8889,-71 311.6398,-71 321.9683,-71"></path>
 <polygon fill="#555555" stroke="#555555" points="322,-74.5001 332,-71 322,-67.5001 322,-74.5001"></polygon>
@@ -325,7 +325,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <polygon fill="none" stroke="#555555" points="128,-160 128,-242 195,-242 195,-160 128,-160"></polygon>
 </g>
 <!-- cards&#45;&gt;disps -->
-<g id="edge2" class="edge">
+<g id="edge5" class="edge">
 <title>cards:disp_id-&gt;disps:id</title>
 <path fill="none" stroke="#555555" d="M69,-211C92.2127,-211 100.396,-211 119.4991,-211"></path>
 <polygon fill="#555555" stroke="#555555" points="119.5,-214.5001 129.5,-211 119.5,-207.5001 119.5,-214.5001"></polygon>
@@ -363,7 +363,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <polygon fill="none" stroke="#004200" stroke-opacity="0.666667" points="128,-80 128,-142 195,-142 195,-80 128,-80"></polygon>
 </g>
 <!-- loans&#45;&gt;accounts -->
-<g id="edge5" class="edge">
+<g id="edge1" class="edge">
 <title>loans:account_id-&gt;accounts:id</title>
 <path fill="none" stroke="#555555" d="M194.5,-91C207.1302,-91 212.5819,-91 221.735,-91"></path>
 <polygon fill="#555555" stroke="#555555" points="222,-94.5001 232,-91 222,-87.5001 222,-94.5001"></polygon>
@@ -378,7 +378,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <polygon fill="none" stroke="#9e569e" stroke-opacity="0.666667" points="0,-100 0,-142 92,-142 92,-100 0,-100"></polygon>
 </g>
 <!-- loans_residuals&#45;&gt;loans -->
-<g id="edge6" class="edge">
+<g id="edge7" class="edge">
 <title>loans_residuals:id-&gt;loans:id</title>
 <path fill="none" stroke="#555555" d="M91,-111C104.1007,-111 109.6787,-111 119.2532,-111"></path>
 <polygon fill="#555555" stroke="#555555" points="119.5,-114.5001 129.5,-111 119.5,-107.5001 119.5,-114.5001"></polygon>
@@ -395,7 +395,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <polygon fill="none" stroke="#555555" points="128,0 128,-62 195,-62 195,0 128,0"></polygon>
 </g>
 <!-- orders&#45;&gt;accounts -->
-<g id="edge7" class="edge">
+<g id="edge2" class="edge">
 <title>orders:account_id-&gt;accounts:id</title>
 <path fill="none" stroke="#555555" d="M194.5,-11C229.6264,-11 200.4948,-75.0149 222.0668,-88.518"></path>
 <polygon fill="#555555" stroke="#555555" points="221.4498,-91.9714 232,-91 223.1467,-85.1802 221.4498,-91.9714"></polygon>
@@ -415,7 +415,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span><span> All constraints satisfied.
 </span></CODE></PRE>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid<span class="sc">$</span>loans_residuals</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_2021_05_03_15_01_40_2032118_1&gt; [?? x 2]</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_2021_05_11_09_50_10_247259_1&gt; [?? x 2]</span><span>
 #&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 []</span><span>
 #&gt;       id   resid
 #&gt;    </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>   </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>

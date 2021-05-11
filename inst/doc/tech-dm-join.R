@@ -17,7 +17,8 @@ dm %>%
   dm_get_all_fks()
 
 ## ------------------------------------------------------------------------
-dm_joined <- dm %>%
+dm_joined <-
+  dm %>%
   dm_join_to_tbl(flights, airlines, join = left_join)
 dm_joined
 

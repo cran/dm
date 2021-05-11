@@ -45,7 +45,7 @@ flights_dm_with_key
 dm_has_pk(flights_dm_with_key, airports)
 
 ## ------------------------------------------------------------------------
-dm_get_pk(flights_dm_with_key, airports)
+dm_get_all_pks(flights_dm_with_key)
 
 ## ------------------------------------------------------------------------
 dm_rm_pk(flights_dm_with_key, airports) %>%
@@ -57,8 +57,8 @@ dm_enum_pk_candidates(flights_dm_with_key, airports)
 ## ------------------------------------------------------------------------
 dm_enum_pk_candidates(flights_dm_with_key, flights) %>% dplyr::count(candidate)
 
-## ------------------------------------------------------------------------
-dm_get_all_pks(dm_nycflights13(cycle = TRUE))
+## ----error = TRUE--------------------------------------------------------
+dm_add_pk(flights_dm, airports, tzone, check = TRUE)
 
 ## ------------------------------------------------------------------------
 flights_dm_with_key %>% dm_add_fk(flights, origin, airports)
@@ -73,12 +73,7 @@ flights_dm_with_fk <- dm_add_fk(flights_dm_with_key, flights, origin, airports)
 flights_dm_with_fk %>% dm_add_fk(flights, dest, airports, check = TRUE)
 
 ## ------------------------------------------------------------------------
-flights_dm_with_fk %>% dm_has_fk(flights, planes)
-flights_dm_with_fk %>% dm_has_fk(flights, airports)
-
-## ------------------------------------------------------------------------
-flights_dm_with_fk %>% dm_get_fk(flights, planes)
-flights_dm_with_fk %>% dm_get_fk(flights, airports)
+dm_get_all_fks(dm_nycflights13(cycle = TRUE))
 
 ## ----error=TRUE----------------------------------------------------------
 flights_dm_with_fk %>%
@@ -88,12 +83,9 @@ flights_dm_with_fk %>%
   dm_rm_fk(flights, origin, airports) %>%
   dm_get_fk(flights, airports)
 flights_dm_with_fk %>%
-  dm_rm_fk(flights, NULL, airports) %>%
+  dm_rm_fk(flights, columns = NULL, airports) %>%
   dm_get_fk(flights, airports)
 
 ## ------------------------------------------------------------------------
 dm_enum_fk_candidates(flights_dm_with_key, weather, airports)
-
-## ------------------------------------------------------------------------
-dm_get_all_fks(dm_nycflights13(cycle = TRUE))
 
