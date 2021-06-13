@@ -38,9 +38,9 @@ flights_dm_w_many_keys_and_colors %>%
   dm_draw()
 
 ## ----eval = rlang::is_installed("DiagrammeRsvg")-------------------------
-flights_dm_w_many_keys_and_colors %>% 
-  dm_select_tbl(flights, airports, planes) %>% 
-  dm_draw() %>% 
-  DiagrammeRsvg::export_svg() %>% 
-  write("flights_dm_w_many_keys_and_color.svg")
+#  flights_dm_w_many_keys_and_colors %>%
+#    dm_select_tbl(flights, airports, planes) %>%
+#    dm_draw() %>%
+#    DiagrammeRsvg::export_svg() %>%
+#    write("flights_dm_w_many_keys_and_color.svg")
 

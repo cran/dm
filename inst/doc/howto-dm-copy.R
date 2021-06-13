@@ -106,3 +106,7 @@ dup_dm
 remote_name(dup_dm$accounts)
 remote_name(deployed_dm$accounts)
 
+## ----disconnect----------------------------------------------------------
+DBI::dbDisconnect(destination_db)
+DBI::dbDisconnect(local_db)
+

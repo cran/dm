@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-05-11" />
+<meta name="date" content="2021-06-13" />
 
 <title>Class dm and basic operations</title>
 
@@ -138,7 +138,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2021-05-11</h4>
+<h4 class="date">2021-06-13</h4>
 
 
 
@@ -169,30 +169,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Pass the tables directly</h3>
 <p>Create a <code>dm</code> object directly by providing data frames to <code>dm()</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
-#&gt; Columns: 53
-#&gt; Primary keys: 0
-#&gt; Foreign keys: 0
-</span></CODE></PRE>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in library(nycflights13): there is no package called &#39;nycflights13&#39;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in .f(.x[[i]], ...): object &#39;airlines&#39; not found</span></span></code></pre></div>
 </div>
 <div id="start-with-an-empty-dm" class="section level3">
 <h3>Start with an empty <code>dm</code></h3>
 <p>Start with an empty <code>dm</code> object that has been created with <code>dm()</code> or <code>new_dm()</code>, and add tables to that object:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>empty_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>empty_dm</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dm()</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_tbl</span>(empty_dm, airlines, airports, flights, planes, weather)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
-#&gt; Columns: 53
-#&gt; Primary keys: 0
-#&gt; Foreign keys: 0
-</span></CODE></PRE>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in library(nycflights13): there is no package called &#39;nycflights13&#39;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>empty_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>empty_dm</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dm()</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_tbl</span>(empty_dm, airlines, airports, flights, planes, weather)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in list2(...): object &#39;airlines&#39; not found</span></span></code></pre></div>
 </div>
 <div id="coerce-a-list-of-tables" class="section level3">
 <h3>Coerce a list of tables</h3>
@@ -201,29 +193,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">airports =</span> airports,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">flights =</span> flights,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">planes =</span> planes,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">weather =</span> weather))</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
-#&gt; Columns: 53
-#&gt; Primary keys: 0
-#&gt; Foreign keys: 0
-</span></CODE></PRE>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">weather =</span> weather))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in as_dm(list(airlines = airlines, airports = airports, flights = flights, : object &#39;airlines&#39; not found</span></span></code></pre></div>
 </div>
 <div id="turn-tables-from-a-src-into-a-dm" class="section level3">
 <h3>Turn tables from a <code>src</code> into a <code>dm</code></h3>
 <p>Squeeze all (or a subset of) tables belonging to a <code>src</code> object into a <code>dm</code> using <code>dm_from_src()</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sqlite_src <span class="ot">&lt;-</span> dbplyr<span class="sc">::</span><span class="fu">nycflights13_sqlite</span>()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.35.5 [/tmp/RtmpZWJQUK/nycflights13.sqlite]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
-#&gt; Columns: 62
-#&gt; Primary keys: 0
-#&gt; Foreign keys: 0
-</span></CODE></PRE>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in (function (cond) : error in evaluating the argument &#39;drv&#39; in selecting a method for function &#39;dbConnect&#39;: there is no package called &#39;RSQLite&#39;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dm_from_src(sqlite_src): object &#39;sqlite_src&#39; not found</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
+#&gt; Columns: 53
+#&gt; Primary keys: 4
+#&gt; Foreign keys: 4
+</CODE></PRE>
 <p>The function <code>dm_from_src(src, table_names = NULL)</code> includes all available tables on a source in the <code>dm</code> object. This means that you can use this, for example, on a postgres database that you access via <code>src_postgres()</code> (with the appropriate arguments <code>dbname</code>, <code>host</code>, <code>port</code>, …), to produce a <code>dm</code> object with all the tables on the database.</p>
 </div>
 <div id="low-level-construction" class="section level3">
@@ -231,12 +218,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Another way of creating a <code>dm</code> object is calling <code>new_dm()</code> on a list of <code>tbl</code> objects:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_dm <span class="ot">&lt;-</span> <span class="fu">new_dm</span>(<span class="fu">list</span>(<span class="at">trees =</span> trees, <span class="at">mtcars =</span> mtcars))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>base_dm</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `trees`, `mtcars`
 #&gt; Columns: 14
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
-</span></CODE></PRE>
+</CODE></PRE>
 <p>This constructor is optimized for speed and does not perform integrity checks. Use with caution, validate using <code>validate_dm()</code> if necessary.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">validate_dm</span>(base_dm)</span></code></pre></div>
 </div>
@@ -248,22 +235,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(flights_dm, <span class="st">&quot;airports&quot;</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `tbl.dm()` was deprecated in dm 0.2.0.</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `dm[[table_name]]` instead to access a specific table.</span></span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`airports`&gt; [?? x 8]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 [/tmp/RtmpZWJQUK/nycflights13.sqlite]</span><span>
-#&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                 </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        
-#&gt; </span><span style="color: #555555;"> 1</span><span> 04G   Lansdowne Airport      41.1  -</span><span style="color: #BB0000;">80.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>044    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 2</span><span> 06A   Moton Field Municipa…  32.5  -</span><span style="color: #BB0000;">85.7</span><span>   264    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
-#&gt; </span><span style="color: #555555;"> 3</span><span> 06C   Schaumburg Regional    42.0  -</span><span style="color: #BB0000;">88.1</span><span>   801    -</span><span style="color: #BB0000;">6</span><span> A     America/Chic…
-#&gt; </span><span style="color: #555555;"> 4</span><span> 06N   Randall Airport        41.4  -</span><span style="color: #BB0000;">74.4</span><span>   523    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 5</span><span> 09J   Jekyll Island Airport  31.1  -</span><span style="color: #BB0000;">81.4</span><span>    11    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 6</span><span> 0A9   Elizabethton Municip…  36.4  -</span><span style="color: #BB0000;">82.2</span><span>  </span><span style="text-decoration: underline;">1</span><span>593    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 7</span><span> 0G6   Williams County Airp…  41.5  -</span><span style="color: #BB0000;">84.5</span><span>   730    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 8</span><span> 0G7   Finger Lakes Regiona…  42.9  -</span><span style="color: #BB0000;">76.8</span><span>   492    -</span><span style="color: #BB0000;">5</span><span> A     America/New_…
-#&gt; </span><span style="color: #555555;"> 9</span><span> 0P2   Shoestring Aviation …  39.8  -</span><span style="color: #BB0000;">76.6</span><span>  </span><span style="text-decoration: underline;">1</span><span>000    -</span><span style="color: #BB0000;">5</span><span> U     America/New_…
-#&gt; </span><span style="color: #555555;">10</span><span> 0S9   Jefferson County Intl  48.1 -</span><span style="color: #BB0000;">123.</span><span>    108    -</span><span style="color: #BB0000;">8</span><span> A     America/Los_…
-#&gt; </span><span style="color: #555555;"># … with more rows</span><span>
-</span></CODE></PRE>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 86 x 8</span>
+#&gt;    faa   name                     lat    lon   alt    tz dst   tzone       
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       
+#&gt; <span style="color: #555555;"> 1</span> ALB   Albany Intl             42.7  -<span style="color: #BB0000;">73.8</span>   285    -<span style="color: #BB0000;">5</span> A     America/New…
+#&gt; <span style="color: #555555;"> 2</span> ATL   Hartsfield Jackson At…  33.6  -<span style="color: #BB0000;">84.4</span>  <span style="text-decoration: underline;">1</span>026    -<span style="color: #BB0000;">5</span> A     America/New…
+#&gt; <span style="color: #555555;"> 3</span> AUS   Austin Bergstrom Intl   30.2  -<span style="color: #BB0000;">97.7</span>   542    -<span style="color: #BB0000;">6</span> A     America/Chi…
+#&gt; <span style="color: #555555;"> 4</span> BDL   Bradley Intl            41.9  -<span style="color: #BB0000;">72.7</span>   173    -<span style="color: #BB0000;">5</span> A     America/New…
+#&gt; <span style="color: #555555;"> 5</span> BHM   Birmingham Intl         33.6  -<span style="color: #BB0000;">86.8</span>   644    -<span style="color: #BB0000;">6</span> A     America/Chi…
+#&gt; <span style="color: #555555;"> 6</span> BNA   Nashville Intl          36.1  -<span style="color: #BB0000;">86.7</span>   599    -<span style="color: #BB0000;">6</span> A     America/Chi…
+#&gt; <span style="color: #555555;"> 7</span> BOS   General Edward Lawren…  42.4  -<span style="color: #BB0000;">71.0</span>    19    -<span style="color: #BB0000;">5</span> A     America/New…
+#&gt; <span style="color: #555555;"> 8</span> BTV   Burlington Intl         44.5  -<span style="color: #BB0000;">73.2</span>   335    -<span style="color: #BB0000;">5</span> A     America/New…
+#&gt; <span style="color: #555555;"> 9</span> BUF   Buffalo Niagara Intl    42.9  -<span style="color: #BB0000;">78.7</span>   724    -<span style="color: #BB0000;">5</span> A     America/New…
+#&gt; <span style="color: #555555;">10</span> BUR   Bob Hope                34.2 -<span style="color: #BB0000;">118.</span>    778    -<span style="color: #BB0000;">8</span> A     America/Los…
+#&gt; <span style="color: #555555;"># … with 76 more rows</span>
+</CODE></PRE>
 <p>But how can we use {dm}-functions to manage the primary keys of the tables in a <code>dm</code> object?</p>
 </div>
 <div id="pk" class="section level2">
@@ -278,52 +264,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>If you created a <code>dm</code> object according to the examples in <a href="#ex_dm">“Examples of <code>dm</code> objects”</a>, your object does not yet have any primary keys set. So let’s add one.</p>
 <p>We use the <code>nycflights13</code> tables, i.e. <code>flights_dm</code> from above.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm, airports)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.35.5 [/tmp/RtmpZWJQUK/nycflights13.sqlite]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
-#&gt; Columns: 62
-#&gt; Primary keys: 1
-#&gt; Foreign keys: 0
-</span></CODE></PRE>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Table `airports` already has a primary key. Use `force = TRUE` to change the existing primary key.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p>The <code>dm</code> now has a primary key:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm_with_key, airports)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p>To get an overview over all tables with primary keys, use <code>dm_get_all_pks()</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_pks</span>(flights_dm_with_key)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
-#&gt;   table    pk_col
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>    </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> airports faa
-</span></CODE></PRE>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_pks</span>(flights_dm_with_key)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p>Remove a primary key:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_rm_pk</span>(flights_dm_with_key, airports) <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_has_pk</span>(airports)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p>If you still need to get to know your data better, and it is already available in the form of a <code>dm</code> object, you can use the <code>dm_enum_pk_candidates()</code> function in order to get information about which columns of the table are unique keys:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, airports)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 8 x 3</span><span>
-#&gt;   columns candidate why                                                    
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>  </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                                  
-#&gt; </span><span style="color: #555555;">1</span><span> faa     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
-#&gt; </span><span style="color: #555555;">2</span><span> lon     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                     
-#&gt; </span><span style="color: #555555;">3</span><span> name    FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: Municipal Airport (5), All Airp…
-#&gt; </span><span style="color: #555555;">4</span><span> lat     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 38.88944 (2), 40.63975 (2)</span><span style="color: #555555;">&quot;</span><span>     
-#&gt; </span><span style="color: #555555;">5</span><span> alt     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: 0 (51), 13 (13), 14 (12), 15 (1…
-#&gt; </span><span style="color: #555555;">6</span><span> tz      FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: -5 (521), -6 (342), -9 (240), -…
-#&gt; </span><span style="color: #555555;">7</span><span> dst     FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: A (1388), U (47), N (23)</span><span style="color: #555555;">&quot;</span><span>       
-#&gt; </span><span style="color: #555555;">8</span><span> tzone   FALSE     </span><span style="color: #555555;">&quot;</span><span>has duplicate values: America/New_York (519), America…
-</span></CODE></PRE>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, airports)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p>The <code>flights</code> table does not have any one-column primary key candidates:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
-#&gt;   candidate     n
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> FALSE        19
-</span></CODE></PRE>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p><code>dm_add_pk()</code> has a <code>check</code> argument. If set to <code>TRUE</code>, the function checks if the column of the table given by the user is unique. For performance reasons, the default is <code>check = FALSE</code>. See also [dm_examine_constraints()] for checking all constraints in a <code>dm</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_pk</span>(flights_dm, airports, tzone, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: (`tzone`) not a unique key of `airports`.</span></span></code></pre></div>
@@ -339,76 +300,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <p>Now it gets (even more) interesting: we want to define relations between different tables. With the <code>dm_add_fk()</code> function you can define which column of which table points to another table’s column.</p>
 <p>This is done by choosing a foreign key from one table that will point to a primary key of another table. The primary key of the referred table must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will find the primary key column of the referenced table by itself and make the indicated column of the child table point to it.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.35.5 [/tmp/RtmpZWJQUK/nycflights13.sqlite]
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
-#&gt; Columns: 62
-#&gt; Primary keys: 1
-#&gt; Foreign keys: 1
-</span></CODE></PRE>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p>This will throw an error:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: ref_table `airports` needs a primary key first. Use `dm_enum_pk_candidates()` to find appropriate columns and `dm_add_pk()` to define a primary key.</span></span></code></pre></div>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: (`origin`) is alreay a foreign key of table `flights` into table `airports`.</span></span></code></pre></div>
 <p>Let’s create a <code>dm</code> object with a foreign key relation to work with later on:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="ot">&lt;-</span> <span class="fu">dm_add_fk</span>(flights_dm_with_key, flights, origin, airports)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="ot">&lt;-</span> <span class="fu">dm_add_fk</span>(flights_dm_with_key, flights, origin, airports)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 <p>What if we tried to add another foreign key relation from <code>flights</code> to <code>airports</code> to the object? Column <code>dest</code> might work, since it also contains airport codes:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, dest, airports, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Column `dest` of table `flights` contains values (see examples above) that are not present in column `faa` of table `airports`.</span></span></code></pre></div>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_fk&#39; not found</span></span></code></pre></div>
 <p>Checks are opt-in and executed only if <code>check = TRUE</code>. You can still add a foreign key with the default <code>check = FALSE</code>. See also [dm_examine_constraints()] for checking all constraints in a <code>dm</code>.</p>
 <p>Get an overview of all foreign key relations with<code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 5 x 4</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 5 x 4</span>
 #&gt;   child_table child_fk_cols     parent_table parent_key_cols  
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>       </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>            </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>        </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>           
-#&gt; </span><span style="color: #555555;">1</span><span> flights     carrier           airlines     carrier          
-#&gt; </span><span style="color: #555555;">2</span><span> flights     origin            airports     faa              
-#&gt; </span><span style="color: #555555;">3</span><span> flights     dest              airports     faa              
-#&gt; </span><span style="color: #555555;">4</span><span> flights     tailnum           planes       tailnum          
-#&gt; </span><span style="color: #555555;">5</span><span> flights     origin, time_hour weather      origin, time_hour
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>           
+#&gt; <span style="color: #555555;">1</span> flights     carrier           airlines     carrier          
+#&gt; <span style="color: #555555;">2</span> flights     origin            airports     faa              
+#&gt; <span style="color: #555555;">3</span> flights     dest              airports     faa              
+#&gt; <span style="color: #555555;">4</span> flights     tailnum           planes       tailnum          
+#&gt; <span style="color: #555555;">5</span> flights     origin, time_hour weather      origin, time_hour
+</CODE></PRE>
 <p>Remove foreign key relations with <code>dm_rm_fk()</code> (parameter <code>columns = NULL</code> means that all relations will be removed, with a message):</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(<span class="at">table =</span> flights, <span class="at">column =</span> dest, <span class="at">ref_table =</span> airports) <span class="sc">%&gt;%</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: No foreign keys to remove.</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_fk&#39; not found</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `dm_get_fk()` was deprecated in dm 0.2.1.</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Please use `dm_get_all_fks()` instead.</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;list_of&lt;character&gt;[0]&gt;</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="at">columns =</span> <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Removing foreign keys: %&gt;%</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rm_fk(flights, origin, airports)</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `dm_get_fk()` was deprecated in dm 0.2.1.</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Please use `dm_get_all_fks()` instead.</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;list_of&lt;character&gt;[0]&gt;</span></span></code></pre></div>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_fk&#39; not found</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="at">columns =</span> <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_fk&#39; not found</span></span></code></pre></div>
 <p>Since the primary keys are defined in the <code>dm</code> object, you do not usually need to provide the referenced column name of <code>ref_table</code>.</p>
 <p>Another function for getting to know your data better (cf. <code>dm_enum_pk_candidates()</code> in <a href="#pk">“Primary keys of <code>dm</code> objects”</a>) is <code>dm_enum_fk_candidates()</code>. Use it to get an overview over foreign key candidates that point from one table to another:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(flights_dm_with_key, weather, airports)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 15 x 3</span><span>
-#&gt;    columns    candidate why                                                
-#&gt;    </span><span style="color: #555555;font-style: italic;">&lt;keys&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;lgl&gt;</span><span>     </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span>                                              
-#&gt; </span><span style="color: #555555;"> 1</span><span> origin     TRUE      </span><span style="color: #555555;">&quot;&quot;</span><span>                                                 
-#&gt; </span><span style="color: #555555;"> 2</span><span> year       FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$year` not in `airports$faa`: 2…
-#&gt; </span><span style="color: #555555;"> 3</span><span> month      FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$month` not in `airports$faa`: …
-#&gt; </span><span style="color: #555555;"> 4</span><span> day        FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$day` not in `airports$faa`: 3 …
-#&gt; </span><span style="color: #555555;"> 5</span><span> hour       FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$hour` not in `airports$faa`: 1…
-#&gt; </span><span style="color: #555555;"> 6</span><span> temp       FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$temp` not in `airports$faa`: 3…
-#&gt; </span><span style="color: #555555;"> 7</span><span> dewp       FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$dewp` not in `airports$faa`: 2…
-#&gt; </span><span style="color: #555555;"> 8</span><span> humid      FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$humid` not in `airports$faa`: …
-#&gt; </span><span style="color: #555555;"> 9</span><span> wind_dir   FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$wind_dir` not in `airports$faa…
-#&gt; </span><span style="color: #555555;">10</span><span> wind_speed FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$wind_speed` not in `airports$f…
-#&gt; </span><span style="color: #555555;">11</span><span> wind_gust  FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$wind_gust` not in `airports$fa…
-#&gt; </span><span style="color: #555555;">12</span><span> precip     FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$precip` not in `airports$faa`:…
-#&gt; </span><span style="color: #555555;">13</span><span> pressure   FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$pressure` not in `airports$faa…
-#&gt; </span><span style="color: #555555;">14</span><span> visib      FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$visib` not in `airports$faa`: …
-#&gt; </span><span style="color: #555555;">15</span><span> time_hour  FALSE     </span><span style="color: #555555;">&quot;</span><span>values of `weather$time_hour` not in `airports$fa…
-</span></CODE></PRE>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(flights_dm_with_key, weather, airports)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;flights_dm_with_key&#39; not found</span></span></code></pre></div>
 </div>
 
 

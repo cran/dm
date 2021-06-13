@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek" />
 
-<meta name="date" content="2021-05-11" />
+<meta name="date" content="2021-06-13" />
 
 <title>Insert, update or remove rows in a database dm</title>
 
@@ -140,7 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Insert, update or remove rows in a database dm</h1>
 <h4 class="author">James Wondrasek</h4>
-<h4 class="date">2021-05-11</h4>
+<h4 class="date">2021-06-13</h4>
 
 
 
@@ -215,22 +215,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">pk =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>parent</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 2</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 2</span>
 #&gt;   value    pk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> A         1
-#&gt; </span><span style="color: #555555;">2</span><span> B         2
-#&gt; </span><span style="color: #555555;">3</span><span> C         3
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
+#&gt; <span style="color: #555555;">1</span> A         1
+#&gt; <span style="color: #555555;">2</span> B         2
+#&gt; <span style="color: #555555;">3</span> C         3
+</CODE></PRE>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">pk =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="cn">NA</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 3</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 3</span>
 #&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     1
-#&gt; </span><span style="color: #555555;">3</span><span> c         3    </span><span style="color: #BB0000;">NA</span><span>
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;">1</span> a         1     1
+#&gt; <span style="color: #555555;">2</span> b         2     1
+#&gt; <span style="color: #555555;">3</span> c         3    <span style="color: #BB0000;">NA</span>
+</CODE></PRE>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>demo_dm <span class="ot">&lt;-</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> parent, <span class="at">child =</span> child) <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(parent, pk) <span class="sc">%&gt;%</span></span>
@@ -238,69 +238,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(child, fk, parent)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>demo_dm <span class="sc">%&gt;%</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
- -->
-<!-- Title: %0 Pages: 1 -->
-<svg width="152pt" height="90pt" viewBox="0.00 0.00 152.00 90.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 86)">
-<title>%0</title>
-<g id="a_graph0"><a xlink:title="Data Model">
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-86 148,-86 148,4 -4,4"></polygon>
-</a>
-</g>
-<!-- child -->
-<g id="node1" class="node">
-<title>child</title>
-<polygon fill="#efebdd" stroke="transparent" points="10,-61 10,-81 44,-81 44,-61 10,-61"></polygon>
-<text text-anchor="start" x="13.0021" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#000000">child</text>
-<polygon fill="#ffffff" stroke="transparent" points="10,-41 10,-61 44,-61 44,-41 10,-41"></polygon>
-<text text-anchor="start" x="11.8401" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#444444">value</text>
-<polygon fill="#ffffff" stroke="transparent" points="10,-21 10,-41 44,-41 44,-21 10,-21"></polygon>
-<text text-anchor="start" x="12" y="-27.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">pk</text>
-<polygon fill="#ffffff" stroke="transparent" points="10,-1 10,-21 44,-21 44,-1 10,-1"></polygon>
-<text text-anchor="start" x="12" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">fk</text>
-<polygon fill="none" stroke="#555555" points="9,0 9,-82 45,-82 45,0 9,0"></polygon>
-</g>
-<!-- parent -->
-<g id="node2" class="node">
-<title>parent</title>
-<polygon fill="#efebdd" stroke="transparent" points="98,-41 98,-61 136,-61 136,-41 98,-41"></polygon>
-<text text-anchor="start" x="99.5098" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#000000">parent</text>
-<polygon fill="#ffffff" stroke="transparent" points="98,-21 98,-41 136,-41 136,-21 98,-21"></polygon>
-<text text-anchor="start" x="100" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#444444">value</text>
-<polygon fill="#ffffff" stroke="transparent" points="98,-1 98,-21 136,-21 136,-1 98,-1"></polygon>
-<text text-anchor="start" x="100" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">pk</text>
-<polygon fill="none" stroke="#555555" points="97,0 97,-62 137,-62 137,0 97,0"></polygon>
-</g>
-<!-- child&#45;&gt;parent -->
-<g id="edge1" class="edge">
-<title>child:fk-&gt;parent:pk</title>
-<path fill="none" stroke="#555555" d="M44,-11C64.25,-11 71.6855,-11 87.931,-11"></path>
-<polygon fill="#555555" stroke="#555555" points="88,-14.5001 98,-11 88,-7.5001 88,-14.5001"></polygon>
-</g>
-</g>
-</svg>
-
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in loadNamespace(x): there is no package called &#39;DiagrammeRsvg&#39;</span></span></code></pre></div>
 <p>{dm} doesn’t check your key values when you create a dm, we add this check:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_examine_constraints</span>(demo_dm)</span></code></pre></div>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span><span> All constraints satisfied.
-</span></CODE></PRE>
+<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> All constraints satisfied.
+</CODE></PRE>
 <p>Then we copy <code>demo_dm</code> into an SQLite database. Note: the default for the method used, <code>copy_dm_to()</code>, is to create temporary tables that will be automatically deleted when your session ends. As <code>demo_sql</code> will be the destination dm for the examples, the argument <code>temporary = FALSE</code> is used to make this distinction apparent.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sqlite_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>demo_sql <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(sqlite_db, demo_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>demo_sql</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.35.5 []
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `parent`, `child`
-#&gt; Columns: 5
-#&gt; Primary keys: 2
-#&gt; Foreign keys: 1
-</span></CODE></PRE>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in (function (cond) : error in evaluating the argument &#39;drv&#39; in selecting a method for function &#39;dbConnect&#39;: there is no package called &#39;RSQLite&#39;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>demo_sql <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(sqlite_db, demo_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is.src(dest): object &#39;sqlite_db&#39; not found</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>demo_sql</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;demo_sql&#39; not found</span></span></code></pre></div>
 <p>{dm}’s table modification methods can be piped together to create a repeatable sequence of operations that returns a dm incorporating all the changes required. This is a common use case for {dm} – building by hand a sequence of operations using temporary results until it is complete and correct, then committing the result.</p>
 </div>
 <div id="insert" class="section level2">
@@ -309,220 +260,147 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The code below adds <code>parent</code> and <code>child</code> table entries for the letter “D”. First, the changeset dm is created and temporarily copied to the database:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>new_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>new_parent</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span>
 #&gt;   value    pk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> D         4
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;">1</span> D         4
+</CODE></PRE>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>new_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;d&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>, <span class="at">fk =</span> <span class="dv">4</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>new_child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 3</span><span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 3</span>
 #&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> d         4     4
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;">1</span> d         4     4
+</CODE></PRE>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dm_insert_in <span class="ot">&lt;-</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is.src(dest): object &#39;sqlite_db&#39; not found</span></span></code></pre></div>
 <p>The changeset dm is then used as an argument to <code>dm_rows_insert()</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span></code></pre></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;demo_sql&#39; not found</span></span></code></pre></div>
 <p>This gives us a warning that changes will not be persisted. Inspecting the <code>child</code> table of the resulting <code>dm_insert_out</code> and <code>demo_sql</code>, we can see that’s exactly what happened. {dm} returned to us a dm object with our inserted rows in place, but the underlying database has not changed.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 3]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 []</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     1
-#&gt; </span><span style="color: #555555;">3</span><span> c         3    </span><span style="color: #BB0000;">NA</span><span>
-#&gt; </span><span style="color: #555555;">4</span><span> d         4     4
-</span></CODE></PRE>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 []</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     1
-#&gt; </span><span style="color: #555555;">3</span><span> c         3    </span><span style="color: #BB0000;">NA</span><span>
-</span></CODE></PRE>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out<span class="sc">$</span>child</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;dm_insert_out&#39; not found</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;demo_sql&#39; not found</span></span></code></pre></div>
 <p>We repeat the operation, this time with the argument <code>in_place = TRUE</code> and the changes now persist in <code>demo_sql</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 []</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     1
-#&gt; </span><span style="color: #555555;">3</span><span> c         3    </span><span style="color: #BB0000;">NA</span><span>
-#&gt; </span><span style="color: #555555;">4</span><span> d         4     4
-</span></CODE></PRE>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;demo_sql&#39; not found</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;demo_sql&#39; not found</span></span></code></pre></div>
 </div>
 <div id="update" class="section level2">
 <h2><code>dm_rows_update()</code></h2>
 <p><code>dm_rows_update()</code> works the same as <code>dm_rows_insert()</code>. We create the dm object and copy it to the same source as the destination. Here we will change the foreign key for the row in <code>child</code> containing “b” to point to the correct row in <code>parent</code>. And we will persist the changes.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>updated_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;b&quot;</span>, <span class="at">pk =</span> <span class="dv">2</span>, <span class="at">fk =</span> <span class="dv">2</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>updated_child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 3</span><span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>updated_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;b&quot;</span>, <span class="at">pk =</span> <span class="dv">2</span>, <span class="at">fk =</span> <span class="dv">2</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>updated_child</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 3</span>
 #&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> b         2     2
-</span></CODE></PRE>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dm_update_in <span class="ot">&lt;-</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> updated_child) <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>dm_update_out <span class="ot">&lt;-</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_update</span>(dm_update_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 []</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     2
-#&gt; </span><span style="color: #555555;">3</span><span> c         3    </span><span style="color: #BB0000;">NA</span><span>
-#&gt; </span><span style="color: #555555;">4</span><span> d         4     4
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;">1</span> b         2     2
+</CODE></PRE>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dm_update_in <span class="ot">&lt;-</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> updated_child) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is.src(dest): object &#39;sqlite_db&#39; not found</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>dm_update_out <span class="ot">&lt;-</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_update</span>(dm_update_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;demo_sql&#39; not found</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;demo_sql&#39; not found</span></span></code></pre></div>
 </div>
 <div id="delete" class="section level2">
 <h2><code>dm_rows_delete()</code></h2>
 <p><code>dm_rows_delete()</code> is not currently implemented to work with an RDBMS, so we will shift our demonstrations back to the local R environment. We’ve made changes to <code>demo_sql</code> so we use <code>collect()</code> to copy the current tables out of SQLite. Note that persistence is not a concern with local dm objects. Every operation returns a new dm object containing the changes made.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>local_dm <span class="ot">&lt;-</span> <span class="fu">collect</span>(demo_sql)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>local_dm<span class="sc">$</span>parent</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 x 2</span><span>
-#&gt;   value    pk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> A         1
-#&gt; </span><span style="color: #555555;">2</span><span> B         2
-#&gt; </span><span style="color: #555555;">3</span><span> C         3
-#&gt; </span><span style="color: #555555;">4</span><span> D         4
-</span></CODE></PRE>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>local_dm<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 x 3</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     2
-#&gt; </span><span style="color: #555555;">3</span><span> c         3    </span><span style="color: #BB0000;">NA</span><span>
-#&gt; </span><span style="color: #555555;">4</span><span> d         4     4
-</span></CODE></PRE>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dm_deleted <span class="ot">&lt;-</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_delete</span>(local_dm, .)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Ignoring extra columns: value, fk</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Ignoring extra columns: value</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>dm_deleted<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 3</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     2
-#&gt; </span><span style="color: #555555;">3</span><span> c         3    </span><span style="color: #BB0000;">NA</span><span>
-</span></CODE></PRE>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>local_dm <span class="ot">&lt;-</span> <span class="fu">collect</span>(demo_sql)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in collect(demo_sql): object &#39;demo_sql&#39; not found</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>local_dm<span class="sc">$</span>parent</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;local_dm&#39; not found</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>local_dm<span class="sc">$</span>child</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;local_dm&#39; not found</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>dm_deleted <span class="ot">&lt;-</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_delete</span>(local_dm, .)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;local_dm&#39; not found</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>dm_deleted<span class="sc">$</span>child</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;dm_deleted&#39; not found</span></span></code></pre></div>
 </div>
 <div id="patch" class="section level2">
 <h2><code>dm_rows_patch()</code></h2>
 <p><code>dm_rows_patch()</code> updates missing values in existing records. We use it here to fix the missing foreign key in the <code>child</code> table.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>patched_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;c&quot;</span>, <span class="at">pk =</span> <span class="dv">3</span>, <span class="at">fk =</span> <span class="dv">3</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>patched_child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 3</span><span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>patched_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;c&quot;</span>, <span class="at">pk =</span> <span class="dv">3</span>, <span class="at">fk =</span> <span class="dv">3</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>patched_child</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 3</span>
 #&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> c         3     3
-</span></CODE></PRE>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dm_patched <span class="ot">&lt;-</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> patched_child) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_patch</span>(dm_deleted, .)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>dm_patched<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 x 3</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     2
-#&gt; </span><span style="color: #555555;">3</span><span> c         3     3
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;">1</span> c         3     3
+</CODE></PRE>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dm_patched <span class="ot">&lt;-</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> patched_child) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_patch</span>(dm_deleted, .)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;dm_deleted&#39; not found</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>dm_patched<span class="sc">$</span>child</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;dm_patched&#39; not found</span></span></code></pre></div>
 </div>
 <div id="upsert" class="section level2">
 <h2><code>dm_rows_upsert()</code></h2>
 <p><code>dm_rows_upsert()</code> updates rows with supplied values if they exist or inserts the supplied values as new rows if they don’t. In this example we add the letter “D” back to our dm, and update the foreign key for “b”.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>upserted_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>upserted_parent</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span><span>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>upserted_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>upserted_parent</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 x 2</span>
 #&gt;   value    pk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> D         4
-</span></CODE></PRE>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>upserted_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="at">pk =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>upserted_child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 2 x 3</span><span>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;">1</span> D         4
+</CODE></PRE>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>upserted_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="at">pk =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>upserted_child</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 2 x 3</span>
 #&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> b         2     3
-#&gt; </span><span style="color: #555555;">2</span><span> d         4     4
-</span></CODE></PRE>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dm_upserted <span class="ot">&lt;-</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> upserted_parent, <span class="at">child =</span> upserted_child) <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_upsert</span>(dm_patched, .)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>parent</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 x 2</span><span>
-#&gt;   value    pk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> A         1
-#&gt; </span><span style="color: #555555;">2</span><span> B         2
-#&gt; </span><span style="color: #555555;">3</span><span> C         3
-#&gt; </span><span style="color: #555555;">4</span><span> D         4
-</span></CODE></PRE>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 x 3</span><span>
-#&gt;   value    pk    fk
-#&gt;   </span><span style="color: #555555;font-style: italic;">&lt;chr&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #555555;font-style: italic;">&lt;dbl&gt;</span><span>
-#&gt; </span><span style="color: #555555;">1</span><span> a         1     1
-#&gt; </span><span style="color: #555555;">2</span><span> b         2     3
-#&gt; </span><span style="color: #555555;">3</span><span> c         3     3
-#&gt; </span><span style="color: #555555;">4</span><span> d         4     4
-</span></CODE></PRE>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;">1</span> b         2     3
+#&gt; <span style="color: #555555;">2</span> d         4     4
+</CODE></PRE>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dm_upserted <span class="ot">&lt;-</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> upserted_parent, <span class="at">child =</span> upserted_child) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_upsert</span>(dm_patched, .)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;dm_patched&#39; not found</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>parent</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;dm_upserted&#39; not found</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>child</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;dm_upserted&#39; not found</span></span></code></pre></div>
 </div>
 <div id="truncate" class="section level2">
 <h2><code>dm_rows_truncate()</code></h2>
 <p><code>dm_rows_truncate()</code> deletes all the rows in a table while leaving all other related information intact, including column names, column types, and key relations. The function derives its name from the SQL <code>TRUNCATE TABLE</code> statement, so we will return to our SQLite database to demonstrate its use. The example below truncates only the <code>child</code> table. Note how a modified version of the destination dm is used as “changeset dm”: the rows in the changeset dm do not matter here.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dm_trunc_in <span class="ot">&lt;-</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(child)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>dm_trunc_in</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span><span> </span><span style="color: #00BB00;">Table source</span><span> </span><span style="color: #00BB00;">───────────────────────────────────────────────────────────</span><span>
-#&gt; src:  sqlite 3.35.5 []
-#&gt; </span><span style="color: #555555;">──</span><span> </span><span style="color: #555555;">Metadata</span><span> </span><span style="color: #555555;">───────────────────────────────────────────────────────────────</span><span>
-#&gt; Tables: `child`
-#&gt; Columns: 3
-#&gt; Primary keys: 1
-#&gt; Foreign keys: 0
-</span></CODE></PRE>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dm_trunc_out <span class="ot">&lt;-</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_truncate</span>(dm_trunc_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span><span>
-#&gt; </span><span style="color: #555555;"># Database: sqlite 3.35.5 []</span><span>
-#&gt; </span><span style="color: #555555;"># … with 3 variables: value &lt;chr&gt;, pk &lt;int&gt;, fk &lt;dbl&gt;</span><span>
-</span></CODE></PRE>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dm_trunc_in <span class="ot">&lt;-</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(child)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;demo_sql&#39; not found</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>dm_trunc_in</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;dm_trunc_in&#39; not found</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>dm_trunc_out <span class="ot">&lt;-</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_truncate</span>(dm_trunc_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;demo_sql&#39; not found</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;demo_sql&#39; not found</span></span></code></pre></div>
+<p>When done, do not forget to disconnect:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(sqlite_db)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument &#39;conn&#39; in selecting a method for function &#39;dbDisconnect&#39;: object &#39;sqlite_db&#39; not found</span></span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>

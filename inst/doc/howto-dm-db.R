@@ -101,3 +101,7 @@ deployed_dm <- copy_dm_to(destination_db, my_dm_local)
 deployed_dm
 my_dm_local
 
+## ----disconnect----------------------------------------------------------
+DBI::dbDisconnect(destination_db)
+DBI::dbDisconnect(my_db)
+

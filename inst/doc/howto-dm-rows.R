@@ -107,3 +107,6 @@ dm_trunc_out <-
 
 demo_sql$child
 
+## ----disconnect----------------------------------------------------------
+DBI::dbDisconnect(sqlite_db)
+

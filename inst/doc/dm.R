@@ -75,3 +75,6 @@ fin_dm_total$total_loans
 fin_dm_total %>%
   dm_examine_constraints()
 
+## ----disconnect, echo = FALSE, results = "hide"--------------------------
+dbDisconnect(fin_db)
+

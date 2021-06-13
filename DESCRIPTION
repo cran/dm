@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 0.2.1
-Date: 2021-05-11
+Version: 0.2.2
+Date: 2021-06-13
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -42,17 +42,17 @@ Imports: backports, cli (>= 2.2.0), DBI, dplyr (>= 1.0.3), ellipsis,
         (>= 1.0.1), vctrs (>= 0.3.2)
 Suggests: brio, covr, crayon, dbplyr, DiagrammeR, DiagrammeRsvg,
         digest, duckdb, fansi, keyring, knitr, mockr, nycflights13,
-        odbc, RMariaDB (>= 1.0.10), rmarkdown, RPostgres, RSQLite,
-        testthat (>= 3.0.2), tidyverse, withr
+        odbc, progress, RMariaDB (>= 1.0.10), rmarkdown, RPostgres,
+        RSQLite, testthat (>= 3.0.2), tidyverse, withr
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
-        draw-dm, bind
+        draw-dm, bind, rows-dm
 NeedsCompilation: no
-Packaged: 2021-05-11 07:51:00 UTC; kirill
+Packaged: 2021-06-13 10:17:43 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Darko Bergant [aut],
@@ -62,4 +62,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph]
 Maintainer: Kirill Müller <krlmlr+r@mailbox.org>
 Repository: CRAN
-Date/Publication: 2021-05-11 08:32:14 UTC
+Date/Publication: 2021-06-13 22:00:05 UTC

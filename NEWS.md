@@ -1,5 +1,18 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# dm 0.2.2
+
+## Features
+
+- `dm_examine_constraints()`, `dm_rows_insert()` and related, `copy_dm_to()` and `collect.dm()` show progress bars in interactive mode via the progress package. The new `progress = NA` argument controls the behavior (#262, @moodymudskipper).
+- `copy_dm_to()` gains a `copy_to` argument to support other ways of copying data to the database (#582).
+
+## Internal
+
+- Always run database tests on sqlite for df source.
+- Establish compatibility with testthat > 3.0.2 (#566, @moodymudskipper).
+
+
 # dm 0.2.1
 
 ## Breaking changes
