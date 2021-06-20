@@ -1,5 +1,20 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# dm 0.2.3
+
+## Bug fixes
+
+- Fix `rows_truncate()` in interactive mode (#588).
+
+## Features
+
+- Implement `rows_delete()` for databases (#589).
+
+## Internal
+
+- Skip examples that might require internet access on non-CI platforms.
+
+
 # dm 0.2.2
 
 ## Features
