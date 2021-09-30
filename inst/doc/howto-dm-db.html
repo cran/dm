@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2021-06-20" />
+<meta name="date" content="2021-09-30" />
 
 <title>Create a dm object from a database</title>
 
@@ -40,6 +40,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -140,54 +141,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Create a dm object from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2021-06-20</h4>
+<h4 class="date">2021-09-30</h4>
 
 
 
 <p>{dm} was designed to make connecting to and working with an RDBMS as straightforward as possible. To this end, a dm object can be created from any database that has a {<a href="https://dbi.r-dbi.org/">DBI</a>} backend available (<a href="https://github.com/r-dbi/backends">see list</a>).</p>
 <p>When a dm object is created via a DBI connection to an RDBMS it can import all the tables in the database, the active schema or a limited set. For some RDBMS, such as Postgres and SQL Server, primary and foreign keys are also imported and do not have to be manually added afterwards.</p>
-<p>To demonstrate, we will connect to a <a href="https://relational.fit.cvut.cz/">relational dataset repository</a> with a database server that is publicly accessible without registration. It hosts a <a href="https://relational.fit.cvut.cz/dataset/Financial">financial dataset</a> that contains loan data along with relevant account information and transactions. We chose this dataset because the relationships between <code>loan</code>, <code>account</code>, and <code>transactions</code> tables are a good representation of databases that record real-world business transactions. The repository uses a MariaDB server for which {dm} does not currently import primary or foreign keys, so we will need to add them.</p>
+<p>To demonstrate, we will connect to a relational dataset repository (https://relational.fit.cvut.cz/) with a database server that is publicly accessible without registration. It hosts a financial dataset (https://relational.fit.cvut.cz/dataset/Financial) that contains loan data along with relevant account information and transactions. We chose this dataset because the relationships between <code>loan</code>, <code>account</code>, and <code>transactions</code> tables are a good representation of databases that record real-world business transactions. The repository uses a MariaDB server for which {dm} does not currently import primary or foreign keys, so we will need to add them.</p>
 <p>Below we open a connection to the publicly accessible database server using their documented connection parameters. Connection details vary from database to database. Before connecting to your own RDBMS you may want to read <code>vignette(&quot;DBI&quot;, package = &quot;DBI&quot;)</code> for further information.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RMariaDB)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in library(RMariaDB): there is no package called &#39;RMariaDB&#39;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>my_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MariaDB</span>(),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&quot;guest&quot;</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&quot;relational&quot;</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&quot;Financial_ijs&quot;</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&quot;relational.fit.cvut.cz&quot;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dbConnect(MariaDB(), username = &quot;guest&quot;, password = &quot;relational&quot;, : could not find function &quot;dbConnect&quot;</span></span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>my_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MariaDB</span>(),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&quot;guest&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&quot;relational&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&quot;Financial_ijs&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&quot;relational.fit.cvut.cz&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Creating a dm object takes a single call to <code>dm_from_src()</code> with the DBI connection object as its argument.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>my_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(my_db)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dm_from_src(my_db): object &#39;my_db&#39; not found</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>my_dm</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;my_dm&#39; not found</span></span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>my_dm</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (9 total)
+#&gt; Columns: 57
+#&gt; Primary keys: 0
+#&gt; Foreign keys: 0
+</CODE></PRE>
 <p>The components of the <code>my_dm</code> object are lazy tables powered by {<a href="https://dbplyr.tidyverse.org/">dbplyr</a>}. {dbplyr} translates the {<a href="https://dplyr.tidyverse.org/">dplyr</a>} grammar of data manipulation into queries the database server understands. Lazy tables defer downloading of table data until results are required for printing or local processing.</p>
 <div id="building-a-dm-from-a-subset-of-tables" class="section level2">
 <h2>Building a dm from a subset of tables</h2>
 <p>A dm can also be constructed from individual tables or views. This is useful for when you want to work with a subset of a database’s tables, perhaps from different schemas.</p>
 <p>Below we use the <code>$</code> notation to extract two tables from the financial database. Then we create our dm by passing the tables in as arguments. Note that the tables arguments have to all be from the same source, in this case <code>my_db</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbListTables</span>(my_db)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dbListTables(my_db): could not find function &quot;dbListTables&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>loans <span class="ot">&lt;-</span> <span class="fu">tbl</span>(my_db, <span class="st">&quot;loans&quot;</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in tbl(my_db, &quot;loans&quot;): object &#39;my_db&#39; not found</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;accounts&quot;  &quot;cards&quot;     &quot;clients&quot;   &quot;disps&quot;     &quot;districts&quot; &quot;loans&quot;    </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;orders&quot;    &quot;tkeys&quot;     &quot;trans&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>loans <span class="ot">&lt;-</span> <span class="fu">tbl</span>(my_db, <span class="st">&quot;loans&quot;</span>)</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>accounts <span class="ot">&lt;-</span> <span class="fu">tbl</span>(my_db, <span class="st">&quot;accounts&quot;</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in tbl(my_db, &quot;accounts&quot;): object &#39;my_db&#39; not found</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>my_manual_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(loans, accounts)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in .f(.x[[i]], ...): object &#39;loans&#39; not found</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>my_manual_dm</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;my_manual_dm&#39; not found</span></span></code></pre></div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>my_manual_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(loans, accounts)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>my_manual_dm</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `loans`, `accounts`
+#&gt; Columns: 11
+#&gt; Primary keys: 0
+#&gt; Foreign keys: 0
+</CODE></PRE>
 </div>
 <div id="define-primary-and-foreign-keys" class="section level2">
 <h2>Define Primary and Foreign Keys</h2>
 <p>Primary keys and foreign keys are how relational database tables are linked with each other. A primary key is a column or column tuple that has a unique value for each row within a table. A foreign key is a column or column tuple containing the primary key for a row in another table. Foreign keys act as cross references between tables. They specify the relationships that gives us the <em>relational</em> database. For more information on keys and a crash course on databases, see <code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
-<p>The <a href="https://relational.fit.cvut.cz/assets/img/datasets-generated/financial.svg">model diagram</a> provided by our test database loosely illustrates the intended relationships between tables. In the diagram we can see that the <code>loans</code> table should be linked to the <code>accounts</code> table. Below we create those links in 3 steps:</p>
+<p>The model diagram (https://relational.fit.cvut.cz/assets/img/datasets-generated/financial.svg) provided by our test database loosely illustrates the intended relationships between tables. In the diagram we can see that the <code>loans</code> table should be linked to the <code>accounts</code> table. Below we create those links in 3 steps:</p>
 <ol style="list-style-type: decimal">
 <li>Add a primary key <code>id</code> to the <code>accounts</code> table</li>
 <li>Add a primary key <code>id</code> to the <code>loans</code> table</li>
@@ -201,106 +211,282 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans, id) <span class="sc">%&gt;%</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans, account_id, accounts) <span class="sc">%&gt;%</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">green =</span> loans, <span class="at">orange =</span> accounts)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_manual_dm&#39; not found</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_dm_keys&#39; not found</span></span></code></pre></div>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg width="165pt" height="70pt" viewBox="0.00 0.00 165.00 70.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 66)">
+<title>%0</title>
+<g id="a_graph0"><a xlink:title="Data Model">
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-66 161,-66 161,4 -4,4"></polygon>
+</a>
+</g>
+<!-- accounts -->
+<g id="node1" class="node">
+<title>accounts</title>
+<polygon fill="#ffa500" stroke="transparent" points="104,-21 104,-41 156,-41 156,-21 104,-21"></polygon>
+<text text-anchor="start" x="105.5105" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">accounts</text>
+<polygon fill="#ffedcc" stroke="transparent" points="104,-1 104,-21 156,-21 156,-1 104,-1"></polygon>
+<text text-anchor="start" x="106" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="103,0 103,-42 157,-42 157,0 103,0"></polygon>
+</g>
+<!-- loans -->
+<g id="node2" class="node">
+<title>loans</title>
+<polygon fill="#00ff00" stroke="transparent" points="1.5,-41 1.5,-61 66.5,-61 66.5,-41 1.5,-41"></polygon>
+<text text-anchor="start" x="19.2251" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">loans</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-21 1.5,-41 66.5,-41 66.5,-21 1.5,-21"></polygon>
+<text text-anchor="start" x="3.5" y="-27.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-1 1.5,-21 66.5,-21 66.5,-1 1.5,-1"></polygon>
+<text text-anchor="start" x="3.2875" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#00aa00" stroke-opacity="0.666667" points="0,0 0,-62 67,-62 67,0 0,0"></polygon>
+</g>
+<!-- loans&#45;&gt;accounts -->
+<g id="edge1" class="edge">
+<title>loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-11C79.1302,-11 84.5819,-11 93.735,-11"></path>
+<polygon fill="#555555" stroke="#555555" points="94,-14.5001 104,-11 94,-7.5001 94,-14.5001"></polygon>
+</g>
+</g>
+</svg>
+
 <p>Once you have instantiated a dm object you can continue to add tables to it. For tables from the original source for the dm, use <code>dm_add_tbl()</code></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trans <span class="ot">&lt;-</span> <span class="fu">tbl</span>(my_db, <span class="st">&quot;trans&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in tbl(my_db, &quot;trans&quot;): object &#39;my_db&#39; not found</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_tbl</span>(trans)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_dm_keys&#39; not found</span></span></code></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_tbl</span>(trans)</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `loans`, `accounts`, `trans`
+#&gt; Columns: 21
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 1
+</CODE></PRE>
 <p>For tables from other sources or from the local environment <code>dplyr::copy_to()</code> is used. <code>copy_to()</code> is discussed later in this article.</p>
 </div>
 <div id="transient-nature-of-operations" class="section level2">
 <h2>Transient nature of operations</h2>
 <p>Like other R objects, a dm is immutable and all operations performed on it are transient unless stored in a new variable.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_dm_keys</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;my_dm_keys&#39; not found</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>my_dm_trans <span class="ot">&lt;-</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  my_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_tbl</span>(trans)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_dm_keys&#39; not found</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>my_dm_trans</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;my_dm_trans&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_dm_keys</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `loans`, `accounts`
+#&gt; Columns: 11
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 1
+</CODE></PRE>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>my_dm_trans <span class="ot">&lt;-</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  my_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_tbl</span>(trans)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>my_dm_trans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `loans`, `accounts`, `trans`
+#&gt; Columns: 21
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 1
+</CODE></PRE>
 <p>And, like {dbplyr}, results are never written to a database unless explicitly requested.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_dm_keys&#39; not found</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_dm_keys&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 10]</span>
+#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+#&gt;       id account_id loans.date amount duration payments status district_id
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;date&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">4</span>959          2 1994-01-05  <span style="text-decoration: underline;">80</span>952       24     <span style="text-decoration: underline;">3</span>373 A                1
+#&gt; <span style="color: #555555;"> 2</span>  <span style="text-decoration: underline;">4</span>961         19 1996-04-29  <span style="text-decoration: underline;">30</span>276       12     <span style="text-decoration: underline;">2</span>523 B               21
+#&gt; <span style="color: #555555;"> 3</span>  <span style="text-decoration: underline;">4</span>962         25 1997-12-08  <span style="text-decoration: underline;">30</span>276       12     <span style="text-decoration: underline;">2</span>523 A               68
+#&gt; <span style="color: #555555;"> 4</span>  <span style="text-decoration: underline;">4</span>967         37 1998-10-14 <span style="text-decoration: underline;">318</span>480       60     <span style="text-decoration: underline;">5</span>308 D               20
+#&gt; <span style="color: #555555;"> 5</span>  <span style="text-decoration: underline;">4</span>968         38 1998-04-19 <span style="text-decoration: underline;">110</span>736       48     <span style="text-decoration: underline;">2</span>307 C               19
+#&gt; <span style="color: #555555;"> 6</span>  <span style="text-decoration: underline;">4</span>973         67 1996-05-02 <span style="text-decoration: underline;">165</span>960       24     <span style="text-decoration: underline;">6</span>915 A               16
+#&gt; <span style="color: #555555;"> 7</span>  <span style="text-decoration: underline;">4</span>986         97 1997-08-10 <span style="text-decoration: underline;">102</span>876       12     <span style="text-decoration: underline;">8</span>573 A               74
+#&gt; <span style="color: #555555;"> 8</span>  <span style="text-decoration: underline;">4</span>988        103 1997-12-06 <span style="text-decoration: underline;">265</span>320       36     <span style="text-decoration: underline;">7</span>370 D               44
+#&gt; <span style="color: #555555;"> 9</span>  <span style="text-decoration: underline;">4</span>989        105 1998-12-05 <span style="text-decoration: underline;">352</span>704       48     <span style="text-decoration: underline;">7</span>348 C               21
+#&gt; <span style="color: #555555;">10</span>  <span style="text-decoration: underline;">4</span>990        110 1997-09-08 <span style="text-decoration: underline;">162</span>576       36     <span style="text-decoration: underline;">4</span>516 C               36
+#&gt; <span style="color: #555555;"># … with more rows, and 2 more variables: frequency &lt;chr&gt;,</span>
+#&gt; <span style="color: #555555;">#   accounts.date &lt;date&gt;</span>
+</CODE></PRE>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `LHS`.`id` AS `id`, `account_id`, `loans.date`, `amount`, `duration`, `payments`, `status`, `district_id`, `frequency`, `accounts.date`</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM (SELECT `id`, `account_id`, `date` AS `loans.date`, `amount`, `duration`, `payments`, `status`</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `loans`) `LHS`</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LEFT JOIN (SELECT `id`, `district_id`, `frequency`, `date` AS `accounts.date`</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `accounts`) `RHS`</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ON (`LHS`.`account_id` = `RHS`.`id`)</span></span></code></pre></div>
 </div>
 <div id="performing-operations-on-tables-by-zooming" class="section level2">
 <h2>Performing operations on tables by “zooming”</h2>
 <p>As the dm is a collection of tables, if we wish to perform operations on an individual table we set it as the context for those operations using <code>dm_zoom_to()</code>. See <code>vignette(&quot;tech-dm-zoom&quot;)</code> for more detail on zooming.</p>
 <p>dm operations are transient unless persistence is explicitly requested. To make our chain of manipulations on the selected table permanent we assign the result of <code>dm_insert_zoomed()</code> to a new object, <code>my_dm_total</code>. This is a new dm object, derived from <code>my_dm_keys</code>, with a new lazy table <code>total_loans</code> linked to the <code>accounts</code> table.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  my_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_dm_keys&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  my_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
 <p>Context is set to the table “loans” using <code>dm_zoom_to(loans)</code>. You can learn more about zooming in the tutorial <code>vignette(&quot;tech-dm-zoom&quot;)</code>. We then use {<a href="https://dplyr.tidyverse.org/">dplyr</a>} functions on the zoomed table to generate a new summary table.</p>
 <p><code>summarize()</code> returns a temporary table with one row for each group created by the preceding <code>group_by()</code> function. The columns in the temporary table are constrained to the columns passed as arguments to the <code>group_by()</code> function and the column(s) created by the <code>summarize()</code> function.</p>
 <p><code>dm_insert_zoomed(&quot;total_loans&quot;)</code> adds the temporary table created by <code>summarize()</code> to the data model under a new name, <code>total_loans</code>. Because the grouping variable <code>account_id</code> is a primary key, the new derived table is automatically linked to the <code>accounts</code> table.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">violet =</span> total_loans) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dm_get_def(dm, quiet): object &#39;my_dm_total&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">violet =</span> total_loans) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg width="165pt" height="130pt" viewBox="0.00 0.00 165.00 130.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 126)">
+<title>%0</title>
+<g id="a_graph0"><a xlink:title="Data Model">
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-126 161,-126 161,4 -4,4"></polygon>
+</a>
+</g>
+<!-- accounts -->
+<g id="node1" class="node">
+<title>accounts</title>
+<polygon fill="#ffa500" stroke="transparent" points="104,-51 104,-71 156,-71 156,-51 104,-51"></polygon>
+<text text-anchor="start" x="105.5105" y="-56.4" font-family="Times,serif" font-size="14.00" fill="#000000">accounts</text>
+<polygon fill="#ffedcc" stroke="transparent" points="104,-31 104,-51 156,-51 156,-31 104,-31"></polygon>
+<text text-anchor="start" x="106" y="-37.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#aa6e00" stroke-opacity="0.666667" points="103,-30 103,-72 157,-72 157,-30 103,-30"></polygon>
+</g>
+<!-- loans -->
+<g id="node2" class="node">
+<title>loans</title>
+<polygon fill="#00ff00" stroke="transparent" points="1.5,-101 1.5,-121 66.5,-121 66.5,-101 1.5,-101"></polygon>
+<text text-anchor="start" x="19.2251" y="-106.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">loans</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-81 1.5,-101 66.5,-101 66.5,-81 1.5,-81"></polygon>
+<text text-anchor="start" x="3.5" y="-87.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-61 1.5,-81 66.5,-81 66.5,-61 1.5,-61"></polygon>
+<text text-anchor="start" x="3.2875" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#00aa00" stroke-opacity="0.666667" points="0,-60 0,-122 67,-122 67,-60 0,-60"></polygon>
+</g>
+<!-- loans&#45;&gt;accounts -->
+<g id="edge1" class="edge">
+<title>loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-71C83.675,-71 83.6705,-51.5743 94.1348,-43.9862"></path>
+<polygon fill="#555555" stroke="#555555" points="95.4429,-47.2471 104,-41 93.4148,-40.5474 95.4429,-47.2471"></polygon>
+</g>
+<!-- total_loans -->
+<g id="node3" class="node">
+<title>total_loans</title>
+<polygon fill="#ee82ee" stroke="transparent" points="1.5,-21 1.5,-41 66.5,-41 66.5,-21 1.5,-21"></polygon>
+<text text-anchor="start" x="3.2819" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">total_loans</text>
+<polygon fill="#fbe6fb" stroke="transparent" points="1.5,-1 1.5,-21 66.5,-21 66.5,-1 1.5,-1"></polygon>
+<text text-anchor="start" x="3.2875" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#9e569e" stroke-opacity="0.666667" points="0,0 0,-42 67,-42 67,0 0,0"></polygon>
+</g>
+<!-- total_loans&#45;&gt;accounts -->
+<g id="edge2" class="edge">
+<title>total_loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-11C83.675,-11 83.6705,-30.4257 94.1348,-38.0138"></path>
+<polygon fill="#555555" stroke="#555555" points="93.4148,-41.4526 104,-41 95.4429,-34.7529 93.4148,-41.4526"></polygon>
+</g>
+</g>
+</svg>
+
 <p>The resulting table <code>total_loans</code> can be accessed like any other table in the dm object.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;my_dm_total&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 2]</span>
+#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+#&gt;    account_id total_amount
+#&gt;         <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span>          2        <span style="text-decoration: underline;">80</span>952
+#&gt; <span style="color: #555555;"> 2</span>         19        <span style="text-decoration: underline;">30</span>276
+#&gt; <span style="color: #555555;"> 3</span>         25        <span style="text-decoration: underline;">30</span>276
+#&gt; <span style="color: #555555;"> 4</span>         37       <span style="text-decoration: underline;">318</span>480
+#&gt; <span style="color: #555555;"> 5</span>         38       <span style="text-decoration: underline;">110</span>736
+#&gt; <span style="color: #555555;"> 6</span>         67       <span style="text-decoration: underline;">165</span>960
+#&gt; <span style="color: #555555;"> 7</span>         97       <span style="text-decoration: underline;">102</span>876
+#&gt; <span style="color: #555555;"> 8</span>        103       <span style="text-decoration: underline;">265</span>320
+#&gt; <span style="color: #555555;"> 9</span>        105       <span style="text-decoration: underline;">352</span>704
+#&gt; <span style="color: #555555;">10</span>        110       <span style="text-decoration: underline;">162</span>576
+#&gt; <span style="color: #555555;"># … with more rows</span>
+</CODE></PRE>
 <p>It is a <em>lazy table</em> powered by the {<a href="https://dbplyr.tidyverse.org/">dbplyr</a>} package: the results are not materialized, instead an SQL query is built and executed each time the data is requested.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in sql_render(.): object &#39;my_dm_total&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `account_id`, SUM(`amount`) AS `total_amount`</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `loans`</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; GROUP BY `account_id`</span></span></code></pre></div>
 <p>Use <code>compute()</code> on a zoomed table to materialize it to a temporary table and avoid recomputing. See <code>vignette(&quot;howto-dm-copy&quot;)</code> for more details.</p>
 </div>
 <div id="downloading-data" class="section level2">
 <h2>Downloading data</h2>
 <p>When it becomes necessary to move data locally for analysis or reporting, the {dm} method <code>collect()</code> is used. Operations on dm objects for databases are limited to report only the first ten results. <code>collect()</code> forces the evaluation of all SQL queries and the generation of the complete set of results. The resulting tables are transferred from the RDBMS and stored as local tibbles.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_dm_local <span class="ot">&lt;-</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  my_dm_total <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in collect(.): object &#39;my_dm_total&#39; not found</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>my_dm_local<span class="sc">$</span>total_loans</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;my_dm_local&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>my_dm_local <span class="ot">&lt;-</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  my_dm_total <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>my_dm_local<span class="sc">$</span>total_loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 682 × 2</span>
+#&gt;    account_id total_amount
+#&gt;         <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span>          2        <span style="text-decoration: underline;">80</span>952
+#&gt; <span style="color: #555555;"> 2</span>         19        <span style="text-decoration: underline;">30</span>276
+#&gt; <span style="color: #555555;"> 3</span>         25        <span style="text-decoration: underline;">30</span>276
+#&gt; <span style="color: #555555;"> 4</span>         37       <span style="text-decoration: underline;">318</span>480
+#&gt; <span style="color: #555555;"> 5</span>         38       <span style="text-decoration: underline;">110</span>736
+#&gt; <span style="color: #555555;"> 6</span>         67       <span style="text-decoration: underline;">165</span>960
+#&gt; <span style="color: #555555;"> 7</span>         97       <span style="text-decoration: underline;">102</span>876
+#&gt; <span style="color: #555555;"> 8</span>        103       <span style="text-decoration: underline;">265</span>320
+#&gt; <span style="color: #555555;"> 9</span>        105       <span style="text-decoration: underline;">352</span>704
+#&gt; <span style="color: #555555;">10</span>        110       <span style="text-decoration: underline;">162</span>576
+#&gt; <span style="color: #555555;"># … with 672 more rows</span>
+</CODE></PRE>
 <p>Use this method with caution. If you are not sure of the size of the dataset you will be downloading you can call <code>dm_nrow()</code> on your dm for the row count of your data model’s tables.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_nrow</span>()</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;my_dm_total&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_nrow</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       loans    accounts total_loans </span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         682        4500         682</span></span></code></pre></div>
 </div>
 <div id="persist" class="section level2">
 <h2>Persisting results</h2>
 <p>It is just as simple to move a local relational model into an RDBMS as is using <code>collect()</code> to download it. The method used is <code>copy_dm_to()</code> and it takes as arguments a database connection and a dm object. In the example below a local SQLite database is used to demonstrate it, but {dm} is designed to work with any RDBMS supported by {DBI}.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>destination_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in (function (cond) : error in evaluating the argument &#39;drv&#39; in selecting a method for function &#39;dbConnect&#39;: there is no package called &#39;RSQLite&#39;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(destination_db, my_dm_local)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is.src(dest): object &#39;destination_db&#39; not found</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>deployed_dm</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;deployed_dm&#39; not found</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>my_dm_local</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;my_dm_local&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>destination_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(destination_db, my_dm_local)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>deployed_dm</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
+#&gt; src:  sqlite 3.36.0 []
+#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `loans`, `accounts`, `total_loans`
+#&gt; Columns: 13
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 2
+</CODE></PRE>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_dm_local</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `loans`, `accounts`, `total_loans`
+#&gt; Columns: 13
+#&gt; Primary keys: 2
+#&gt; Foreign keys: 2
+</CODE></PRE>
 <p>In the output you can observe that the <code>src</code> for <code>deployed_dm</code> is the SQLite database, while for <code>my_dm_local</code> the source is the local R environment.</p>
 <p>Persisting tables are covered in more detail in <code>vignette(&quot;howto-dm-copy&quot;)</code>.</p>
 <p>When done, do not forget to disconnect:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(destination_db)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument &#39;conn&#39; in selecting a method for function &#39;dbDisconnect&#39;: object &#39;destination_db&#39; not found</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(my_db)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument &#39;conn&#39; in selecting a method for function &#39;dbDisconnect&#39;: object &#39;my_db&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(destination_db)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(my_db)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>

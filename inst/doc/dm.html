@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-06-20" />
+<meta name="date" content="2021-09-30" />
 
 <title>Getting started with dm</title>
 
@@ -39,6 +39,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -138,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Getting started with dm</h1>
-<h4 class="date">2021-06-20</h4>
+<h4 class="date">2021-09-30</h4>
 
 
 
@@ -151,112 +152,252 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>dm objects can be created from individual tables or loaded directly from a relational data model on an RDBMS (relational database management system).</p>
 <p>For this demonstration we’re going work with a model hosted on a public server. The first thing we need is a connection to the RDBMS hosting the data.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RMariaDB)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in library(RMariaDB): there is no package called &#39;RMariaDB&#39;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fin_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MariaDB</span>(),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&#39;guest&#39;</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&#39;relational&#39;</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&#39;Financial_ijs&#39;</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&#39;relational.fit.cvut.cz&#39;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dbConnect(MariaDB(), username = &quot;guest&quot;, password = &quot;relational&quot;, : could not find function &quot;dbConnect&quot;</span></span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fin_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MariaDB</span>(),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&#39;guest&#39;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&#39;relational&#39;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&#39;Financial_ijs&#39;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&#39;relational.fit.cvut.cz&#39;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>We create a dm object from an RDBMS using <code>dm_from_src()</code>, passing in the connection object we just created as the first argument.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(fin_db)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dm_from_src(fin_db): object &#39;fin_db&#39; not found</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fin_dm</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;fin_dm&#39; not found</span></span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fin_dm</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
+#&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
+#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
+#&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (9 total)
+#&gt; Columns: 57
+#&gt; Primary keys: 0
+#&gt; Foreign keys: 0
+</CODE></PRE>
 <p>The dm object interrogates the RDBMS for table and column information and, where implemented, primary and foreign keys. Currently, primary and foreign keys are only available from Postgres and SQL Server.</p>
 </div>
 <div id="selecting-tables" class="section level2">
 <h2>Selecting tables</h2>
 <p>The dm object can be accessed like a named list of tables:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fin_dm)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;fin_dm&#39; not found</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fin_dm<span class="sc">$</span>loans</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;fin_dm&#39; not found</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">count</span>(fin_dm<span class="sc">$</span>trans)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dplyr::count(fin_dm$trans): object &#39;fin_dm&#39; not found</span></span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;accounts&quot;  &quot;cards&quot;     &quot;clients&quot;   &quot;disps&quot;     &quot;districts&quot; &quot;loans&quot;    </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;orders&quot;    &quot;tkeys&quot;     &quot;trans&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fin_dm<span class="sc">$</span>loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`Financial_ijs`.`loans`&gt; [?? x 7]</span>
+#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+#&gt;       id account_id date       amount duration payments status
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;date&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> 
+#&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">4</span>959          2 1994-01-05  <span style="text-decoration: underline;">80</span>952       24     <span style="text-decoration: underline;">3</span>373 A     
+#&gt; <span style="color: #555555;"> 2</span>  <span style="text-decoration: underline;">4</span>961         19 1996-04-29  <span style="text-decoration: underline;">30</span>276       12     <span style="text-decoration: underline;">2</span>523 B     
+#&gt; <span style="color: #555555;"> 3</span>  <span style="text-decoration: underline;">4</span>962         25 1997-12-08  <span style="text-decoration: underline;">30</span>276       12     <span style="text-decoration: underline;">2</span>523 A     
+#&gt; <span style="color: #555555;"> 4</span>  <span style="text-decoration: underline;">4</span>967         37 1998-10-14 <span style="text-decoration: underline;">318</span>480       60     <span style="text-decoration: underline;">5</span>308 D     
+#&gt; <span style="color: #555555;"> 5</span>  <span style="text-decoration: underline;">4</span>968         38 1998-04-19 <span style="text-decoration: underline;">110</span>736       48     <span style="text-decoration: underline;">2</span>307 C     
+#&gt; <span style="color: #555555;"> 6</span>  <span style="text-decoration: underline;">4</span>973         67 1996-05-02 <span style="text-decoration: underline;">165</span>960       24     <span style="text-decoration: underline;">6</span>915 A     
+#&gt; <span style="color: #555555;"> 7</span>  <span style="text-decoration: underline;">4</span>986         97 1997-08-10 <span style="text-decoration: underline;">102</span>876       12     <span style="text-decoration: underline;">8</span>573 A     
+#&gt; <span style="color: #555555;"> 8</span>  <span style="text-decoration: underline;">4</span>988        103 1997-12-06 <span style="text-decoration: underline;">265</span>320       36     <span style="text-decoration: underline;">7</span>370 D     
+#&gt; <span style="color: #555555;"> 9</span>  <span style="text-decoration: underline;">4</span>989        105 1998-12-05 <span style="text-decoration: underline;">352</span>704       48     <span style="text-decoration: underline;">7</span>348 C     
+#&gt; <span style="color: #555555;">10</span>  <span style="text-decoration: underline;">4</span>990        110 1997-09-08 <span style="text-decoration: underline;">162</span>576       36     <span style="text-decoration: underline;">4</span>516 C     
+#&gt; <span style="color: #555555;"># … with more rows</span>
+</CODE></PRE>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">count</span>(fin_dm<span class="sc">$</span>trans)</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 1]</span>
+#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+#&gt;         n
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;int64&gt;</span>
+#&gt; <span style="color: #555555;">1</span> 1<span style="text-decoration: underline;">056</span>320
+</CODE></PRE>
 <p>At the same time, most <code>dm</code> functions are pipe-friendly and support tidy evaluation. We can use <code>[</code> or the <code>dm_select_tbl()</code> verb to derive a smaller dm with the <code>loans</code>, <code>accounts</code>, <code>districts</code> and <code>trans</code> tables:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span> fin_dm[<span class="fu">c</span>(<span class="st">&quot;loans&quot;</span>, <span class="st">&quot;accounts&quot;</span>, <span class="st">&quot;districts&quot;</span>, <span class="st">&quot;trans&quot;</span>)]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;fin_dm&#39; not found</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  fin_dm <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(loans, accounts, districts, trans)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;fin_dm&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span> fin_dm[<span class="fu">c</span>(<span class="st">&quot;loans&quot;</span>, <span class="st">&quot;accounts&quot;</span>, <span class="st">&quot;districts&quot;</span>, <span class="st">&quot;trans&quot;</span>)]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  fin_dm <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(loans, accounts, districts, trans)</span></code></pre></div>
 </div>
 <div id="linking-tables-by-adding-keys" class="section level2">
 <h2>Linking tables by adding keys</h2>
 <p>In many cases, <code>dm_from_src()</code> already returns a dm with all keys set. If not, dm allows us to define primary and foreign keys ourselves.</p>
 <p>In our data model, <code>id</code> columns uniquely identify records in the <code>accounts</code> and <code>loans</code> table, a primary key is added with <code>dm_add_pk()</code>. Each loan is linked to one account via the <code>account_id</code> column in the <code>loans</code> table, the relationship is established with <code>dm_add_fk()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="ot">&lt;-</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_small <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(accounts, id) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans, id) <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans, account_id, accounts) <span class="sc">%&gt;%</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(trans, id) <span class="sc">%&gt;%</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(trans, account_id, accounts) <span class="sc">%&gt;%</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(districts, id) <span class="sc">%&gt;%</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(accounts, district_id, districts)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;fin_dm_small&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="ot">&lt;-</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_small <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(accounts, id) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans, id) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans, account_id, accounts) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(trans, id) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(trans, account_id, accounts) <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(districts, id) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(accounts, district_id, districts)</span></code></pre></div>
 </div>
 <div id="visualizing-a-data-model" class="section level2">
 <h2>Visualizing a data model</h2>
 <p>Having a diagram of the data model is the quickest way to verify we’re on the right track. We can display a visual summary of the dm at any time. The default is to display the table name, any defined keys and their links to other tables.</p>
 <p>Visualizing the dm in its current state we see the keys we have created and how they link the tables together. Color guides the eye.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">green =</span> <span class="fu">c</span>(loans, accounts), <span class="at">darkblue =</span> trans, <span class="at">grey =</span> districts) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in dm_get_def(dm, quiet): object &#39;fin_dm_keys&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">green =</span> <span class="fu">c</span>(loans, accounts), <span class="at">darkblue =</span> trans, <span class="at">grey =</span> districts) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: %0 Pages: 1 -->
+<svg width="263pt" height="150pt" viewBox="0.00 0.00 263.00 150.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 146)">
+<title>%0</title>
+<g id="a_graph0"><a xlink:title="Data Model">
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-146 259,-146 259,4 -4,4"></polygon>
+</a>
+</g>
+<!-- accounts -->
+<g id="node1" class="node">
+<title>accounts</title>
+<polygon fill="#00ff00" stroke="transparent" points="104,-61 104,-81 164,-81 164,-61 104,-61"></polygon>
+<text text-anchor="start" x="109.5105" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">accounts</text>
+<polygon fill="#ccffcc" stroke="transparent" points="104,-41 104,-61 164,-61 164,-41 104,-41"></polygon>
+<text text-anchor="start" x="106" y="-47.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ccffcc" stroke="transparent" points="104,-21 104,-41 164,-41 164,-21 104,-21"></polygon>
+<text text-anchor="start" x="105.6136" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#444444">district_id</text>
+<polygon fill="none" stroke="#00aa00" stroke-opacity="0.666667" points="103,-20 103,-82 165,-82 165,-20 103,-20"></polygon>
+</g>
+<!-- districts -->
+<g id="node2" class="node">
+<title>districts</title>
+<polygon fill="#bebebe" stroke="transparent" points="204,-41 204,-61 252,-61 252,-41 204,-41"></polygon>
+<text text-anchor="start" x="205.8366" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#000000">districts</text>
+<polygon fill="#f2f2f2" stroke="transparent" points="204,-21 204,-41 252,-41 252,-21 204,-21"></polygon>
+<text text-anchor="start" x="206" y="-27.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="none" stroke="#7e7e7e" stroke-opacity="0.666667" points="203,-20 203,-62 253,-62 253,-20 203,-20"></polygon>
+</g>
+<!-- accounts&#45;&gt;districts -->
+<g id="edge3" class="edge">
+<title>accounts:district_id-&gt;districts:id</title>
+<path fill="none" stroke="#555555" d="M164,-31C177.8889,-31 183.6398,-31 193.9683,-31"></path>
+<polygon fill="#555555" stroke="#555555" points="194,-34.5001 204,-31 194,-27.5001 194,-34.5001"></polygon>
+</g>
+<!-- loans -->
+<g id="node3" class="node">
+<title>loans</title>
+<polygon fill="#00ff00" stroke="transparent" points="1.5,-121 1.5,-141 66.5,-141 66.5,-121 1.5,-121"></polygon>
+<text text-anchor="start" x="19.2251" y="-126.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">loans</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-101 1.5,-121 66.5,-121 66.5,-101 1.5,-101"></polygon>
+<text text-anchor="start" x="3.5" y="-107.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#ccffcc" stroke="transparent" points="1.5,-81 1.5,-101 66.5,-101 66.5,-81 1.5,-81"></polygon>
+<text text-anchor="start" x="3.2875" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#00aa00" stroke-opacity="0.666667" points="0,-80 0,-142 67,-142 67,-80 0,-80"></polygon>
+</g>
+<!-- loans&#45;&gt;accounts -->
+<g id="edge1" class="edge">
+<title>loans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-91C86.6802,-91 82.4424,-63.5684 94.2289,-54.1387"></path>
+<polygon fill="#555555" stroke="#555555" points="95.5496,-57.3907 104,-51 93.4087,-50.7261 95.5496,-57.3907"></polygon>
+</g>
+<!-- trans -->
+<g id="node4" class="node">
+<title>trans</title>
+<polygon fill="#00008b" stroke="transparent" points="1.5,-41 1.5,-61 66.5,-61 66.5,-41 1.5,-41"></polygon>
+<text text-anchor="start" x="20.3948" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#ffffff">trans</text>
+<polygon fill="#cccce7" stroke="transparent" points="1.5,-21 1.5,-41 66.5,-41 66.5,-21 1.5,-21"></polygon>
+<text text-anchor="start" x="3.5" y="-27.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">id</text>
+<polygon fill="#cccce7" stroke="transparent" points="1.5,-1 1.5,-21 66.5,-21 66.5,-1 1.5,-1"></polygon>
+<text text-anchor="start" x="3.2875" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">account_id</text>
+<polygon fill="none" stroke="#00005c" stroke-opacity="0.666667" points="0,0 0,-62 67,-62 67,0 0,0"></polygon>
+</g>
+<!-- trans&#45;&gt;accounts -->
+<g id="edge2" class="edge">
+<title>trans:account_id-&gt;accounts:id</title>
+<path fill="none" stroke="#555555" d="M66.5,-11C86.6802,-11 82.4424,-38.4316 94.2289,-47.8613"></path>
+<polygon fill="#555555" stroke="#555555" points="93.4087,-51.2739 104,-51 95.5496,-44.6093 93.4087,-51.2739"></polygon>
+</g>
+</g>
+</svg>
+
 </div>
 <div id="accessing-a-data-model-as-a-table" class="section level2">
 <h2>Accessing a data model as a table</h2>
 <p>If we want to perform modeling or analysis on this relational model we need to transform it into a tabular format that R functions can work with. <code>dm_squash_to_tbl()</code> will automatically follow foreign keys across tables to gather all the available columns into a single table.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;fin_dm_keys&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 25]</span>
+#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+#&gt;       id account_id loans.date amount duration payments status district_id
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;date&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">4</span>959          2 1994-01-05  <span style="text-decoration: underline;">80</span>952       24     <span style="text-decoration: underline;">3</span>373 A                1
+#&gt; <span style="color: #555555;"> 2</span>  <span style="text-decoration: underline;">4</span>961         19 1996-04-29  <span style="text-decoration: underline;">30</span>276       12     <span style="text-decoration: underline;">2</span>523 B               21
+#&gt; <span style="color: #555555;"> 3</span>  <span style="text-decoration: underline;">4</span>962         25 1997-12-08  <span style="text-decoration: underline;">30</span>276       12     <span style="text-decoration: underline;">2</span>523 A               68
+#&gt; <span style="color: #555555;"> 4</span>  <span style="text-decoration: underline;">4</span>967         37 1998-10-14 <span style="text-decoration: underline;">318</span>480       60     <span style="text-decoration: underline;">5</span>308 D               20
+#&gt; <span style="color: #555555;"> 5</span>  <span style="text-decoration: underline;">4</span>968         38 1998-04-19 <span style="text-decoration: underline;">110</span>736       48     <span style="text-decoration: underline;">2</span>307 C               19
+#&gt; <span style="color: #555555;"> 6</span>  <span style="text-decoration: underline;">4</span>973         67 1996-05-02 <span style="text-decoration: underline;">165</span>960       24     <span style="text-decoration: underline;">6</span>915 A               16
+#&gt; <span style="color: #555555;"> 7</span>  <span style="text-decoration: underline;">4</span>986         97 1997-08-10 <span style="text-decoration: underline;">102</span>876       12     <span style="text-decoration: underline;">8</span>573 A               74
+#&gt; <span style="color: #555555;"> 8</span>  <span style="text-decoration: underline;">4</span>988        103 1997-12-06 <span style="text-decoration: underline;">265</span>320       36     <span style="text-decoration: underline;">7</span>370 D               44
+#&gt; <span style="color: #555555;"> 9</span>  <span style="text-decoration: underline;">4</span>989        105 1998-12-05 <span style="text-decoration: underline;">352</span>704       48     <span style="text-decoration: underline;">7</span>348 C               21
+#&gt; <span style="color: #555555;">10</span>  <span style="text-decoration: underline;">4</span>990        110 1997-09-08 <span style="text-decoration: underline;">162</span>576       36     <span style="text-decoration: underline;">4</span>516 C               36
+#&gt; <span style="color: #555555;"># … with more rows, and 17 more variables: frequency &lt;chr&gt;,</span>
+#&gt; <span style="color: #555555;">#   accounts.date &lt;date&gt;, A2 &lt;chr&gt;, A3 &lt;chr&gt;, A4 &lt;int&gt;, A5 &lt;int&gt;,</span>
+#&gt; <span style="color: #555555;">#   A6 &lt;int&gt;, A7 &lt;int&gt;, A8 &lt;int&gt;, A9 &lt;int&gt;, A10 &lt;dbl&gt;, A11 &lt;int&gt;,</span>
+#&gt; <span style="color: #555555;">#   A12 &lt;dbl&gt;, A13 &lt;dbl&gt;, A14 &lt;int&gt;, A15 &lt;int&gt;, A16 &lt;int&gt;</span>
+</CODE></PRE>
 <p>Apart from the rows printed above, no data has been fetched from the database. Use <code>select()</code> to reduce the number of columns fetched, and <code>collect()</code> to retrieve the entire result for local processing.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;fin_dm_keys&#39; not found</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is.data.frame(data): object &#39;loans_df&#39; not found</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>model</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;model&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>model</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; lm(formula = amount ~ duration + A3, data = loans_df)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       (Intercept)           duration  A3central Bohemia  </span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             14241               4109              -4044  </span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    A3east Bohemia    A3north Bohemia    A3north Moravia  </span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -20248             -32977              -2577  </span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   A3south Bohemia    A3south Moravia     A3west Bohemia  </span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             -5940             -16507             -32616</span></span></code></pre></div>
 </div>
 <div id="operations-on-table-data-within-a-dm" class="section level2">
 <h2>Operations on table data within a dm</h2>
 <p>We don’t need to take the extra step of exporting the data to work with it. Through the dm object we have complete access to dplyr’s data manipulation verbs. These operate on the data within individual tables.</p>
 <p>To work with a particular table we use <code>dm_zoom_to()</code> to set the context to our chosen table. Then we can perform any of the operations we want.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="ot">&lt;-</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;fin_dm_keys&#39; not found</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>fin_dm_total<span class="sc">$</span>total_loans</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;fin_dm_total&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="ot">&lt;-</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>fin_dm_total<span class="sc">$</span>total_loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 2]</span>
+#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+#&gt;    account_id total_amount
+#&gt;         <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span>          2        <span style="text-decoration: underline;">80</span>952
+#&gt; <span style="color: #555555;"> 2</span>         19        <span style="text-decoration: underline;">30</span>276
+#&gt; <span style="color: #555555;"> 3</span>         25        <span style="text-decoration: underline;">30</span>276
+#&gt; <span style="color: #555555;"> 4</span>         37       <span style="text-decoration: underline;">318</span>480
+#&gt; <span style="color: #555555;"> 5</span>         38       <span style="text-decoration: underline;">110</span>736
+#&gt; <span style="color: #555555;"> 6</span>         67       <span style="text-decoration: underline;">165</span>960
+#&gt; <span style="color: #555555;"> 7</span>         97       <span style="text-decoration: underline;">102</span>876
+#&gt; <span style="color: #555555;"> 8</span>        103       <span style="text-decoration: underline;">265</span>320
+#&gt; <span style="color: #555555;"> 9</span>        105       <span style="text-decoration: underline;">352</span>704
+#&gt; <span style="color: #555555;">10</span>        110       <span style="text-decoration: underline;">162</span>576
+#&gt; <span style="color: #555555;"># … with more rows</span>
+</CODE></PRE>
 <p>Note that in the above example we use <code>dm_insert_zoomed()</code> to add the results as a new table to our data model. This table is temporary and will be deleted when our session ends. If you want to make permanent changes to your data model on an RDBMS please see the “Persisting results” section in <code>vignette(&quot;howto-dm-db&quot;)</code>.</p>
 </div>
 <div id="checking-constraints" class="section level2">
 <h2>Checking constraints</h2>
 <p>It’s always smart to check that your data model follows its specifications. When building our own model or changing existing models by adding tables or keys, it is even more important that the new model is validated.</p>
 <p><code>dm_examine_constrains()</code> checks all primary and foreign keys and reports if they violate their expected constraints.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in is_dm(dm): object &#39;fin_dm_total&#39; not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
+<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> All constraints satisfied.
+</CODE></PRE>
 <p>For more on constraint checking, including cardinality, finding candidate columns for keys, and normalization, see <code>vignette(&quot;tech-dm-low-level&quot;)</code>.</p>
-<pre><code>#&gt; Error in dbDisconnect(fin_db): could not find function &quot;dbDisconnect&quot;</code></pre>
 </div>
 <div id="next-steps" class="section level2">
 <h2>Next Steps</h2>
