@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-09-30" />
+<meta name="date" content="2021-10-15" />
 
 <title>Class dm and basic operations</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2021-09-30</h4>
+<h4 class="date">2021-10-15</h4>
 
 
 
@@ -218,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.36.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//Rtmpbdc1XD/nycflights13.sqlite]
+#&gt; src:  sqlite 3.36.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpnHSbnm/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -251,7 +251,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `dm[[table_name]]` instead to access a specific table.</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`airports`&gt; [?? x 8]</span>
 #&gt; <span style="color: #555555;"># Database: sqlite 3.36.0
-#&gt; #   [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//Rtmpbdc1XD/nycflights13.sqlite]</span>
+#&gt; #   [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpnHSbnm/nycflights13.sqlite]</span>
 #&gt;    faa   name                    lat    lon   alt    tz dst   tzone        
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        
 #&gt; <span style="color: #555555;"> 1</span> 04G   Lansdowne Airport      41.1  -<span style="color: #BB0000;">80.6</span>  <span style="text-decoration: underline;">1</span>044    -<span style="color: #BB0000;">5</span> A     America/New_…
@@ -284,7 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.36.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//Rtmpbdc1XD/nycflights13.sqlite]
+#&gt; src:  sqlite 3.36.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpnHSbnm/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -343,7 +343,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This is done by choosing a foreign key from one table that will point to a primary key of another table. The primary key of the referred table must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will find the primary key column of the referenced table by itself and make the indicated column of the child table point to it.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.36.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//Rtmpbdc1XD/nycflights13.sqlite]
+#&gt; src:  sqlite 3.36.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpnHSbnm/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -361,14 +361,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Checks are opt-in and executed only if <code>check = TRUE</code>. You can still add a foreign key with the default <code>check = FALSE</code>. See also [dm_examine_constraints()] for checking all constraints in a <code>dm</code>.</p>
 <p>Get an overview of all foreign key relations with<code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 5 × 4</span>
-#&gt;   child_table child_fk_cols     parent_table parent_key_cols  
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>           
-#&gt; <span style="color: #555555;">1</span> flights     carrier           airlines     carrier          
-#&gt; <span style="color: #555555;">2</span> flights     origin            airports     faa              
-#&gt; <span style="color: #555555;">3</span> flights     dest              airports     faa              
-#&gt; <span style="color: #555555;">4</span> flights     tailnum           planes       tailnum          
-#&gt; <span style="color: #555555;">5</span> flights     origin, time_hour weather      origin, time_hour
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 5 × 5</span>
+#&gt;   child_table child_fk_cols     parent_table parent_key_cols   on_delete
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    
+#&gt; <span style="color: #555555;">1</span> flights     carrier           airlines     carrier           no_action
+#&gt; <span style="color: #555555;">2</span> flights     origin            airports     faa               no_action
+#&gt; <span style="color: #555555;">3</span> flights     dest              airports     faa               no_action
+#&gt; <span style="color: #555555;">4</span> flights     tailnum           planes       tailnum           no_action
+#&gt; <span style="color: #555555;">5</span> flights     origin, time_hour weather      origin, time_hour no_action
 </CODE></PRE>
 <p>Remove foreign key relations with <code>dm_rm_fk()</code> (parameter <code>columns = NULL</code> means that all relations will be removed, with a message):</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>

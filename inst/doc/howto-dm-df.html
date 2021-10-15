@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-09-30" />
+<meta name="date" content="2021-10-15" />
 
 <title>Create a dm object from data frames</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Create a dm object from data frames</h1>
-<h4 class="date">2021-09-30</h4>
+<h4 class="date">2021-10-15</h4>
 
 
 
@@ -718,12 +718,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A data frame of foreign keys is retrieved with <code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>()</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 × 4</span>
-#&gt;   child_table child_fk_cols parent_table parent_key_cols
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>         
-#&gt; <span style="color: #555555;">1</span> flights     carrier       airlines     carrier        
-#&gt; <span style="color: #555555;">2</span> flights     origin        airports     faa            
-#&gt; <span style="color: #555555;">3</span> flights     tailnum       planes       tailnum
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 × 5</span>
+#&gt;   child_table child_fk_cols parent_table parent_key_cols on_delete
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>          <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    
+#&gt; <span style="color: #555555;">1</span> flights     carrier       airlines     carrier         no_action
+#&gt; <span style="color: #555555;">2</span> flights     origin        airports     faa             no_action
+#&gt; <span style="color: #555555;">3</span> flights     tailnum       planes       tailnum         no_action
 </CODE></PRE>
 <p>We can use <code>tibble::as_tibble()</code> on the result of <code>dm_examine_constraints()</code> to programmatically inspect which constraints are not satisfied:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
