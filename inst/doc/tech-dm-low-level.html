@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-10-15" />
+<meta name="date" content="2021-11-21" />
 
 <title>Model verification - keys, constraints and normalization</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Model verification - keys, constraints and normalization</h1>
-<h4 class="date">2021-10-15</h4>
+<h4 class="date">2021-11-21</h4>
 
 
 
@@ -172,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span>     3     6     9
 </CODE></PRE>
-<pre><code>#&gt; Error: Column `a` of table `data_2` contains values (see examples above) that are not present in column `a` of table `data_1`.</code></pre>
+<pre><code>#&gt; Error: Column (`a`) of table `data_2` contains values (see examples above) that are not present in column (`a`) of table `data_1`.</code></pre>
 <p>It should be kept in mind that <code>check_subset()</code> does not test if column <code>c2</code> is a unique key of table <code>t2</code>. In order to find out if a (child) table <code>t1</code> contains a column <code>c1</code> that is a foreign key to a (parent) table <code>t2</code> with the corresponding column <code>c2</code>, the following method should be used:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_key</span>(t2, c2)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">check_subset</span>(t1, c1, t2, c2)</span></code></pre></div>
@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span>     3     6     9
 </CODE></PRE>
-<pre><code>#&gt; Error: Column `a` of table `data_2` contains values (see examples above) that are not present in column `a` of table `data_1`..</code></pre>
+<pre><code>#&gt; Error: Column (`a`) of table `data_2` contains values (see examples above) that are not present in column (`a`) of table `data_1`.</code></pre>
 <p>Introducing one more table enables us to show how it looks when the test is passed:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data_3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -227,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># This does not pass, injectivity is violated:</span></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_1_1</span>(d1, a, d2, c)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: 1..1 cardinality (bijectivity) is not given: Column `c` in table `d2` contains duplicate values.</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: 1..1 cardinality (bijectivity) is not given: Column (`c`) in table `d2` contains duplicate values.</span></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># This passes:</span></span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_0_1</span>(d1, a, d3, c)</span></code></pre></div>

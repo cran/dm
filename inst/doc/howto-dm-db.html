@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2021-10-15" />
+<meta name="date" content="2021-11-21" />
 
 <title>Create a dm object from a database</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Create a dm object from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2021-10-15</h4>
+<h4 class="date">2021-11-21</h4>
 
 
 
@@ -299,8 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>And, like {dbplyr}, results are never written to a database unless explicitly requested.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   lazy query [?? x 10]</span>
 #&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
 #&gt;       id account_id loans.date amount duration payments status district_id
@@ -322,14 +323,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `LHS`.`id` AS `id`, `account_id`, `loans.date`, `amount`, `duration`, `payments`, `status`, `district_id`, `frequency`, `accounts.date`</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM (SELECT `id`, `account_id`, `date` AS `loans.date`, `amount`, `duration`, `payments`, `status`</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `loans`) `LHS`</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LEFT JOIN (SELECT `id`, `district_id`, `frequency`, `date` AS `accounts.date`</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `accounts`) `RHS`</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ON (`LHS`.`account_id` = `RHS`.`id`)</span></span></code></pre></div>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `LHS`.`id` AS `id`, `account_id`, `loans.date`, `amount`, `duration`, `payments`, `status`, `district_id`, `frequency`, `accounts.date`</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM (SELECT `id`, `account_id`, `date` AS `loans.date`, `amount`, `duration`, `payments`, `status`</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `loans`) `LHS`</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LEFT JOIN (SELECT `id`, `district_id`, `frequency`, `date` AS `accounts.date`</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `accounts`) `RHS`</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ON (`LHS`.`account_id` = `RHS`.`id`)</span></span></code></pre></div>
 </div>
 <div id="performing-operations-on-tables-by-zooming" class="section level2">
 <h2>Performing operations on tables by “zooming”</h2>

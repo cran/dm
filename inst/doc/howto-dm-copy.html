@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2021-10-15" />
+<meta name="date" content="2021-11-21" />
 
 <title>Copy tables to and from a database</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Copy tables to and from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2021-10-15</h4>
+<h4 class="date">2021-11-21</h4>
 
 
 
@@ -154,10 +154,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────── tidyverse 1.3.1 ──
 </CODE></PRE>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">ggplot2</span> 3.3.5     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">purrr  </span> 0.3.4
-#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">tibble </span> 3.1.5     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">dplyr  </span> 1.0.7
-#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">tidyr  </span> 1.1.4     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">stringr</span> 1.4.0
-#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">readr  </span> 2.0.2     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">forcats</span> 0.5.1
+<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">ggplot2</span> 3.3.5          <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">purrr  </span> 0.3.4     
+#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">tibble </span> 3.1.6          <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">dplyr  </span> 1.0.7.<span style="color: #BB0000;">9000</span>
+#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">tidyr  </span> 1.1.4          <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">stringr</span> 1.4.0     
+#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">readr  </span> 2.0.2          <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">forcats</span> 0.5.1
 </CODE></PRE>
 <PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Conflicts</span> ───────────────────────────────────── tidyverse_conflicts() ──
 #&gt; <span style="color: #BB0000;">x</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">dm</span>::filter(), <span style="color: #0000BB;">stats</span>::filter()
@@ -224,8 +224,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * date -&gt; loans.date, accounts.date</span></span></code></pre></div>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span></code></pre></div>
 <p>Please note the use of <code>dm_squash_to_tbl()</code>. This method gathers all linked information into a single wide table. It follows foreign key relations starting from the table supplied as its argument and gathers all the columns from related tables, disambiguating column names as it goes.</p>
 <p>In the above code, the <code>select()</code> statement isolates the columns we need for our model. <code>collect()</code> works similarly to <code>compute()</code> by forcing the execution of the underlying SQL query, but it returns the results as a local tibble.</p>
 <p>Below, the local tibble, <code>loans_df</code>, is used to estimate the linear model and the residuals are stored along with the original associated <code>id</code> in a new tibble, <code>loans_residuals</code>. The <code>id</code> column is necessary to link the new tibble to the tables in the dm it was collected from.</p>
@@ -416,7 +417,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> All constraints satisfied.
 </CODE></PRE>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid<span class="sc">$</span>loans_residuals</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_2021_10_15_16_01_55_12457_1&gt; [?? x 2]</span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_2021_11_21_16_17_48_34722_1&gt; [?? x 2]</span>
 #&gt; <span style="color: #555555;"># Database: sqlite 3.36.0 []</span>
 #&gt;       id   resid
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2021-10-15" />
+<meta name="date" content="2021-11-21" />
 
 <title>Joining in relational data models</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Joining in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2021-10-15</h4>
+<h4 class="date">2021-11-21</h4>
 
 
 
@@ -368,9 +368,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_nycflights13</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>weather) <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(<span class="at">start =</span> flights)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renamed columns:</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * year -&gt; flights.year, planes.year</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * name -&gt; airlines.name, airports.name</span></span></code></pre></div>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(flights, flights.year = year) %&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(airlines, airlines.name = name) %&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(airports, airports.name = name) %&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(planes, planes.year = year)</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1,761 × 35</span>
 #&gt;    flights.year month   day dep_time sched_dep_time dep_delay arr_time
 #&gt;           <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>          <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>

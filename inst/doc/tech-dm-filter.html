@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2021-10-15" />
+<meta name="date" content="2021-11-21" />
 
 <title>Filtering in relational data models</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Filtering in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2021-10-15</h4>
+<h4 class="date">2021-11-21</h4>
 
 
 
@@ -432,29 +432,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_tables</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(dbplyr<span class="sc">::</span>sql_render)</span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $flights</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT * FROM `flights_2021_10_15_16_02_41_12457_6` AS `LHS`</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT * FROM `flights_2021_11_21_16_18_19_34722_6` AS `LHS`</span></span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airlines_2021_10_15_16_02_41_12457_6`</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airlines_2021_11_21_16_18_19_34722_6`</span></span>
 <span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `RHS`</span></span>
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   WHERE (`LHS`.`carrier` = `RHS`.`carrier`)</span></span>
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; )) AS `LHS`</span></span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airports_2021_10_15_16_02_41_12457_6`</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airports_2021_11_21_16_18_19_34722_6`</span></span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `RHS`</span></span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   WHERE (`LHS`.`origin` = `RHS`.`faa`)</span></span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; )</span></span>
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $airlines</span></span>
 <span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT *</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airlines_2021_10_15_16_02_41_12457_6`</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airlines_2021_11_21_16_18_19_34722_6`</span></span>
 <span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `LHS`</span></span>
 <span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2021_10_15_16_02_41_12457_6` AS `LHS`</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2021_11_21_16_18_19_34722_6` AS `LHS`</span></span>
 <span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airports_2021_10_15_16_02_41_12457_6`</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airports_2021_11_21_16_18_19_34722_6`</span></span>
 <span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `RHS`</span></span>
 <span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   WHERE (`LHS`.`origin` = `RHS`.`faa`)</span></span>
 <span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; )) AS `RHS`</span></span>
@@ -463,13 +463,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $airports</span></span>
 <span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT * FROM (SELECT *</span></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airports_2021_10_15_16_02_41_12457_6`</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airports_2021_11_21_16_18_19_34722_6`</span></span>
 <span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE (`name` != &#39;John F Kennedy Intl&#39;)) AS `LHS`</span></span>
 <span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2021_10_15_16_02_41_12457_6` AS `LHS`</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT * FROM `flights_2021_11_21_16_18_19_34722_6` AS `LHS`</span></span>
 <span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE EXISTS (</span></span>
 <span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   SELECT 1 FROM (SELECT *</span></span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airlines_2021_10_15_16_02_41_12457_6`</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `airlines_2021_11_21_16_18_19_34722_6`</span></span>
 <span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; WHERE (`name` = &#39;Delta Air Lines Inc.&#39;)) AS `RHS`</span></span>
 <span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   WHERE (`LHS`.`carrier` = `RHS`.`carrier`)</span></span>
 <span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; )) AS `RHS`</span></span>
