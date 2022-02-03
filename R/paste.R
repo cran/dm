@@ -191,7 +191,8 @@ dm_paste_fks <- function(dm) {
   on_delete <- if_else(
     fpks$on_delete != "no_action",
     glue(", on_delete = \"{fpks$on_delete}\""),
-    "")
+    ""
+  )
 
   glue("dm::dm_add_fk({tick_if_needed(fpks$child_table)}, {deparse_keys(fpks$child_fk_cols)}, {tick_if_needed(fpks$parent_table)}{fpks$non_default_parent_key_cols}{on_delete})")
 }
@@ -241,7 +242,7 @@ dquote <- function(x) {
 # Errors ------------------------------------------------------------------
 
 abort_unknown_option <- function(options, all_options) {
-  abort(error_txt_unknown_option(options, all_options), .subclass = dm_error_full("unknown_option"))
+  abort(error_txt_unknown_option(options, all_options), class = dm_error_full("unknown_option"))
 }
 
 error_txt_unknown_option <- function(options, all_options) {

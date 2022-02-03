@@ -21,6 +21,7 @@ utils::globalVariables(c(
   "any_na",
   "arrange_col",
   "candidate",
+  "cardinality",
   "child_fk_cols",
   "child_table",
   "colname",
@@ -29,6 +30,7 @@ utils::globalVariables(c(
   "column",
   "columns",
   "constraint",
+  "ct_name",
   "day",
   "dest",
   "df",
@@ -49,6 +51,7 @@ utils::globalVariables(c(
   "need_ref",
   "new_display",
   "new_name",
+  "node",
   "old",
   "origin",
   "parent",
@@ -58,11 +61,13 @@ utils::globalVariables(c(
   "pk_col",
   "pks",
   "problem",
+  "pt_name",
   "ref",
   "ref_col",
   "ref_column",
   "ref_table",
   "remote_name",
+  "remote_name_unquoted",
   "renames",
   "schema",
   "schema_name",
@@ -110,5 +115,16 @@ utils::globalVariables(c(
   "film",
   "role_type",
   "award_type",
-  "genre"
+  "genre",
+  #
+  # build_copy_queries
+  "col_def",
+  "fk_def",
+  "index_name",
+  "remote_table",
+  "remote_table_unquoted",
+  "unique_def",
+  #
+  # keep this to avoid dealing with trailing commas
+  NULL
 ))

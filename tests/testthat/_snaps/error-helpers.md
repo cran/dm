@@ -100,7 +100,7 @@
     Code
       abort_fk_exists("child", c("child_1", "child_2"), "parent")
     Error <dm_error_fk_exists>
-      (`child_1`, `child_2`) is alreay a foreign key of table `child` into table `parent`.
+      (`child_1`, `child_2`) is already a foreign key of table `child` into table `parent`.
     Code
       abort_first_rm_fks("parent", c("child_1", "child_2"))
     Error <dm_error_first_rm_fks>
@@ -241,14 +241,6 @@
       Argument `dbms_dependent_arg` ignored: currently only supported for MSSQL and Postgres.
     Output
       NULL
-    Code
-      abort_no_schema_exists("table_1")
-    Error <dm_error_no_schema_exists>
-      No schema named `table_1` exists.
-    Code
-      abort_no_schema_exists("fastfood", "gala_dinner")
-    Error <dm_error_no_schema_exists>
-      No schema named `fastfood` exists on database `gala_dinner`.
     Code
       abort_no_schemas_supported("FantasticDatabaseManagementSystem",
         "hyperconnection")
