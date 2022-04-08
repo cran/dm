@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-02-03" />
+<meta name="date" content="2022-04-08" />
 
 <title>Class dm and basic operations</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2022-02-03</h4>
+<h4 class="date">2022-04-08</h4>
 
 
 
@@ -218,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.37.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpSMAIzf/nycflights13.sqlite]
+#&gt; src:  sqlite 3.38.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -250,8 +250,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `tbl.dm()` was deprecated in dm 0.2.0.</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `dm[[table_name]]` instead to access a specific table.</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`airports`&gt; [?? x 8]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.37.0
-#&gt; #   [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpSMAIzf/nycflights13.sqlite]</span>
+#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0
+#&gt; #   [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]</span>
 #&gt;    faa   name                            lat    lon   alt    tz dst   tzone
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>
 #&gt; <span style="color: #555555;"> 1</span> 04G   Lansdowne Airport              41.1  -<span style="color: #BB0000;">80.6</span>  <span style="text-decoration: underline;">1</span>044    -<span style="color: #BB0000;">5</span> A     Amer…
@@ -284,7 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.37.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpSMAIzf/nycflights13.sqlite]
+#&gt; src:  sqlite 3.38.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -328,7 +328,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </CODE></PRE>
 <p><code>dm_add_pk()</code> has a <code>check</code> argument. If set to <code>TRUE</code>, the function checks if the column of the table given by the user is unique. For performance reasons, the default is <code>check = FALSE</code>. See also [dm_examine_constraints()] for checking all constraints in a <code>dm</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_pk</span>(flights_dm, airports, tzone, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_not_unique_key()`[49m[39m:[22m</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_not_unique_key()`:[22m</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m (`tzone`) not a unique key of `airports`.</span></span></code></pre></div>
 </div>
 <div id="foreign-keys" class="section level2">
@@ -344,7 +344,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This is done by choosing a foreign key from one table that will point to a primary key of another table. The primary key of the referred table must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will find the primary key column of the referenced table by itself and make the indicated column of the child table point to it.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.37.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpSMAIzf/nycflights13.sqlite]
+#&gt; src:  sqlite 3.38.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -353,13 +353,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </CODE></PRE>
 <p>This will throw an error:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_ref_tbl_has_no_pk()`[49m[39m:[22m</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_ref_tbl_has_no_pk()`:[22m</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m ref_table `airports` needs a primary key first. Use `dm_enum_pk_candidates()` to find appropriate columns and `dm_add_pk()` to define a primary key.</span></span></code></pre></div>
 <p>Let’s create a <code>dm</code> object with a foreign key relation to work with later on:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="ot">&lt;-</span> <span class="fu">dm_add_fk</span>(flights_dm_with_key, flights, origin, airports)</span></code></pre></div>
 <p>What if we tried to add another foreign key relation from <code>flights</code> to <code>airports</code> to the object? Column <code>dest</code> might work, since it also contains airport codes:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, dest, airports, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_not_subset_of()`[49m[39m:[22m</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_not_subset_of()`:[22m</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m Column (`dest`) of table `flights` contains values (see examples above) that are not present in column (`faa`) of table `airports`.</span></span></code></pre></div>
 <p>Checks are opt-in and executed only if <code>check = TRUE</code>. You can still add a foreign key with the default <code>check = FALSE</code>. See also [dm_examine_constraints()] for checking all constraints in a <code>dm</code>.</p>
 <p>Get an overview of all foreign key relations with<code>dm_get_all_fks()</code>:</p>
@@ -377,7 +377,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(<span class="at">table =</span> flights, <span class="at">column =</span> dest, <span class="at">ref_table =</span> airports) <span class="sc">%&gt;%</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_is_not_fkc()`[49m[39m:[22m</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_is_not_fkc()`:[22m</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m No foreign keys to remove.</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>

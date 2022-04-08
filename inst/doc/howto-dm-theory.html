@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2022-02-03" />
+<meta name="date" content="2022-04-08" />
 
 <title>Introduction to relational data models</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Introduction to relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2022-02-03</h4>
+<h4 class="date">2022-04-08</h4>
 
 
 
@@ -437,8 +437,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ...propagates to all related records</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(airlines) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(flight, name)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Joining, by = &quot;carrier&quot;</span></span></code></pre></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(flight, name)</span></code></pre></div>
+<PRE class="fansi fansi-message"><CODE>#&gt; Joining, by = &quot;carrier&quot;
+</CODE></PRE>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 336,776 × 2</span>
 #&gt;    flight name                    
 #&gt;     <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                   
@@ -511,18 +512,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_dm_to</span>(con_sqlite, dm)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbListTables</span>(con_sqlite)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines_2022_02_03_09_23_59_49102_5&quot;</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;airports_2022_02_03_09_23_59_49102_5&quot;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;flights_2022_02_03_09_23_59_49102_5&quot; </span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;planes_2022_02_03_09_23_59_49102_5&quot;  </span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;weather_2022_02_03_09_23_59_49102_5&quot;</span></span></code></pre></div>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines_2022_04_08_14_53_25_4519_5&quot;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;airports_2022_04_08_14_53_25_4519_5&quot;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;flights_2022_04_08_14_53_25_4519_5&quot; </span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;planes_2022_04_08_14_53_25_4519_5&quot;  </span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;weather_2022_04_08_14_53_25_4519_5&quot;</span></span></code></pre></div>
 <p>In the opposite direction, <code>dm</code> can also be populated with data from a DB. Unfortunately, keys currently can be learned only for MSSQL and Postgres, but not for SQLite. Therefore, the dm contains the tables but not the keys:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_from_src</span>(con_sqlite)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Keys could not be queried, use `learn_keys = FALSE` to mute this message.</span></span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.37.0 []
+#&gt; src:  sqlite 3.38.0 []
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
-#&gt; Tables: `airlines_2022_02_03_09_23_59_49102_5`, `airports_2022_02_03_09_23_59_49102_5`, `flights_2022_02_03_09_23_59_49102_5`, `planes_2022_02_03_09_23_59_49102_5`, `weather_2022_02_03_09_23_59_49102_5`
+#&gt; Tables: `airlines_2022_04_08_14_53_25_4519_5`, `airports_2022_04_08_14_53_25_4519_5`, `flights_2022_04_08_14_53_25_4519_5`, `planes_2022_04_08_14_53_25_4519_5`, `weather_2022_04_08_14_53_25_4519_5`
 #&gt; Columns: 53
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0

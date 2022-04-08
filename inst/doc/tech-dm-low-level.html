@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-02-03" />
+<meta name="date" content="2022-04-08" />
 
 <title>Model verification - keys, constraints and normalization</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Model verification - keys, constraints and normalization</h1>
-<h4 class="date">2022-02-03</h4>
+<h4 class="date">2022-04-08</h4>
 
 
 
@@ -159,7 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>))</span></code></pre></div>
 <p>and you want to know if <code>a</code> is a primary key for <code>data_1</code>, you can use the <code>check_key()</code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_key</span>(data_1, a)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_not_unique_key()`[49m[39m:[22m</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_not_unique_key()`:[22m</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m (`a`) not a unique key of `data_1`.</span></span></code></pre></div>
 <p>Mind the error message when a test is not passed.</p>
 <p>For <code>data_2</code>, column <code>a</code> is a key:</p>
@@ -173,7 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span>     3     6     9
 </CODE></PRE>
-<pre><code>#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_not_subset_of()`[49m[39m:[22m
+<pre><code>#&gt; [1m[33mError[39m in [1m[1m`abort_not_subset_of()`:[22m
 #&gt; [33m![39m Column (`a`) of table `data_2` contains values (see examples above) that are not present in column (`a`) of table `data_1`.</code></pre>
 <p>It should be kept in mind that <code>check_subset()</code> does not test if column <code>c2</code> is a unique key of table <code>t2</code>. In order to find out if a (child) table <code>t1</code> contains a column <code>c1</code> that is a foreign key to a (parent) table <code>t2</code> with the corresponding column <code>c2</code>, the following method should be used:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_key</span>(t2, c2)</span>
@@ -185,7 +185,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span>     3     6     9
 </CODE></PRE>
-<pre><code>#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_sets_not_equal()`[49m[39m:[22m
+<pre><code>#&gt; [1m[33mError[39m in [1m[1m`abort_sets_not_equal()`:[22m
 #&gt; [33m![39m Column (`a`) of table `data_2` contains values (see examples above) that are not present in column (`a`) of table `data_1`.</code></pre>
 <p>Introducing one more table enables us to show how it looks when the test is passed:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data_3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>))</span>
@@ -223,7 +223,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here are some examples of how the cardinality testing functions can be used:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This does not pass, `c` is not unique key of d2:</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_0_n</span>(d2, c, d1, a)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_not_unique_key()`[49m[39m:[22m</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_not_unique_key()`:[22m</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m (`c`) not a unique key of `d2`.</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># This passes, multiple values in d2$c are allowed:</span></span>
@@ -231,7 +231,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># This does not pass, injectivity is violated:</span></span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_1_1</span>(d1, a, d2, c)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m[30m[47m`abort_not_bijective()`[49m[39m:[22m</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_not_bijective()`:[22m</span></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m 1..1 cardinality (bijectivity) is not given: Column (`c`) in table `d2` contains duplicate values.</span></span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># This passes:</span></span>
