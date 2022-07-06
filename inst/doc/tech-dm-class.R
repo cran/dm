@@ -21,20 +21,26 @@ as_dm(list(airlines = airlines,
            weather = weather))
 
 ## ----message=FALSE-------------------------------------------------------
-sqlite_src <- dbplyr::nycflights13_sqlite()
+sqlite_con <- dbplyr::nycflights13_sqlite()
 
-flights_dm <- dm_from_src(sqlite_src)
+flights_dm <- dm_from_con(sqlite_con)
 flights_dm
 
 ## ------------------------------------------------------------------------
-base_dm <- new_dm(list(trees = trees, mtcars = mtcars))
+base_dm <- new_dm(list(
+  airlines = airlines,
+  airports = airports,
+  flights = flights,
+  planes = planes,
+  weather = weather
+))
 base_dm
 
 ## ------------------------------------------------------------------------
-validate_dm(base_dm)
+dm_validate(base_dm)
 
 ## ------------------------------------------------------------------------
-tbl(flights_dm, "airports")
+flights_dm[["airports"]]
 
 ## ------------------------------------------------------------------------
 dm_has_pk(flights_dm, airports)
@@ -78,13 +84,15 @@ dm_get_all_fks(dm_nycflights13(cycle = TRUE))
 ## ----error=TRUE----------------------------------------------------------
 flights_dm_with_fk %>%
   dm_rm_fk(table = flights, column = dest, ref_table = airports) %>%
-  dm_get_fk(flights, airports)
+  dm_get_all_fks(c(flights, airports))
+
 flights_dm_with_fk %>%
   dm_rm_fk(flights, origin, airports) %>%
-  dm_get_fk(flights, airports)
+  dm_get_all_fks(c(flights, airports))
+
 flights_dm_with_fk %>%
   dm_rm_fk(flights, columns = NULL, airports) %>%
-  dm_get_fk(flights, airports)
+  dm_get_all_fks(c(flights, airports))
 
 ## ------------------------------------------------------------------------
 dm_enum_fk_candidates(flights_dm_with_key, weather, airports)

@@ -12,11 +12,23 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2022-04-08" />
+<meta name="date" content="2022-07-06" />
 
 <title>Joining in relational data models</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -127,7 +139,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,31 +333,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Joining in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2022-04-08</h4>
+<h4 class="date">2022-07-06</h4>
 
 
 
-<p>The {dm} package offers functions to work with relational data models in R. A common task for multiple, separated tables that have a shared attribute is merging the data.</p>
-<p>This document introduces you to the joining functions of {dm} and shows how to apply them using data from the <a href="https://github.com/tidyverse/nycflights13">{nycflights13}</a> package.</p>
-<p><a href="https://cynkra.github.io/dm/articles/howto-dm-theory#model">Relational data models</a> consist of multiple tables that are linked with <a href="https://cynkra.github.io/dm/articles/howto-dm-theory#fk">foreign keys</a>. They are the building blocks for joining tables. Read more about relational data models in the vignette <a href="https://cynkra.github.io/dm/articles/howto-dm-theory">“Introduction to Relational Data Models”</a>.</p>
+<p>The {dm} package offers functions to work with relational data models
+in R. A common task for multiple, separated tables that have a shared
+attribute is merging the data.</p>
+<p>This document introduces you to the joining functions of {dm} and
+shows how to apply them using data from the <a href="https://github.com/tidyverse/nycflights13">{nycflights13}</a>
+package.</p>
+<p><a href="https://cynkra.github.io/dm/articles/howto-dm-theory#model">Relational
+data models</a> consist of multiple tables that are linked with <a href="https://cynkra.github.io/dm/articles/howto-dm-theory#fk">foreign
+keys</a>. They are the building blocks for joining tables. Read more
+about relational data models in the vignette <a href="https://cynkra.github.io/dm/articles/howto-dm-theory">“Introduction
+to Relational Data Models”</a>.</p>
 <p>First, we load the packages that we need:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <div id="data-nycflights13" class="section level2">
 <h2>Data: nycflights13</h2>
-<p>To explore filtering with {dm}, we’ll use the {nycflights13} data with its tables <code>flights</code>, <code>planes</code>, <code>airlines</code> and <code>airports</code>.</p>
-<p>This dataset contains information about the 336 776 flights that departed from New York City in 2013, with 3322 different planes and 1458 airports involved. The data comes from the US Bureau of Transportation Statistics, and is documented in <code>?nycflights13</code>.</p>
-<p>First, we have to create a <code>dm</code> object from the {nycflights13} data. This is implemented with <code>dm::dm_nycflights13()</code>.</p>
-<p>A <a href="https://cynkra.github.io/dm/articles/tech-dm-class.html#class-dm">data model object</a> contains the data as well as metadata.</p>
-<p>If you would like to create a <code>dm</code> from other tables, please look at <code>?dm</code> and the function <code>new_dm()</code>.</p>
+<p>To explore filtering with {dm}, we’ll use the {nycflights13} data
+with its tables <code>flights</code>, <code>planes</code>,
+<code>airlines</code> and <code>airports</code>.</p>
+<p>This dataset contains information about the 336,776 flights that
+departed from New York City in 2013, with 3,322 different planes and
+1,458 airports involved. The data comes from the US Bureau of
+Transportation Statistics, and is documented in
+<code>?nycflights13</code>.</p>
+<p>First, we have to create a <code>dm</code> object from the
+{nycflights13} data. This is implemented with
+<code>dm_nycflights13()</code>.</p>
+<p>A <a href="https://cynkra.github.io/dm/articles/tech-dm-class.html#class-dm">data
+model object</a> contains the data as well as metadata.</p>
+<p>If you would like to create a <code>dm</code> from other tables,
+please look at <code>?dm</code> and the function
+<code>new_dm()</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>()</span></code></pre></div>
 </div>
 <div id="join" class="section level2">
 <h2>Joining a <code>dm</code> object</h2>
-<p>{dm} allows you to join two tables of a <code>dm</code> object based on a shared column. You can use all join functions that you know from the {dplyr} package. Currently {dplyr} supports four types of mutating joins, two types of filtering joins, and a nesting join. See <code>?dplyr::join</code> for details.</p>
+<p>{dm} allows you to join two tables of a <code>dm</code> object based
+on a shared column. You can use all join functions that you know from
+the {dplyr} package. Currently {dplyr} supports four types of mutating
+joins, two types of filtering joins, and a nesting join. See
+<code>?dplyr::join</code> for details.</p>
 <div id="how-it-works" class="section level3">
 <h3>How it works</h3>
-<p>A join is the combination of two tables based on shared information. In technical terms, we merge the tables that need to be directly connected by a <a href="https://cynkra.github.io/dm/articles/howto-dm-theory#fk">foreign key relation</a>.</p>
+<p>A join is the combination of two tables based on shared information.
+In technical terms, we merge the tables that need to be directly
+connected by a <a href="https://cynkra.github.io/dm/articles/howto-dm-theory#fk">foreign
+key relation</a>.</p>
 <p>The existing links can be inspected in two ways:</p>
 <ol style="list-style-type: decimal">
 <li>Visually, by drawing the data model with <code>dm_draw()</code></li>
@@ -262,7 +480,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </g>
 </svg>
 
-<p>The directed arrows show explicitly the relation between different columns.</p>
+<p>The directed arrows show explicitly the relation between different
+columns.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Printed to the console by calling <code>dm_get_all_fks()</code></li>
 </ol>
@@ -280,10 +499,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="joining-examples" class="section level3">
 <h3>Joining Examples</h3>
 <p>Let’s look at some examples:</p>
-<p><strong>Add a column with airline names from the <code>airlines</code> table to the <code>flights</code> table.</strong></p>
+<p><strong>Add a column with airline names from the
+<code>airlines</code> table to the <code>flights</code>
+table.</strong></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dm_joined <span class="ot">&lt;-</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  dm <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_join_to_tbl</span>(flights, airlines, <span class="at">join =</span> left_join)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(flights, airlines, <span class="at">join =</span> left_join)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>dm_joined</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1,761 × 20</span>
 #&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
@@ -303,41 +524,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,</span>
 #&gt; <span style="color: #555555;">#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, name &lt;chr&gt;</span>
 </CODE></PRE>
-<p>As you can see below, the <code>dm_joined</code> dataframe has one more column than the <code>flights</code> table. The difference is the <code>name</code> column from the <code>airlines</code> table.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl</span>(<span class="st">&quot;flights&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `tbl.dm()` was deprecated in dm 0.2.0.</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `dm[[table_name]]` instead to access a specific table.</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl</span>(<span class="st">&quot;airlines&quot;</span>) <span class="sc">%&gt;%</span></span>
+<p>As you can see below, the <code>dm_joined</code> data frame has one
+more column than the <code>flights</code> table. The difference is the
+<code>name</code> column from the <code>airlines</code> table.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dm<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>dm<span class="sc">$</span>airlines <span class="sc">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;carrier&quot; &quot;name&quot;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>dm_joined <span class="sc">%&gt;%</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `tbl.dm()` was deprecated in dm 0.2.0.</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `dm[[table_name]]` instead to access a specific table.</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;carrier&quot; &quot;name&quot;</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>dm_joined <span class="sc">%&gt;%</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;      &quot;name&quot;</span></span></code></pre></div>
-<p>The result is not a <code>dm</code> object anymore, but a conventional dataframe:</p>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;year&quot;           &quot;month&quot;          &quot;day&quot;            &quot;dep_time&quot;      </span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;sched_dep_time&quot; &quot;dep_delay&quot;      &quot;arr_time&quot;       &quot;sched_arr_time&quot;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;arr_delay&quot;      &quot;carrier&quot;        &quot;flight&quot;         &quot;tailnum&quot;       </span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;origin&quot;         &quot;dest&quot;           &quot;air_time&quot;       &quot;distance&quot;      </span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [17] &quot;hour&quot;           &quot;minute&quot;         &quot;time_hour&quot;      &quot;name&quot;</span></span></code></pre></div>
+<p>The result is not a <code>dm</code> object anymore, but a (tibble)
+data frame:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dm_joined <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>()</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</span></span></code></pre></div>
 <p>Another example:</p>
-<p><strong>Get all flights that can’t be matched with airlines names.</strong></p>
-<p>We expect the flights data from {nycflights13} package to be clean and well organized, so no flights should remain. You can check this with an <code>anti_join</code>:</p>
+<p><strong>Get all flights that can’t be matched with airlines
+names.</strong></p>
+<p>We expect the <code>flights</code> data from {nycflights13} package
+to be clean and well organized, so no flights should remain. You can
+check this with an <code>anti_join</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_join_to_tbl</span>(flights, airlines, <span class="at">join =</span> anti_join)</span></code></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(flights, airlines, <span class="at">join =</span> anti_join)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 0 × 19</span>
 #&gt; <span style="color: #555555;"># … with 19 variables: year &lt;int&gt;, month &lt;int&gt;, day &lt;int&gt;, dep_time &lt;int&gt;,</span>
 #&gt; <span style="color: #555555;">#   sched_dep_time &lt;int&gt;, dep_delay &lt;dbl&gt;, arr_time &lt;int&gt;,</span>
@@ -346,25 +567,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">#   distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</span>
 </CODE></PRE>
 <p>An example with filtering on a <code>dm</code> and then merging:</p>
-<p><strong>Get all flights from Delta Air Lines which didn’t depart from John F. Kennedy International Airport in May 2013 - and join all the airports data into the <code>flights</code> table.</strong></p>
-<p>Currently, it is important to call <code>dm_apply_filters()</code> after piping your conditions. Only then the underlying tables and key relations are updated and you can perform a join on the filtered data. We are working towards removing this inconvenience <a href="https://github.com/cynkra/dm/issues/62">#62</a>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_nycflights13</span>() <span class="sc">%&gt;%</span></span>
+<p><strong>Get all flights from Delta Air Lines which didn’t depart from
+John F. Kennedy International Airport in May 2013 - and join all the
+airports data into the <code>flights</code> table.</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_nycflights13</span>(<span class="at">subset =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_filter</span>(airlines, name <span class="sc">==</span> <span class="st">&quot;Delta Air Lines Inc.&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_filter</span>(flights, month <span class="sc">==</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_apply_filters</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_join_to_tbl</span>(flights, airports, <span class="at">join =</span> left_join)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 0 × 26</span>
-#&gt; <span style="color: #555555;"># … with 26 variables: year &lt;int&gt;, month &lt;int&gt;, day &lt;int&gt;, dep_time &lt;int&gt;,</span>
-#&gt; <span style="color: #555555;">#   sched_dep_time &lt;int&gt;, dep_delay &lt;dbl&gt;, arr_time &lt;int&gt;,</span>
-#&gt; <span style="color: #555555;">#   sched_arr_time &lt;int&gt;, arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,</span>
-#&gt; <span style="color: #555555;">#   tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;,</span>
-#&gt; <span style="color: #555555;">#   distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;,</span>
-#&gt; <span style="color: #555555;">#   name &lt;chr&gt;, lat &lt;dbl&gt;, lon &lt;dbl&gt;, alt &lt;dbl&gt;, tz &lt;dbl&gt;, dst &lt;chr&gt;,</span>
-#&gt; <span style="color: #555555;">#   tzone &lt;chr&gt;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(flights, airports, <span class="at">join =</span> left_join)</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4,082 × 26</span>
+#&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>          <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">2</span>013     5     1      554            600        -<span style="color: #BB0000;">6</span>      731
+#&gt; <span style="color: #555555;"> 2</span>  <span style="text-decoration: underline;">2</span>013     5     1      555            600        -<span style="color: #BB0000;">5</span>      819
+#&gt; <span style="color: #555555;"> 3</span>  <span style="text-decoration: underline;">2</span>013     5     1      603            610        -<span style="color: #BB0000;">7</span>      754
+#&gt; <span style="color: #555555;"> 4</span>  <span style="text-decoration: underline;">2</span>013     5     1      622            630        -<span style="color: #BB0000;">8</span>      848
+#&gt; <span style="color: #555555;"> 5</span>  <span style="text-decoration: underline;">2</span>013     5     1      634            635        -<span style="color: #BB0000;">1</span>      900
+#&gt; <span style="color: #555555;"> 6</span>  <span style="text-decoration: underline;">2</span>013     5     1      654            700        -<span style="color: #BB0000;">6</span>      931
+#&gt; <span style="color: #555555;"> 7</span>  <span style="text-decoration: underline;">2</span>013     5     1      655            700        -<span style="color: #BB0000;">5</span>      944
+#&gt; <span style="color: #555555;"> 8</span>  <span style="text-decoration: underline;">2</span>013     5     1      656            705        -<span style="color: #BB0000;">9</span>     <span style="text-decoration: underline;">1</span>005
+#&gt; <span style="color: #555555;"> 9</span>  <span style="text-decoration: underline;">2</span>013     5     1      658            700        -<span style="color: #BB0000;">2</span>     <span style="text-decoration: underline;">1</span>016
+#&gt; <span style="color: #555555;">10</span>  <span style="text-decoration: underline;">2</span>013     5     1      658            700        -<span style="color: #BB0000;">2</span>      925
+#&gt; <span style="color: #555555;"># … with 4,072 more rows, and 19 more variables: sched_arr_time &lt;int&gt;,</span>
+#&gt; <span style="color: #555555;">#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,</span>
+#&gt; <span style="color: #555555;">#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,</span>
+#&gt; <span style="color: #555555;">#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, name &lt;chr&gt;, lat &lt;dbl&gt;, lon &lt;dbl&gt;,</span>
+#&gt; <span style="color: #555555;">#   alt &lt;dbl&gt;, tz &lt;dbl&gt;, dst &lt;chr&gt;, tzone &lt;chr&gt;</span>
 </CODE></PRE>
 <p>A last example:</p>
 <p><strong>Merge all tables into one big table.</strong></p>
-<p>Sometimes you need everything in one place. In this case you can use the <code>dm_flatten_to_tbl()</code> function. It joins all the tables of your <code>dm</code> object together into one wide table. All you have to do is to specify the starting table. The following joins are determined by the foreign key links.</p>
+<p>Sometimes you need everything in one place. In this case, you can use
+the <code>dm_flatten_to_tbl()</code> function. It joins all the tables
+in your <code>dm</code> object together into one wide table. All you
+have to do is to specify the starting table. The following joins are
+determined by the foreign key links.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_nycflights13</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>weather) <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(<span class="at">start =</span> flights)</span>
@@ -394,7 +629,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">#   dst &lt;chr&gt;, tzone &lt;chr&gt;, planes.year &lt;int&gt;, type &lt;chr&gt;,</span>
 #&gt; <span style="color: #555555;">#   manufacturer &lt;chr&gt;, model &lt;chr&gt;, engines &lt;int&gt;, seats &lt;int&gt;, …</span>
 </CODE></PRE>
-<p>Be aware that all column names need to be unique. The <code>dm_flatten_to_tbl</code> cares about automatically renaming the relevant columns and prints if something was changed, e.g. <code>name -&gt; airlines.name</code>.</p>
+<p>To be more precise, <code>dm_flatten_to_tbl()</code> will join all
+tables from one level of hierarchy (i.e., direct neighbors to table
+<code>start</code>). If you want to cover tables from all levels of
+hierarchy, use <code>dm_squash_to_tbl()</code> instead.</p>
+<p>Also, be aware that all column names need to be unique. The
+<code>dm_flatten_to_tbl()</code> takes care of this by automatically
+renaming the relevant columns and informs the user if any names were
+changed,
+e.g. <code>dm_rename(airlines, airlines.name = name)</code>.</p>
+<p>If you want to merge all tables, but get a nested table in return,
+use <code>dm_wrap_tbl()</code> with <code>pull_tbl()</code> instead:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_nycflights13</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_wrap_tbl</span>(<span class="at">root =</span> flights) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull_tbl</span>(flights)</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1,761 × 23</span>
+#&gt;     year month   day dep_time sched_dep_time dep_delay arr_time
+#&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>          <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
+#&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">2</span>013     1    10        3           <span style="text-decoration: underline;">2</span>359         4      426
+#&gt; <span style="color: #555555;"> 2</span>  <span style="text-decoration: underline;">2</span>013     1    10       16           <span style="text-decoration: underline;">2</span>359        17      447
+#&gt; <span style="color: #555555;"> 3</span>  <span style="text-decoration: underline;">2</span>013     1    10      450            500       -<span style="color: #BB0000;">10</span>      634
+#&gt; <span style="color: #555555;"> 4</span>  <span style="text-decoration: underline;">2</span>013     1    10      520            525        -<span style="color: #BB0000;">5</span>      813
+#&gt; <span style="color: #555555;"> 5</span>  <span style="text-decoration: underline;">2</span>013     1    10      530            530         0      824
+#&gt; <span style="color: #555555;"> 6</span>  <span style="text-decoration: underline;">2</span>013     1    10      531            540        -<span style="color: #BB0000;">9</span>      832
+#&gt; <span style="color: #555555;"> 7</span>  <span style="text-decoration: underline;">2</span>013     1    10      535            540        -<span style="color: #BB0000;">5</span>     <span style="text-decoration: underline;">1</span>015
+#&gt; <span style="color: #555555;"> 8</span>  <span style="text-decoration: underline;">2</span>013     1    10      546            600       -<span style="color: #BB0000;">14</span>      645
+#&gt; <span style="color: #555555;"> 9</span>  <span style="text-decoration: underline;">2</span>013     1    10      549            600       -<span style="color: #BB0000;">11</span>      652
+#&gt; <span style="color: #555555;">10</span>  <span style="text-decoration: underline;">2</span>013     1    10      550            600       -<span style="color: #BB0000;">10</span>      649
+#&gt; <span style="color: #555555;"># … with 1,751 more rows, and 16 more variables: sched_arr_time &lt;int&gt;,</span>
+#&gt; <span style="color: #555555;">#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,</span>
+#&gt; <span style="color: #555555;">#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,</span>
+#&gt; <span style="color: #555555;">#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, airlines &lt;packed[,1]&gt;,</span>
+#&gt; <span style="color: #555555;">#   airports &lt;packed[,7]&gt;, planes &lt;packed[,8]&gt;, weather &lt;packed[,13]&gt;</span>
+</CODE></PRE>
 </div>
 </div>
 

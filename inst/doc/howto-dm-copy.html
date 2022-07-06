@@ -12,11 +12,23 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2022-04-08" />
+<meta name="date" content="2022-07-06" />
 
 <title>Copy tables to and from a database</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -127,7 +139,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,106 +333,164 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Copy tables to and from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2022-04-08</h4>
+<h4 class="date">2022-07-06</h4>
 
 
 
-<p>In this tutorial we introduce {dm} methods and techniques for copying individual tables and entire relational data models into an RDBMS. This is an integral part of the {dm} workflow. Copying tables to an RDBMS is often a step in the process of building a relational data model from locally hosted data. If your data model is complete, copying it to an RDBMS in a single operation allows you to leverage the power of the database and make it accessible to others. For modifying and persisting changes to your data at the row-level see <code>vignette(&quot;howto-dm-rows&quot;)</code>.</p>
+<p>In this tutorial, we introduce {dm} methods and techniques for
+copying individual tables and entire relational data models into a
+relational database management system (RDBMS). This is an integral part
+of the {dm} workflow. Copying tables to an RDBMS is often a step in the
+process of building a relational data model from locally hosted data. If
+your data model is complete, copying it to an RDBMS in a single
+operation allows you to leverage the power of the database and make it
+accessible to others. For modifying and persisting changes to your data
+at the row-level see <code>vignette(&quot;howto-dm-rows&quot;)</code>.</p>
 <div id="copy-models-or-copy-tables" class="section level2">
 <h2>Copy models or copy tables?</h2>
-<p>Using {dm} you can persist an entire relational data model with a single function call. <code>copy_dm_to()</code> will move your entire model into a destination RDBMS. This may be all you need to deploy a new model. You may want to add new tables to an existing model on an RDBMS. These requirements can be handled using the <code>compute()</code> and <code>copy_to()</code> methods.</p>
-<p>Calling <code>compute()</code> or <code>copy_to()</code> requires write permission on the RDBMS, otherwise an error is returned. Therefore for the following examples we will instantiate a test dm and move it into a local SQLite database with full permissions. {dm} and {dbplyr} are designed so there is no difference between the code used to manipulate a local SQLite database and a remote RDBMS. The steps for this were already introduced in <code>vignette(&quot;howto-dm-db&quot;)</code> and will be discussed in more detail in the <a href="#copy-model">Copying a relational model</a> section.</p>
+<p>Using {dm} you can persist an entire relational data model with a
+single function call. <code>copy_dm_to()</code> will move your entire
+model into a destination RDBMS. This may be all you need to deploy a new
+model. You may want to add new tables to an existing model on an RDBMS.
+These requirements can be handled using the <code>compute()</code> and
+<code>copy_to()</code> methods.</p>
+<p>Calling <code>compute()</code> or <code>copy_to()</code> requires
+write permission on the RDBMS; otherwise, an error is returned.
+Therefore, for the following examples, we will instantiate a test
+<code>dm</code> object and move it into a local SQLite database with
+full permissions. {dm} and {dbplyr} are designed to treat the code used
+to manipulate a <strong>local</strong> SQLite database and a
+<strong>remote</strong> RDBMS similarly. The steps for this were already
+introduced in <code>vignette(&quot;howto-dm-db&quot;)</code> and will be discussed
+in more detail in the <a href="#copy-model">Copying a relational
+model</a> section.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────── tidyverse 1.3.1 ──
-</CODE></PRE>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">ggplot2</span> 3.3.5     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">purrr  </span> 0.3.4
-#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">tibble </span> 3.1.6     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">dplyr  </span> 1.0.8
-#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">tidyr  </span> 1.2.0     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">stringr</span> 1.4.0
-#&gt; <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">readr  </span> 2.1.1     <span style="color: #00BB00;">✓</span> <span style="color: #0000BB;">forcats</span> 0.5.1
-</CODE></PRE>
-<PRE class="fansi fansi-message"><CODE>#&gt; ── <span style="font-weight: bold;">Conflicts</span> ───────────────────────────────────── tidyverse_conflicts() ──
-#&gt; <span style="color: #BB0000;">x</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">dm</span>::filter(), <span style="color: #0000BB;">stats</span>::filter()
-#&gt; <span style="color: #BB0000;">x</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()
-</CODE></PRE>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dbplyr&#39;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:dplyr&#39;:</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     ident, sql</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:dm&#39;:</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     get_returned_rows, has_returned_rows, sql_returning_cols</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>local_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(local_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dbplyr&#39;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:dplyr&#39;:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     ident, sql</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>local_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(local_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
 <div id="copying-tables" class="section level2">
 <h2>Copying and persisting individual tables</h2>
-<p>As part of your data analysis you may combine tables from multiple sources and create links to existing tables via foreign keys, or create new tables holding data summaries. The example below, already discussed in <code>vignette(&quot;howto-dm-db&quot;)</code>, computes the total amount of all loans for each account.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
-<p>The derived table <code>total_loans</code> is a <em>lazy table</em> powered by the {<a href="https://dbplyr.tidyverse.org/">dbplyr</a>} package: the results are not materialized, instead an SQL query is built and executed each time the data is requested.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `account_id`, SUM(`amount`) AS `total_amount`</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `loans`</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; GROUP BY `account_id`</span></span></code></pre></div>
-<p>To avoid recomputing the query every time you use <code>total_loans</code>, call <code>compute()</code> right before inserting the derived table with <code>dm_insert_tbl()</code>. <code>compute()</code> forces the computation of a query and stores the full results in a table on the RDBMS.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_dm_total_computed <span class="ot">&lt;-</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compute</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>my_dm_total_computed<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT *</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `dbplyr_001`</span></span></code></pre></div>
-<p>Note the differences in queries returned by <code>sql_render()</code>. <code>my_dm_total$total_loans</code> is still being lazily evaluated and the full query constructed from the chain of operations that generated it, and is required to run to access it, is still in place. Contrast that with <code>my_dm_total_computed$total_loans</code> where the query has been realized and accessing its rows requires a simple <code>SELECT *</code> statement. The table name, <code>dbplyr_001</code>, was automatically generated as the <code>name</code> argument was not supplied to <code>compute()</code>.</p>
-<p>The default is to create a temporary table. If you want results to persist across sessions in permanent tables, <code>compute()</code> must be called with the argument <code>temporary = FALSE</code> and a table name for the <code>name</code> argument. See <code>?compute</code> for more details.</p>
-<p>When called on a whole dm object (without zoom), <code>compute()</code> materializes all tables into new (temporary or persistent) tables by executing the associated SQL query and storing the full results. Depending on the size of your data this may take considerable time or be infeasible. It may be useful occasionally to create snapshots of data that is subject to change.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_dm_total_snapshot <span class="ot">&lt;-</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  my_dm_total <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compute</span>()</span></code></pre></div>
+<p>As part of your data analysis, you may combine tables from multiple
+sources and create links to existing tables via foreign keys, or create
+new tables holding data summaries. The example below, already discussed
+in <code>vignette(&quot;howto-dm-db&quot;)</code>, computes the total amount of
+all loans for each account.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
+<p>The derived table <code>total_loans</code> is a <em>lazy table</em>
+powered by the {<a href="https://dbplyr.tidyverse.org/">dbplyr</a>}
+package: the results are not materialized, instead an SQL query is built
+and executed each time the data is requested.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT `account_id`, SUM(`amount`) AS `total_amount`</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `loans`</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; GROUP BY `account_id`</span></span></code></pre></div>
+<p>To avoid recomputing the query every time you use
+<code>total_loans</code>, call <code>compute()</code> right before
+inserting the derived table with <code>dm_insert_tbl()</code>.
+<code>compute()</code> forces the computation of a query and stores the
+full results in a table on the RDBMS.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_dm_total_computed <span class="ot">&lt;-</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compute</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>my_dm_total_computed<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;SQL&gt; SELECT *</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; FROM `dbplyr_001`</span></span></code></pre></div>
+<p>Note the differences in queries returned by
+<code>sql_render()</code>. <code>my_dm_total$total_loans</code> is still
+being lazily evaluated and the full query constructed from the chain of
+operations that generated it is still in place and needs to be run to
+access it. Contrast that with
+<code>my_dm_total_computed$total_loans</code>, where the query has been
+realized and accessing its rows requires a simple <code>SELECT *</code>
+statement. The table name, <code>dbplyr_001</code>, was automatically
+generated as the <code>name</code> argument was not supplied to
+<code>compute()</code>.</p>
+<p>The default is to create a <strong>temporary</strong> tables. If you
+want results to persist across sessions in <strong>permanent</strong>
+tables, <code>compute()</code> must be called with the argument
+<code>temporary = FALSE</code> and a table name for the
+<code>name</code> argument. See <code>?compute</code> for more
+details.</p>
+<p>When called on a whole <code>dm</code> object (without zoom),
+<code>compute()</code> materializes all tables into new (temporary or
+persistent) tables by executing the associated SQL query and storing the
+full results. Depending on the size of your data, this may take
+considerable time or may even be unfeasible. It may be useful
+occasionally to create snapshots of data that is subject to change.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_dm_total_snapshot <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  my_dm_total <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compute</span>()</span></code></pre></div>
 </div>
 <div id="data-frames" class="section level2">
 <h2>Adding local data frames to an RDBMS</h2>
-<p>If you need to add local data frames to an existing dm object, use the <code>copy_to()</code> method. It takes the same arguments as <code>copy_dm_to()</code>, except the second argument takes a data frame rather than a dm. The result is a derived dm object that contains the new table.</p>
-<p>To demonstrate the use of <code>copy_to()</code> the example below will use {dm} to pull consolidated data from several tables out of an RDBMS, estimate a linear model from the data, then insert the residuals back into the RDBMS and link it to the existing tables. This is all done with a local SQLite database, but the process would work unchanged on any supported RDBMS.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span></code></pre></div>
-<p>Please note the use of <code>dm_squash_to_tbl()</code>. This method gathers all linked information into a single wide table. It follows foreign key relations starting from the table supplied as its argument and gathers all the columns from related tables, disambiguating column names as it goes.</p>
-<p>In the above code, the <code>select()</code> statement isolates the columns we need for our model. <code>collect()</code> works similarly to <code>compute()</code> by forcing the execution of the underlying SQL query, but it returns the results as a local tibble.</p>
-<p>Below, the local tibble, <code>loans_df</code>, is used to estimate the linear model and the residuals are stored along with the original associated <code>id</code> in a new tibble, <code>loans_residuals</code>. The <code>id</code> column is necessary to link the new tibble to the tables in the dm it was collected from.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>loans_residuals <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> loans_df<span class="sc">$</span>id,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">resid =</span> <span class="fu">unname</span>(<span class="fu">residuals</span>(model))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>loans_residuals</span></code></pre></div>
+<p>If you need to add local data frames to an existing <code>dm</code>
+object, use the <code>copy_to()</code> method. It takes the same
+arguments as <code>copy_dm_to()</code>, except the second argument takes
+a data frame rather than a dm. The result is a derived <code>dm</code>
+object that contains the new table.</p>
+<p>To demonstrate the use of <code>copy_to()</code>, the example below
+will use {dm} to pull consolidated data from several tables out of an
+RDBMS, estimate a linear model from the data, then insert the residuals
+back into the RDBMS and link it to the existing tables. This is all done
+with a local SQLite database, but the process would work unchanged on
+any supported RDBMS.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span></code></pre></div>
+<p>Please note the use of <code>dm_squash_to_tbl()</code>. This method
+gathers all linked information into a single wide table. It follows
+foreign key relations starting from the table supplied as its argument
+and gathers all the columns from related tables, disambiguating column
+names as it goes.</p>
+<p>In the above code, the <code>select()</code> statement isolates the
+columns we need for our model. <code>collect()</code> works similarly to
+<code>compute()</code> by forcing the execution of the underlying SQL
+query, but it returns the results as a local tibble.</p>
+<p>Below, the local tibble, <code>loans_df</code>, is used to estimate
+the linear model and the residuals are stored along with the original
+associated <code>id</code> in a new tibble,
+<code>loans_residuals</code>. The <code>id</code> column is necessary to
+link the new tibble to the tables in the dm it was collected from.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>loans_residuals <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> loans_df<span class="sc">$</span>id,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">resid =</span> <span class="fu">unname</span>(<span class="fu">residuals</span>(model))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>loans_residuals</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 682 × 2</span>
 #&gt;       id   resid
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
@@ -256,17 +506,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">10</span>  <span style="text-decoration: underline;">4</span>990  <span style="text-decoration: underline;">33</span>377.
 #&gt; <span style="color: #555555;"># … with 672 more rows</span>
 </CODE></PRE>
-<p>Adding <code>loans_residuals</code> to the dm is done using <code>copy_to()</code>. The call to the method includes the argument <code>temporary = FALSE</code> because we want this table to persist beyond our current session. In the same pipeline we create the necessary primary and foreign keys to integrate the table with the rest of our relational model. For more information on key creation see <code>vignette(&quot;howto-dm-db&quot;)</code> and <code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="ot">&lt;-</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_to</span>(deployed_dm, loans_residuals, <span class="at">temporary =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans_residuals, id) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans_residuals, id, loans)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `copy_to.dm()` was deprecated in dm 0.2.0.</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `copy_to(dm_get_con(dm), ...)` and `dm_add_tbl()`.</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">violet =</span> loans_residuals) <span class="sc">%&gt;%</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<p>Adding <code>loans_residuals</code> to the dm is done using
+<code>copy_to()</code>. The call to the method includes the argument
+<code>temporary = FALSE</code> because we want this table to persist
+beyond our current session. In the same pipeline we create the necessary
+primary and foreign keys to integrate the table with the rest of our
+relational model. For more information on key creation, see
+<code>vignette(&quot;howto-dm-db&quot;)</code> and
+<code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="ot">&lt;-</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_to</span>(deployed_dm, loans_residuals, <span class="at">temporary =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans_residuals, id) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans_residuals, id, loans)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `copy_to.dm()` was deprecated in dm 0.2.0.</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `copy_to(dm_get_con(dm), ...)` and `dm_add_tbl()`.</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">violet =</span> loans_residuals) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -415,13 +672,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </g>
 </svg>
 
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> All constraints satisfied.
 </CODE></PRE>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid<span class="sc">$</span>loans_residuals</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_2022_04_08_14_52_55_4519_1&gt; [?? x 2]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0 []</span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid<span class="sc">$</span>loans_residuals</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;loans_residuals_1_2022_07_06_17_28_57_647972_49986&gt; [?? x 2]</span>
+#&gt; <span style="color: #555555;"># Database: sqlite 3.38.5 []</span>
 #&gt;       id   resid
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>   <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">4</span>959 -<span style="color: #BB0000; text-decoration: underline;">31</span><span style="color: #BB0000;">912.</span>
@@ -439,76 +696,130 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="copy-model" class="section level2">
 <h2>Persisting a relational model with <code>copy_dm_to()</code></h2>
-<p>Persistence, because it is intended to make permanent changes, requires write access to the source RDBMS. The code below is a repeat of the code that opened the <a href="#copying-tables">Copying and persisting individual tables</a> section at the beginning of the tutorial. It uses the {dm} convenience function <code>dm_financial()</code> to create a dm object corresponding to a data model from a public dataset repository. The dm object is downloaded locally first, before deploying it to a local SQLite database.</p>
-<p><code>dm_select_tbl()</code> is used to exclude the transaction table <code>trans</code> due to its size, then the <code>collect()</code> method retrieves the remaining tables and returns them as a local dm object.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_nrow</span>()</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  accounts     cards   clients     disps districts     loans    orders </span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      4500       892      5369      5369        77       682      6471 </span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     tkeys     trans </span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       234   1056320</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>fin_dm</span></code></pre></div>
+<p>Persistence, because it is intended to make permanent changes,
+requires write access to the source RDBMS. The code below is a repeat of
+the code that opened the <a href="#copying-tables">Copying and
+persisting individual tables</a> section at the beginning of the
+tutorial. It uses the {dm} convenience function
+<code>dm_financial()</code> to create a dm object corresponding to a
+data model from a public dataset repository. The dm object is downloaded
+locally first, before deploying it to a local SQLite database.</p>
+<p><code>dm_select_tbl()</code> is used to exclude the transaction table
+<code>trans</code> due to its size, then the <code>collect()</code>
+method retrieves the remaining tables and returns them as a local dm
+object.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_nrow</span>()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  accounts     cards   clients     disps districts     loans    orders </span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      4500       892      5369      5369        77       682      6471 </span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     tkeys     trans </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       234   1056320</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>fin_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (8 total)
 #&gt; Columns: 47
 #&gt; Primary keys: 7
 #&gt; Foreign keys: 6
 </CODE></PRE>
-<p>It is just as simple to move a local relational model into an RDBMS.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>destination_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>deployed_dm</span></code></pre></div>
+<p>It is just as simple to move a local relational model into an
+RDBMS.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>destination_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>deployed_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.38.0 []
+#&gt; src:  sqlite 3.38.5 []
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (8 total)
 #&gt; Columns: 47
 #&gt; Primary keys: 7
 #&gt; Foreign keys: 6
 </CODE></PRE>
-<p>Note that in the call to <code>copy_dm_to()</code> the argument <code>temporary = FALSE</code> is supplied. Without this argument the model would still be copied into the database, but the argument would default to <code>temporary = TRUE</code> and the data would be deleted once your session ends.</p>
-<p>In the output you can observe that the <code>src</code> for <code>deployed_dm</code> is SQLite, while for <code>fin_dm</code> the source is not indicated because it is a local data model.</p>
-<p>Copying a relational model into an empty database is the simplest use case for <code>copy_dm_to()</code>. If you want to copy a model into an RDBMS that is already populated, be aware that <code>copy_dm_to()</code> will not overwrite pre-existing tables. In this case you will need to use the <code>table_names</code> argument to give the tables unique names.</p>
-<p><code>table_names</code> can be a named character vector, with the names matching the table names in the dm object and the values containing the desired names in the RDBMS, or a function or one-sided formula. In the example below, <code>paste0()</code> is used to add a prefix to the table names to provide uniqueness.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dup_dm <span class="ot">&lt;-</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>, <span class="at">table_names =</span> <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;dup_&quot;</span>, .x))</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>dup_dm</span></code></pre></div>
+<p>Note that in the call to <code>copy_dm_to()</code> the argument
+<code>temporary = FALSE</code> is supplied. Without this argument, the
+model would still be copied into the database, but the argument would
+default to <code>temporary = TRUE</code> and the data would be deleted
+once your session ends.</p>
+<p>In the output you can observe that the <code>src</code> for
+<code>deployed_dm</code> is SQLite, while for <code>fin_dm</code> the
+source is not indicated because it is a local data model.</p>
+<p>Copying a relational model into an empty database is the simplest use
+case for <code>copy_dm_to()</code>. If you want to copy a model into an
+RDBMS that is already populated, be aware that <code>copy_dm_to()</code>
+will not overwrite pre-existing tables. In this case you will need to
+use the <code>table_names</code> argument to give the tables unique
+names.</p>
+<p><code>table_names</code> can be a named character vector, with the
+names matching the table names in the dm object and the values
+containing the desired names in the RDBMS, or a function or one-sided
+formula. In the example below, <code>paste0()</code> is used to add a
+prefix to the table names to provide uniqueness.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dup_dm <span class="ot">&lt;-</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>, <span class="at">table_names =</span> <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;dup_&quot;</span>, .x))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>dup_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.38.0 []
+#&gt; src:  sqlite 3.38.5 []
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (8 total)
 #&gt; Columns: 47
 #&gt; Primary keys: 7
 #&gt; Foreign keys: 6
 </CODE></PRE>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">remote_name</span>(dup_dm<span class="sc">$</span>accounts)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;IDENT&gt; `dup_accounts`</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">remote_name</span>(deployed_dm<span class="sc">$</span>accounts)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;IDENT&gt; `accounts`</span></span></code></pre></div>
-<p>Note the different table names for <code>dup_dm$accounts</code> and <code>deployed_dm$accounts</code>. For both, the table name is <code>accounts</code> in the dm, but they link to different tables on the database. In <code>dup_dm</code> the table is backed by the table <code>dup_accounts</code> in the RDBMS. <code>dm_deployed$accounts</code> shows us that this table is still backed by the <code>accounts</code> table from the <code>copy_dm_to()</code> operation we performed in the preceding example.</p>
-<p>Managing tables in the RDBMS is outside the scope of <code>dm</code>. If you find you need to remove tables or perform operations directly on the RDBMS, see the {<a href="https://dbi.r-dbi.org/">DBI</a>} package.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">remote_name</span>(dup_dm<span class="sc">$</span>accounts)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;IDENT&gt; `dup_accounts`</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">remote_name</span>(deployed_dm<span class="sc">$</span>accounts)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;IDENT&gt; `accounts`</span></span></code></pre></div>
+<p>Note the different table names for <code>dup_dm$accounts</code> and
+<code>deployed_dm$accounts</code>. For both, the table name is
+<code>accounts</code> in the <code>dm</code> object, but they link to
+different tables on the database. In <code>dup_dm</code>, the table is
+backed by the table <code>dup_accounts</code> in the RDBMS.
+<code>dm_deployed$accounts</code> shows us that this table is still
+backed by the <code>accounts</code> table from the
+<code>copy_dm_to()</code> operation we performed in the preceding
+example.</p>
+<p>Managing tables in the RDBMS is outside the scope of <code>dm</code>.
+If you find you need to remove tables or perform operations directly on
+the RDBMS, see the {<a href="https://dbi.r-dbi.org/">DBI</a>}
+package.</p>
 <p>When done, do not forget to disconnect:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(destination_db)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(local_db)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(destination_db)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(local_db)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p><code>dm</code> makes it straightforward to deploy your complete relational model to an RDBMS using the <code>copy_dm_to()</code> function. For tables that are created from a relational model during analysis or development, <code>compute()</code> and <code>copy_to()</code> can be used to persist them between sessions or to copy local tables to a database dm. The <code>collect()</code> method downloads an entire dm object that fits into memory from the database.</p>
+<p><code>dm</code> makes it straightforward to deploy your complete
+relational model to an RDBMS using the <code>copy_dm_to()</code>
+function. For tables that are created from a relational model during
+analysis or development, <code>compute()</code> and
+<code>copy_to()</code> can be used to persist them (using argument
+<code>temporary = FALSE</code>) between sessions or to copy local tables
+to a database <code>dm</code>. The <code>collect()</code> method
+downloads an entire <code>dm</code> object that fits into memory from
+the database.</p>
 </div>
-<div id="next-steps" class="section level2">
-<h2>Next steps</h2>
-<p>If you need finer-grained control over modifications to your relational model, see <code>vignette(&quot;howto-dm-rows&quot;)</code> for an introduction to row level operations, including updates, insertions, deletions and patching.</p>
-<p>If you feel you need to know more about relational data models in order to get the most out of dm, check out <code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
-<p>If you’re familiar with relational data models but want to know how to work with them in dm, then any of <code>vignette(&quot;tech-dm-join&quot;)</code>, <code>vignette(&quot;tech-dm-filter&quot;)</code>, or <code>vignette(&quot;tech-dm-zoom&quot;)</code> is a good next step.</p>
+<div id="further-reading" class="section level2">
+<h2>Further Reading</h2>
+<p>If you need finer-grained control over modifications to your
+relational model, see <code>vignette(&quot;howto-dm-rows&quot;)</code> for an
+introduction to row level operations, including updates, insertions,
+deletions and patching.</p>
+<p>If you feel you need to know more about relational data models in
+order to get the most out of dm, check out
+<code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
+<p>If you’re familiar with relational data models but want to know how
+to work with them in dm, then any of
+<code>vignette(&quot;tech-dm-join&quot;)</code>,
+<code>vignette(&quot;tech-dm-filter&quot;)</code>, or
+<code>vignette(&quot;tech-dm-zoom&quot;)</code> is a good next step.</p>
 </div>
 
 

@@ -1,5 +1,8 @@
 #' \pkg{dplyr} table manipulation methods for zoomed dm objects
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Use these methods without the '.zoomed_dm' suffix (see examples).
 #' @param .data object of class `zoomed_dm`
 #' @param ... see corresponding function in package \pkg{dplyr} or \pkg{tidyr}
@@ -459,6 +462,22 @@ anti_join.zoomed_dm <- function(x, y, by = NULL, copy = NULL, suffix = NULL, sel
   replace_zoomed_tbl(x, joined_tbl, join_data$new_col_names)
 }
 
+#' @export
+nest_join.dm <- function(x, ...) {
+  check_zoomed(x)
+}
+
+#' @rdname dplyr_join
+#' @inheritParams dplyr::nest_join
+#' @export
+nest_join.zoomed_dm <- function(x, y, by = NULL, copy = FALSE, keep = FALSE, name = NULL, ...) {
+  y_name <- as_string(enexpr(y))
+  name <- name %||% y_name
+  join_data <- prepare_join(x, {{ y }}, by, NULL, NULL, NULL, disambiguate = FALSE)
+  joined_tbl <- nest_join(join_data$x_tbl, join_data$y_tbl, join_data$by, copy, keep, name, ...)
+  replace_zoomed_tbl(x, joined_tbl, join_data$new_col_names)
+}
+
 prepare_join <- function(x, y, by, selected, suffix, copy, disambiguate = TRUE) {
   y_name <- dm_tbl_name(x, {{ y }})
   select_quo <- enquo(selected)
@@ -533,7 +552,6 @@ prepare_join <- function(x, y, by, selected, suffix, copy, disambiguate = TRUE) 
   # inform user in case RHS `by` column(s) are added
   if (!all(by %in% selected)) {
     new_cols <- glue_collapse(tick_if_needed(setdiff(by, selected)), ", ")
-    message(glue("Using `select = c({as_label(select_quo)}, {new_cols})`."))
   }
 
   # rename RHS `by` columns in the tibble to avoid after-the-fact disambiguation collision

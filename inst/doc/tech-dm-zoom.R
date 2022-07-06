@@ -17,6 +17,7 @@ flights_zoomed_mutate <-
   mutate(am_pm_dep = if_else(dep_time < 1200, "am", "pm")) %>%
   # in order to see our changes in the output we use `select()` for reordering the columns
   select(year:dep_time, am_pm_dep, everything())
+
 flights_zoomed_mutate
 
 # To update the original `dm` with a new `flights` table we use `dm_update_zoomed()`:
@@ -30,6 +31,7 @@ dm_draw(updated_flights_dm)
 
 ## ------------------------------------------------------------------------
 library(tidyr)
+
 weather_zoomed <-
   flights_dm %>%
   dm_zoom_to(weather)

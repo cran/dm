@@ -11,11 +11,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-04-08" />
+<meta name="date" content="2022-07-06" />
 
 <title>Create a dm object from data frames</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -126,7 +138,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -139,16 +331,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Create a dm object from data frames</h1>
-<h4 class="date">2022-04-08</h4>
+<h4 class="date">2022-07-06</h4>
 
 
 
-<div id="building-data-models-from-data-frames-with-dm" class="section level1">
-<h1>Building data models from data frames with dm</h1>
-<p>dm allows you to create your own relational data models from local data frames. Once your data model is complete, you can deploy it to a range of DBMSs using dm.</p>
+<p>dm allows you to create your own relational data models from local
+data frames. Once your data model is complete, you can deploy it to a
+range of database management systems (DBMS) using {dm}.</p>
 <div id="creating-a-dm-object-from-data-frames" class="section level2">
 <h2>Creating a dm object from data frames</h2>
-<p>The example data set that we will be using is available through the <a href="https://github.com/tidyverse/nycflights13"><code>nycflights13</code></a> package. The five tables that we are working with contain information about all flights that departed from the airports of New York to other destinations in the United States in 2013:</p>
+<p>The example data set that we will be using is available through the
+<a href="https://github.com/tidyverse/nycflights13"><code>nycflights13</code></a>
+package. The five tables that we are working with contain information
+about all flights that departed from the airports of New York to other
+destinations in the United States in 2013:</p>
 <ul>
 <li><code>flights</code> represents the trips taken by planes</li>
 <li><code>airlines</code> includes
@@ -156,11 +352,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>the names of transport organizations (<code>name</code>)</li>
 <li>their abbreviated codes (<code>carrier</code>)</li>
 </ul></li>
-<li><code>airports</code> indicates the ports of departure (<code>origin</code>) and of destination (<code>dest</code>)</li>
-<li><code>weather</code> contains meteorological information at each hour</li>
+<li><code>airports</code> indicates the ports of departure
+(<code>origin</code>) and of destination (<code>dest</code>)</li>
+<li><code>weather</code> contains meteorological information at each
+hour</li>
 <li><code>planes</code> describes characteristics of the aircraft</li>
 </ul>
-<p>Once we’ve loaded {nycflights13}, the aforementioned tables are all in our work environment, ready to be accessed.</p>
+<p>Once we’ve loaded {nycflights13}, the aforementioned tables are all
+in our work environment, ready to be accessed.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>airports</span></code></pre></div>
@@ -179,11 +378,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">10</span> 0S9   Jefferson County Intl          48.1 -<span style="color: #BB0000;">123.</span>    108    -<span style="color: #BB0000;">8</span> A     Amer…
 #&gt; <span style="color: #555555;"># … with 1,448 more rows</span>
 </CODE></PRE>
-<p>Your own data will probably not be available as an R package. Whatever format it is in, you will need to be able to load it as data frames into your R session. If the data is too large, consider using dm to connect to the database instead. See <code>vignette(&quot;howto-dm-db&quot;)</code> for details on using dm with databases.</p>
+<p>Your own data will probably not be available as an R package.
+Whatever format it is in, you will need to be able to load it as data
+frames into your R session. If the data is too large, consider using dm
+to connect to the database instead. See
+<code>vignette(&quot;howto-dm-db&quot;)</code> for details on using dm with
+databases.</p>
 </div>
 <div id="adding-tables" class="section level2">
 <h2>Adding Tables</h2>
-<p>Our first step will be to tell <code>dm</code> which tables we want to work with and how they are connected. For that we can use <code>dm()</code>, passing in the table names as arguments.</p>
+<p>Our first step will be to tell <code>dm</code> which tables we want
+to work with and how they are connected. For that we can use
+<code>dm()</code>, passing in the table names as arguments.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="ot">&lt;-</span> <span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span>
@@ -194,12 +400,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
 </CODE></PRE>
-<p>The <code>as_dm()</code> function is an alternative that works if you already have a list of tables.</p>
+<p>The <code>as_dm()</code> function is an alternative that works if you
+already have a list of tables.</p>
 </div>
 <div id="a-dm-is-a-list" class="section level2">
 <h2>A dm is a list</h2>
-<p>dm objects behave like lists with a user- and console-friendly print format. In fact, using a dm as a nicer list for organizing your data frames in your environment is an easy first step towards using dm and its data modeling functionality.</p>
-<p>Member referencing, by subscript and by name, and list and slice manipulation functions work just as you would expect on a dm object.</p>
+<p><code>dm</code> objects behave like lists with a user- and
+console-friendly print format. In fact, using a dm as a nicer list for
+organizing your data frames in your environment is an easy first step
+towards using dm and its data modeling functionality.</p>
+<p>Subsetting syntax for a <code>dm</code> object (either by subscript
+or by name) is similar to syntax for lists, and so you don’t need to
+learn any additional syntax to work with <code>dm</code> objects.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(flights_dm_no_keys)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines&quot; &quot;airports&quot; &quot;flights&quot;  &quot;planes&quot;   &quot;weather&quot;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys<span class="sc">$</span>airports</span></code></pre></div>
@@ -228,12 +440,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="defining-keys" class="section level2">
 <h2>Defining Keys</h2>
-<p>Even though we now have a <code>dm</code> object that contains all our data, we have not specified how our five tables are connected. To do this we need to define primary keys and foreign keys on the tables.</p>
-<p>Primary keys and foreign keys are how relational database tables are linked with each other. A primary key is a column or column tuple that has a unique value for each row within a table. A foreign key is a column or column tuple containing the primary key for a row in another table. Foreign keys act as cross references between tables. They specify the relationships that gives us the <em>relational</em> database. For more information on keys and a crash course on databases, see <code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
+<p>Even though we now have a <code>dm</code> object that contains all
+our data, we have not specified how our five tables are connected. To do
+this, we need to define primary keys and foreign keys on the tables.</p>
+<p>Primary keys and foreign keys are how relational database tables are
+linked with each other. A primary key is a column or column tuple that
+has a unique value for each row within a table. A foreign key is a
+column or column tuple containing the primary key for a row in another
+table. Foreign keys act as cross references between tables. They specify
+the relationships that gives us the <em>relational</em> database. For
+more information on keys and a crash course on databases, see
+<code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
 </div>
 <div id="primary-keys" class="section level2">
 <h2>Primary Keys</h2>
-<p><code>dm</code> offers <code>dm_enum_pk_candidates()</code> to identify viable primary keys, and <code>dm_add_pk()</code> to add them.</p>
+<p><code>dm</code> offers <code>dm_enum_pk_candidates()</code> to
+identify viable primary keys for a table in the <code>dm</code> object,
+and <code>dm_add_pk()</code> to add them.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_no_keys,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> planes</span>
@@ -251,24 +474,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">8</span> speed        FALSE     <span style="color: #555555;">&quot;</span>has 3299 missing values, and duplicate values: 4…
 #&gt; <span style="color: #555555;">9</span> engine       FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: Turbo-fan (2750), Turbo-je…
 </CODE></PRE>
-<p>Now, we add the primary keys that we have identified:</p>
+<p>Now, we can add the identified primary keys:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="ot">&lt;-</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_no_keys <span class="sc">%&gt;%</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(<span class="at">table =</span> airlines, <span class="at">columns =</span> carrier) <span class="sc">%&gt;%</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airports, faa) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(planes, tailnum)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks</span></code></pre></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(planes, tailnum) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(weather, <span class="fu">c</span>(origin, time_hour))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
-#&gt; Primary keys: 3
+#&gt; Primary keys: 4
 #&gt; Foreign keys: 0
 </CODE></PRE>
-<p>Note that we demonstrate both named and positional arguments above.</p>
+<p>Note that {dm} functions work with both named and positional argument
+specification, and compound keys can be specified using a vector
+argument.</p>
 </div>
 <div id="foreign-keys" class="section level2">
 <h2>Foreign Keys</h2>
-<p>To define how our tables are related, we use <code>dm_add_fk()</code> to add foreign keys. In calling <code>dm_add_fk()</code> the <code>table</code> argument is the table that needs a foreign key to link it to a second table. <code>ref_table</code> is the table to be linked to and it needs a primary key already defined for it.</p>
+<p>To define how our tables are related, we use <code>dm_add_fk()</code>
+to add foreign keys. Naturally, this function will deal with two tables:
+a table <em>looking for</em> a reference, and a table that is
+<em>providing</em> the reference. Accordingly, while calling
+<code>dm_add_fk()</code>, the <code>table</code> argument specifies the
+table that needs a foreign key to link it to a second table, and the
+<code>ref_table</code> argument specifies the table to be linked to,
+which needs a primary key already defined for it.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_only_pks,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> flights,</span>
@@ -297,24 +530,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">18</span> minute         FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;double&gt; and `value1` …
 #&gt; <span style="color: #555555;">19</span> time_hour      FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;datetime&lt;America/New_…
 </CODE></PRE>
-<p>Having chosen a column from the successful candidates provided by <code>dm_enum_fk_candidates()</code>, we use the <code>dm_add_fk()</code> function to establish the foreign key linking the tables. In the second call to <code>dm_add_fk()</code> we complete the process for the <code>flights</code> and <code>airlines</code> tables that we started above. The <code>carrier</code> column in the <code>airlines</code> table will be added as the foreign key in <code>flights</code>.</p>
+<p>Having chosen a column from the successful candidates provided by
+<code>dm_enum_fk_candidates()</code>, we use the
+<code>dm_add_fk()</code> function to establish the foreign key linking
+the tables. In the second call to <code>dm_add_fk()</code> we complete
+the process for the <code>flights</code> and <code>airlines</code>
+tables that we started above. The <code>carrier</code> column in the
+<code>airlines</code> table will be added as the foreign key in
+<code>flights</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="ot">&lt;-</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_only_pks <span class="sc">%&gt;%</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(<span class="at">table =</span> flights, <span class="at">columns =</span> tailnum, <span class="at">ref_table =</span> planes) <span class="sc">%&gt;%</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, carrier, airlines) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys</span></code></pre></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, <span class="fu">c</span>(origin, time_hour), weather)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
 #&gt; Columns: 53
-#&gt; Primary keys: 3
-#&gt; Foreign keys: 3
+#&gt; Primary keys: 4
+#&gt; Foreign keys: 4
 </CODE></PRE>
-<p>Having created the required primary and foreign keys to link all the tables together, we now have a relational data model we can work with.</p>
+<p>Having created the required primary and foreign keys to link all the
+tables together, we now have a relational data model we can work
+with.</p>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
-<p>Visualizing a data model is a quick and easy way to verify that we have successfully created the model we were aiming for. We can use <code>dm_draw()</code> at any stage of the process to generate a visual representation of the tables and the links between them:</p>
+<p>Visualizing a data model is a quick and easy way to verify that we
+have successfully created the model we were aiming for. We can use
+<code>dm_draw()</code> at any stage of the process to generate a visual
+representation of the tables and the links between them:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">rankdir =</span> <span class="st">&quot;TB&quot;</span>, <span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
@@ -473,10 +719,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </g>
 </svg>
 
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airlines, carrier) <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airlines, carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -529,153 +774,163 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </g>
 </svg>
 
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, tailnum, planes) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, tailnum, planes) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
  -->
 <!-- Title: %0 Pages: 1 -->
-<svg width="182pt" height="178pt" viewBox="0.00 0.00 182.00 178.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 174)">
+<svg width="230pt" height="170pt" viewBox="0.00 0.00 230.00 170.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 166)">
 <title>%0</title>
 <g id="a_graph0"><a xlink:title="Data Model">
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-174 178,-174 178,4 -4,4"></polygon>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-166 226,-166 226,4 -4,4"></polygon>
 </a>
 </g>
 <!-- airlines -->
 <g id="node1" class="node">
 <title>airlines</title>
-<polygon fill="#efebdd" stroke="transparent" points="5,-149 5,-169 50,-169 50,-149 5,-149"></polygon>
-<text text-anchor="start" x="6.8969" y="-154.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
-<polygon fill="#ffffff" stroke="transparent" points="5,-129 5,-149 50,-149 50,-129 5,-129"></polygon>
-<text text-anchor="start" x="7" y="-135.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="none" stroke="#555555" points="3.5,-128 3.5,-170 50.5,-170 50.5,-128 3.5,-128"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="5,-77 5,-97 50,-97 50,-77 5,-77"></polygon>
+<text text-anchor="start" x="6.8969" y="-82.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
+<polygon fill="#ffffff" stroke="transparent" points="5,-57 5,-77 50,-77 50,-57 5,-57"></polygon>
+<text text-anchor="start" x="7" y="-63.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
+<polygon fill="none" stroke="#555555" points="3.5,-56 3.5,-98 50.5,-98 50.5,-56 3.5,-56"></polygon>
 </g>
 <!-- airports -->
 <g id="node2" class="node">
 <title>airports</title>
-<polygon fill="#efebdd" stroke="transparent" points="76,-141 76,-161 122,-161 122,-141 76,-141"></polygon>
-<text text-anchor="start" x="77.6192" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
-<polygon fill="#ffffff" stroke="transparent" points="76,-121 76,-141 122,-141 122,-121 76,-121"></polygon>
-<text text-anchor="start" x="78" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="none" stroke="#555555" points="75,-120 75,-162 123,-162 123,-120 75,-120"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="4,-141 4,-161 50,-161 50,-141 4,-141"></polygon>
+<text text-anchor="start" x="5.6192" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
+<polygon fill="#ffffff" stroke="transparent" points="4,-121 4,-141 50,-141 50,-121 4,-121"></polygon>
+<text text-anchor="start" x="6" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
+<polygon fill="none" stroke="#555555" points="3,-120 3,-162 51,-162 51,-120 3,-120"></polygon>
 </g>
 <!-- flights -->
 <g id="node3" class="node">
 <title>flights</title>
-<polygon fill="#efebdd" stroke="transparent" points="34,-77 34,-97 80,-97 80,-77 34,-77"></polygon>
-<text text-anchor="start" x="39.1115" y="-82.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
-<polygon fill="#ffffff" stroke="transparent" points="34,-57 34,-77 80,-77 80,-57 34,-57"></polygon>
-<text text-anchor="start" x="35.6115" y="-62.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#555555" points="33,-56 33,-98 81,-98 81,-56 33,-56"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="82,-21 82,-41 128,-41 128,-21 82,-21"></polygon>
+<text text-anchor="start" x="87.1115" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
+<polygon fill="#ffffff" stroke="transparent" points="82,-1 82,-21 128,-21 128,-1 82,-1"></polygon>
+<text text-anchor="start" x="83.6115" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
+<polygon fill="none" stroke="#555555" points="81,0 81,-42 129,-42 129,0 81,0"></polygon>
 </g>
 <!-- planes -->
 <g id="node4" class="node">
 <title>planes</title>
-<polygon fill="#efebdd" stroke="transparent" points="124,-77 124,-97 170,-97 170,-77 124,-77"></polygon>
-<text text-anchor="start" x="129.1178" y="-82.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
-<polygon fill="#ffffff" stroke="transparent" points="124,-57 124,-77 170,-77 170,-57 124,-57"></polygon>
-<text text-anchor="start" x="125.6115" y="-63.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#555555" points="123,-56 123,-98 171,-98 171,-56 123,-56"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="172,-21 172,-41 218,-41 218,-21 172,-21"></polygon>
+<text text-anchor="start" x="177.1178" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
+<polygon fill="#ffffff" stroke="transparent" points="172,-1 172,-21 218,-21 218,-1 172,-1"></polygon>
+<text text-anchor="start" x="173.6115" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
+<polygon fill="none" stroke="#555555" points="171,0 171,-42 219,-42 219,0 171,0"></polygon>
 </g>
 <!-- flights&#45;&gt;planes -->
 <g id="edge1" class="edge">
 <title>flights:tailnum-&gt;planes:tailnum</title>
-<path fill="none" stroke="#555555" d="M80,-67C95.5833,-67 101.8532,-67 113.6529,-67"></path>
-<polygon fill="#555555" stroke="#555555" points="114,-70.5001 124,-67 114,-63.5001 114,-70.5001"></polygon>
+<path fill="none" stroke="#555555" d="M128,-11C143.5833,-11 149.8532,-11 161.6529,-11"></path>
+<polygon fill="#555555" stroke="#555555" points="162,-14.5001 172,-11 162,-7.5001 162,-14.5001"></polygon>
 </g>
 <!-- weather -->
 <g id="node5" class="node">
 <title>weather</title>
-<polygon fill="#efebdd" stroke="transparent" points="43,-8 43,-28 91,-28 91,-8 43,-8"></polygon>
-<text text-anchor="start" x="44.8492" y="-13.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
-<polygon fill="none" stroke="#555555" points="42,-7 42,-29 92,-29 92,-7 42,-7"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="72.5,-85 72.5,-105 173.5,-105 173.5,-85 72.5,-85"></polygon>
+<text text-anchor="start" x="100.8492" y="-90.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
+<polygon fill="#ffffff" stroke="transparent" points="72.5,-65 72.5,-85 173.5,-85 173.5,-65 72.5,-65"></polygon>
+<text text-anchor="start" x="74.0056" y="-71.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">origin, time_hour</text>
+<polygon fill="none" stroke="#555555" points="71,-64 71,-106 174,-106 174,-64 71,-64"></polygon>
 </g>
 </g>
 </svg>
 
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
  -->
 <!-- Title: %0 Pages: 1 -->
-<svg width="152pt" height="200pt" viewBox="0.00 0.00 152.00 200.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 196)">
+<svg width="250pt" height="230pt" viewBox="0.00 0.00 250.00 230.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 226)">
 <title>%0</title>
 <g id="a_graph0"><a xlink:title="Data Model">
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-196 148,-196 148,4 -4,4"></polygon>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-226 246,-226 246,4 -4,4"></polygon>
 </a>
 </g>
 <!-- airlines -->
 <g id="node1" class="node">
 <title>airlines</title>
-<polygon fill="#efebdd" stroke="transparent" points="95,-141 95,-161 140,-161 140,-141 95,-141"></polygon>
-<text text-anchor="start" x="96.8969" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
-<polygon fill="#ffffff" stroke="transparent" points="95,-121 95,-141 140,-141 140,-121 95,-121"></polygon>
-<text text-anchor="start" x="97" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="none" stroke="#555555" points="93.5,-120 93.5,-162 140.5,-162 140.5,-120 93.5,-120"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="168.5,-201 168.5,-221 213.5,-221 213.5,-201 168.5,-201"></polygon>
+<text text-anchor="start" x="170.3969" y="-206.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
+<polygon fill="#ffffff" stroke="transparent" points="168.5,-181 168.5,-201 213.5,-201 213.5,-181 168.5,-181"></polygon>
+<text text-anchor="start" x="170.5" y="-187.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
+<polygon fill="none" stroke="#555555" points="167,-180 167,-222 214,-222 214,-180 167,-180"></polygon>
 </g>
 <!-- airports -->
 <g id="node2" class="node">
 <title>airports</title>
-<polygon fill="#efebdd" stroke="transparent" points="94,-21 94,-41 140,-41 140,-21 94,-21"></polygon>
-<text text-anchor="start" x="95.6192" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
-<polygon fill="#ffffff" stroke="transparent" points="94,-1 94,-21 140,-21 140,-1 94,-1"></polygon>
-<text text-anchor="start" x="96" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="none" stroke="#555555" points="93,0 93,-42 141,-42 141,0 93,0"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="167.5,-81 167.5,-101 213.5,-101 213.5,-81 167.5,-81"></polygon>
+<text text-anchor="start" x="169.1192" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
+<polygon fill="#ffffff" stroke="transparent" points="167.5,-61 167.5,-81 213.5,-81 213.5,-61 167.5,-61"></polygon>
+<text text-anchor="start" x="169.5" y="-67.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
+<polygon fill="none" stroke="#555555" points="166.5,-60 166.5,-102 214.5,-102 214.5,-60 166.5,-60"></polygon>
 </g>
 <!-- flights -->
 <g id="node3" class="node">
 <title>flights</title>
-<polygon fill="#efebdd" stroke="transparent" points="4,-101 4,-121 50,-121 50,-101 4,-101"></polygon>
-<text text-anchor="start" x="9.1115" y="-106.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
-<polygon fill="#ffffff" stroke="transparent" points="4,-81 4,-101 50,-101 50,-81 4,-81"></polygon>
-<text text-anchor="start" x="6" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="#ffffff" stroke="transparent" points="4,-61 4,-81 50,-81 50,-61 4,-61"></polygon>
-<text text-anchor="start" x="5.6115" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="#ffffff" stroke="transparent" points="4,-41 4,-61 50,-61 50,-41 4,-41"></polygon>
-<text text-anchor="start" x="6" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
-<polygon fill="none" stroke="#555555" points="3,-40 3,-122 51,-122 51,-40 3,-40"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="1.5,-141 1.5,-161 102.5,-161 102.5,-141 1.5,-141"></polygon>
+<text text-anchor="start" x="34.1115" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
+<polygon fill="#ffffff" stroke="transparent" points="1.5,-121 1.5,-141 102.5,-141 102.5,-121 1.5,-121"></polygon>
+<text text-anchor="start" x="3.5" y="-126.4" font-family="Times,serif" font-size="14.00" fill="#444444">carrier</text>
+<polygon fill="#ffffff" stroke="transparent" points="1.5,-101 1.5,-121 102.5,-121 102.5,-101 1.5,-101"></polygon>
+<text text-anchor="start" x="3.5" y="-106.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
+<polygon fill="#ffffff" stroke="transparent" points="1.5,-81 1.5,-101 102.5,-101 102.5,-81 1.5,-81"></polygon>
+<text text-anchor="start" x="3.5" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
+<polygon fill="#ffffff" stroke="transparent" points="1.5,-61 1.5,-81 102.5,-81 102.5,-61 1.5,-61"></polygon>
+<text text-anchor="start" x="3.0056" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin, time_hour</text>
+<polygon fill="none" stroke="#555555" points="0,-60 0,-162 103,-162 103,-60 0,-60"></polygon>
 </g>
 <!-- flights&#45;&gt;airlines -->
 <g id="edge1" class="edge">
 <title>flights:carrier-&gt;airlines:carrier</title>
-<path fill="none" stroke="#555555" d="M50,-91C72.787,-91 69.9925,-120.0063 85.1849,-128.6176"></path>
-<polygon fill="#555555" stroke="#555555" points="84.4566,-132.0424 95,-131 86.1078,-125.2399 84.4566,-132.0424"></polygon>
+<path fill="none" stroke="#555555" d="M102.5,-131C126.5668,-131 120.8029,-155.2496 139,-171 147.7956,-178.613 151.0394,-185.8305 158.4157,-189.1277"></path>
+<polygon fill="#555555" stroke="#555555" points="158.0291,-192.6157 168.5,-191 159.307,-185.7333 158.0291,-192.6157"></polygon>
 </g>
 <!-- flights&#45;&gt;airports -->
 <g id="edge2" class="edge">
 <title>flights:origin-&gt;airports:faa</title>
-<path fill="none" stroke="#555555" d="M50,-51C72.2991,-51 69.4778,-22.5234 83.9268,-13.6245"></path>
-<polygon fill="#555555" stroke="#555555" points="85.2055,-16.9083 94,-11 83.4406,-10.1344 85.2055,-16.9083"></polygon>
+<path fill="none" stroke="#555555" d="M102.5,-91C128.9473,-91 135.7361,-75.6875 157.2687,-71.8594"></path>
+<polygon fill="#555555" stroke="#555555" points="157.8281,-75.3248 167.5,-71 157.2421,-68.3494 157.8281,-75.3248"></polygon>
 </g>
 <!-- planes -->
 <g id="node4" class="node">
 <title>planes</title>
-<polygon fill="#efebdd" stroke="transparent" points="94,-81 94,-101 140,-101 140,-81 94,-81"></polygon>
-<text text-anchor="start" x="99.1178" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
-<polygon fill="#ffffff" stroke="transparent" points="94,-61 94,-81 140,-81 140,-61 94,-61"></polygon>
-<text text-anchor="start" x="95.6115" y="-67.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#555555" points="93,-60 93,-102 141,-102 141,-60 93,-60"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="167.5,-141 167.5,-161 213.5,-161 213.5,-141 167.5,-141"></polygon>
+<text text-anchor="start" x="172.6178" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
+<polygon fill="#ffffff" stroke="transparent" points="167.5,-121 167.5,-141 213.5,-141 213.5,-121 167.5,-121"></polygon>
+<text text-anchor="start" x="169.1115" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
+<polygon fill="none" stroke="#555555" points="166.5,-120 166.5,-162 214.5,-162 214.5,-120 166.5,-120"></polygon>
 </g>
 <!-- flights&#45;&gt;planes -->
 <g id="edge3" class="edge">
 <title>flights:tailnum-&gt;planes:tailnum</title>
-<path fill="none" stroke="#555555" d="M50,-71C65.5833,-71 71.8532,-71 83.6529,-71"></path>
-<polygon fill="#555555" stroke="#555555" points="84,-74.5001 94,-71 84,-67.5001 84,-74.5001"></polygon>
+<path fill="none" stroke="#555555" d="M102.5,-111C128.9473,-111 135.7361,-126.3125 157.2687,-130.1406"></path>
+<polygon fill="#555555" stroke="#555555" points="157.2421,-133.6506 167.5,-131 157.8281,-126.6752 157.2421,-133.6506"></polygon>
 </g>
 <!-- weather -->
 <g id="node5" class="node">
 <title>weather</title>
-<polygon fill="#efebdd" stroke="transparent" points="15,-164 15,-184 63,-184 63,-164 15,-164"></polygon>
-<text text-anchor="start" x="16.8492" y="-169.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
-<polygon fill="none" stroke="#555555" points="14,-163 14,-185 64,-185 64,-163 14,-163"></polygon>
+<polygon fill="#efebdd" stroke="transparent" points="140.5,-21 140.5,-41 241.5,-41 241.5,-21 140.5,-21"></polygon>
+<text text-anchor="start" x="168.8492" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
+<polygon fill="#ffffff" stroke="transparent" points="140.5,-1 140.5,-21 241.5,-21 241.5,-1 140.5,-1"></polygon>
+<text text-anchor="start" x="142.0056" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">origin, time_hour</text>
+<polygon fill="none" stroke="#555555" points="139,0 139,-42 242,-42 242,0 139,0"></polygon>
+</g>
+<!-- flights&#45;&gt;weather -->
+<g id="edge4" class="edge">
+<title>flights:origin, time_hour-&gt;weather:origin, time_hour</title>
+<path fill="none" stroke="#555555" d="M102.5,-71C129.8727,-71 114.6101,-25.8792 130.6579,-13.8939"></path>
+<polygon fill="#555555" stroke="#555555" points="131.8935,-17.1789 140.5,-11 129.9188,-10.4631 131.8935,-17.1789"></polygon>
 </g>
 </g>
 </svg>
@@ -683,7 +938,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="integrity-checks" class="section level2">
 <h2>Integrity Checks</h2>
-<p>As well as checking our data model visually, dm can examine the constraints we have created by the addition of keys and verify that they are sensible.</p>
+<p>As well as checking our data model visually, dm can examine the
+constraints we have created by the addition of keys and verify that they
+are sensible.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> No constraints defined.
@@ -699,47 +956,77 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #BBBB00;">!</span> Unsatisfied constraints:
 </CODE></PRE>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #BB0000;">•</span> Table `flights`: foreign key `tailnum` into table `planes`: values of `flights$tailnum` not in `planes$tailnum`: N725MQ (575), N722MQ (513), N723MQ (507), N713MQ (483), N735MQ (396), …
+#&gt; <span style="color: #BB0000;">•</span> Table `flights`: foreign key `origin`, `time_hour` into table `weather`: values of `flights$origin`, `flights$time_hour` not in `weather$origin`, `weather$time_hour`: EWR, 2013-10-23 06:00:00 (34), EWR, 2013-08-19 17:00:00 (26), EWR, 2013-12-31 06:00:00 (26), EWR, 2013-12-31 07:00:00 (26), JFK, 2013-08-19 17:00:00 (26), …
 </CODE></PRE>
-<p>The results are presented in a human-readable form, and available as a tibble for programmatic inspection.</p>
+<p>The results are presented in a human-readable form, and available as
+a tibble for programmatic inspection.</p>
 </div>
 <div id="programming" class="section level2">
 <h2>Programming</h2>
-<p>Helper functions are available to access details on keys and check results.</p>
-<p><code>dm_get_all_pks()</code> returns a data frame with our primary keys:</p>
+<p>Helper functions are available to access details on keys and check
+results.</p>
+<p>A data frame of primary keys is retrieved with
+<code>dm_get_all_pks()</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_pks</span>()</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 × 2</span>
-#&gt;   table    pk_col 
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span> 
-#&gt; <span style="color: #555555;">1</span> airlines carrier
-#&gt; <span style="color: #555555;">2</span> airports faa    
-#&gt; <span style="color: #555555;">3</span> planes   tailnum
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 × 2</span>
+#&gt;   table    pk_col           
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>           
+#&gt; <span style="color: #555555;">1</span> airlines carrier          
+#&gt; <span style="color: #555555;">2</span> airports faa              
+#&gt; <span style="color: #555555;">3</span> planes   tailnum          
+#&gt; <span style="color: #555555;">4</span> weather  origin, time_hour
 </CODE></PRE>
-<p>A data frame of foreign keys is retrieved with <code>dm_get_all_fks()</code>:</p>
+<p>Similarly, a data frame of foreign keys is retrieved with
+<code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>()</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 × 5</span>
-#&gt;   child_table child_fk_cols parent_table parent_key_cols on_delete
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>          <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    
-#&gt; <span style="color: #555555;">1</span> flights     carrier       airlines     carrier         no_action
-#&gt; <span style="color: #555555;">2</span> flights     origin        airports     faa             no_action
-#&gt; <span style="color: #555555;">3</span> flights     tailnum       planes       tailnum         no_action
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 × 5</span>
+#&gt;   child_table child_fk_cols     parent_table parent_key_cols   on_delete
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    
+#&gt; <span style="color: #555555;">1</span> flights     carrier           airlines     carrier           no_action
+#&gt; <span style="color: #555555;">2</span> flights     origin            airports     faa               no_action
+#&gt; <span style="color: #555555;">3</span> flights     tailnum           planes       tailnum           no_action
+#&gt; <span style="color: #555555;">4</span> flights     origin, time_hour weather      origin, time_hour no_action
 </CODE></PRE>
-<p>We can use <code>tibble::as_tibble()</code> on the result of <code>dm_examine_constraints()</code> to programmatically inspect which constraints are not satisfied:</p>
+<p>We can use <code>tibble::as_tibble()</code> on the result of
+<code>dm_examine_constraints()</code> to programmatically inspect which
+constraints are not satisfied:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 6 × 6</span>
-#&gt;   table    kind  columns ref_table is_key problem                          
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                            
-#&gt; <span style="color: #555555;">1</span> flights  FK    tailnum planes    FALSE  <span style="color: #555555;">&quot;</span>values of `flights$tailnum` not…
-#&gt; <span style="color: #555555;">2</span> airlines PK    carrier <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                               
-#&gt; <span style="color: #555555;">3</span> airports PK    faa     <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                               
-#&gt; <span style="color: #555555;">4</span> planes   PK    tailnum <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                               
-#&gt; <span style="color: #555555;">5</span> flights  FK    carrier airlines  TRUE   <span style="color: #555555;">&quot;&quot;</span>                               
-#&gt; <span style="color: #555555;">6</span> flights  FK    origin  airports  TRUE   <span style="color: #555555;">&quot;&quot;</span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 8 × 6</span>
+#&gt;   table    kind  columns           ref_table is_key problem                
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                  
+#&gt; <span style="color: #555555;">1</span> flights  FK    tailnum           planes    FALSE  <span style="color: #555555;">&quot;</span>values of `flights$ta…
+#&gt; <span style="color: #555555;">2</span> flights  FK    origin, time_hour weather   FALSE  <span style="color: #555555;">&quot;</span>values of `flights$or…
+#&gt; <span style="color: #555555;">3</span> airlines PK    carrier           <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
+#&gt; <span style="color: #555555;">4</span> airports PK    faa               <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
+#&gt; <span style="color: #555555;">5</span> planes   PK    tailnum           <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
+#&gt; <span style="color: #555555;">6</span> weather  PK    origin, time_hour <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
+#&gt; <span style="color: #555555;">7</span> flights  FK    carrier           airlines  TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
+#&gt; <span style="color: #555555;">8</span> flights  FK    origin            airports  TRUE   <span style="color: #555555;">&quot;&quot;</span>
 </CODE></PRE>
 </div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>In this tutorial, we have demonstrated how simple it is to create
+relational data models from local data frames using {dm}, including
+setting primary and foreign keys and visualizing the resulting
+relational model.</p>
+</div>
+<div id="further-reading" class="section level2">
+<h2>Further reading</h2>
+<p><code>vignette(&quot;howto-dm-db&quot;)</code> – This article covers accessing
+and working with RDBMSs within your R session, including manipulating
+data, filling in missing relationships between tables, getting data out
+of the RDBMS and into your model, and deploying your data model to an
+RDBMS.</p>
+<p><code>vignette(&quot;howto-dm-theory&quot;)</code> – Do you know all about data
+frames but very little about relational data models? This quick
+introduction will walk you through the key similarities and differences,
+and show you how to move from individual data frames to a relational
+data model.</p>
 </div>
 
 

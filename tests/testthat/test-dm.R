@@ -41,7 +41,7 @@ test_that("'compute.dm()' computes tables on DB", {
   skip("Needs https://github.com/tidyverse/dbplyr/pull/649")
 
   def <-
-    dm_for_filter_sqlite() %>%
+    dm_for_filter_duckdb() %>%
     dm_filter(tf_1, a > 3) %>%
     {
       suppress_mssql_message(compute(.))
@@ -56,7 +56,7 @@ test_that("'compute.zoomed_dm()' computes tables on DB", {
   skip("Needs https://github.com/tidyverse/dbplyr/pull/649")
 
   zoomed_dm_for_compute <-
-    dm_for_filter_sqlite() %>%
+    dm_for_filter_duckdb() %>%
     dm_zoom_to(tf_1) %>%
     mutate(c = a + 1)
 
@@ -154,7 +154,6 @@ test_that("`pull_tbl()`-methods work (2)", {
 })
 
 test_that("numeric subsetting works", {
-
   # check specifically for the right output in one case
   expect_equivalent_tbl(dm_for_filter()[[4]], tf_4())
 
@@ -346,5 +345,54 @@ test_that("glimpse.dm() works", {
           gdsjgiodsjgdisogjdsiogjdsigjsdiogjisdjgiodsjgiosdjgiojsdiogjgrjihjrehoierjhiorejhrieojhreiojhieorhjioerjhierjhioerjhioerjhioerjiohjeriosdiogjsdjigjsd = iris_1
         )
     )
+
+    # in case no primary keys are present, nothing about primary keys should be printed
+    dm_nycflights13() %>%
+      dm_select_tbl(weather) %>%
+      dm_select(weather, -origin) %>%
+      glimpse()
+  })
+})
+
+test_that("glimpse.zoomed_dm() works", {
+  skip_if_remote_src()
+  expect_snapshot({
+    # doesn't have foreign keys to print
+    dm_nycflights13() %>%
+      dm_zoom_to(airports) %>%
+      glimpse()
+
+    # has foreign keys to print
+    dm_nycflights13() %>%
+      dm_zoom_to(flights) %>%
+      glimpse(width = 100)
+
+    # if any primary key has been removed, no primary key is displayed
+    dm_nycflights13() %>%
+      dm_zoom_to(weather) %>%
+      select(-origin) %>%
+      glimpse()
+
+    # anticipate primary keys being renamed by users
+    dm_nycflights13() %>%
+      dm_zoom_to(weather) %>%
+      rename(origin_location = origin) %>%
+      glimpse()
+
+    # if any foreign key has been removed, corresponding composite key is not displayed
+    dm_nycflights13() %>%
+      dm_zoom_to(flights) %>%
+      select(-carrier) %>%
+      glimpse()
+    dm_nycflights13() %>%
+      dm_zoom_to(flights) %>%
+      select(-origin) %>%
+      glimpse()
+
+    # anticipate foreign keys being renamed by users
+    dm_nycflights13() %>%
+      dm_zoom_to(flights) %>%
+      rename(origin_location = origin) %>%
+      glimpse()
   })
 })

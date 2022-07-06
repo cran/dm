@@ -24,7 +24,7 @@ check_if_subset <- function(t1, c1, t2, c2) {
 #' @keywords internal
 #' @export
 check_cardinality <- function(parent_table, pk_column, child_table, fk_column) {
-  deprecate_soft("0.1.0", "dm::examine_cardinality()", "dm::examine_cardinality()")
+  deprecate_soft("0.1.0", "dm::check_cardinality()", "dm::examine_cardinality()")
   pt <- enquo(parent_table)
   pkc <- enexpr(pk_column)
   ct <- enquo(child_table)
@@ -78,7 +78,7 @@ default_local_src <- function() {
 #' @export
 cdm_get_con <- function(x) {
   deprecate_soft("0.1.0", "dm::cdm_get_con()", "dm::dm_get_con()")
-  dm_get_con(x = x)
+  dm_get_con(dm = x)
 }
 
 #' @rdname deprecated
@@ -94,7 +94,7 @@ cdm_get_tables <- function(x) {
 #' @export
 cdm_get_filter <- function(x) {
   deprecate_soft("0.1.0", "dm::cdm_get_filter()", "dm::dm_get_filters()")
-  dm_get_filters(x = x)
+  dm_get_filters(dm = x)
 }
 
 #' @rdname deprecated
@@ -392,7 +392,7 @@ cdm_get_referencing_tables <- function(dm, table) {
 #' @export
 cdm_learn_from_db <- function(dest) {
   deprecate_soft("0.1.0", "dm::cdm_learn_from_db()", "dm::dm_from_src()")
-  dm_from_src(dest)
+  dm_from_con(con_from_src_or_con(dest))
 }
 
 #' @rdname deprecated

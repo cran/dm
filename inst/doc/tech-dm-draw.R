@@ -4,7 +4,7 @@ source("setup/setup.R")
 ## ------------------------------------------------------------------------
 library(dm)
 library(dplyr)
-flights_dm_w_many_keys <- dm_nycflights13(color = FALSE)
+flights_dm_w_many_keys <- dm_nycflights13(cycle = TRUE, color = FALSE)
 flights_dm_w_many_keys
 
 ## ------------------------------------------------------------------------

@@ -96,17 +96,6 @@ dm_upserted <-
 dm_upserted$parent
 dm_upserted$child
 
-## ------------------------------------------------------------------------
-dm_trunc_in <-
-  demo_sql %>%
-  dm_select_tbl(child)
-dm_trunc_in
-dm_trunc_out <-
-  demo_sql %>%
-  dm_rows_truncate(dm_trunc_in, in_place = TRUE)
-
-demo_sql$child
-
 ## ----disconnect----------------------------------------------------------
 DBI::dbDisconnect(sqlite_db)
 

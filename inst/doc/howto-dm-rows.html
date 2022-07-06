@@ -12,11 +12,23 @@
 
 <meta name="author" content="James Wondrasek" />
 
-<meta name="date" content="2022-04-08" />
+<meta name="date" content="2022-07-06" />
 
-<title>Insert, update or remove rows in a database dm</title>
+<title>Insert, update, or remove rows in a database</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -127,7 +139,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -139,36 +331,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<h1 class="title toc-ignore">Insert, update or remove rows in a database dm</h1>
+<h1 class="title toc-ignore">Insert, update, or remove rows in a
+database</h1>
 <h4 class="author">James Wondrasek</h4>
-<h4 class="date">2022-04-08</h4>
+<h4 class="date">2022-07-06</h4>
 
 
 
-<div id="intro" class="section level2">
-<h2>Introduction</h2>
-<p>This tutorial introduces the methods {dm} provides for modifying the data in the tables of a relational model. There are 6 methods:</p>
+<p>This tutorial introduces the methods {dm} provides for modifying the
+data in the tables of a relational model. There are 6 methods:</p>
 <ul>
-<li><a href="#insert"><code>dm_rows_insert()</code></a> - adds new rows</li>
-<li><a href="#update"><code>dm_rows_update()</code></a> - changes values in rows</li>
-<li><a href="#patch"><code>dm_rows_patch()</code></a> - fills in missing values</li>
-<li><a href="#upsert"><code>dm_rows_upsert()</code></a> - adds new rows or changes values if pre-existing</li>
-<li><a href="#delete"><code>dm_rows_delete()</code></a> - deletes rows</li>
-<li><a href="#truncate"><code>dm_rows_truncate()</code></a> - removes all rows, leaving table structure intact</li>
+<li><a href="#insert"><code>dm_rows_insert()</code></a> - adds new
+unique rows</li>
+<li><a href="#insert"><code>dm_rows_append()</code></a> - adds new rows
+unconditionally</li>
+<li><a href="#update"><code>dm_rows_update()</code></a> - changes values
+in rows</li>
+<li><a href="#patch"><code>dm_rows_patch()</code></a> - fills in missing
+values</li>
+<li><a href="#upsert"><code>dm_rows_upsert()</code></a> - adds new rows
+or changes values if pre-existing</li>
+<li><a href="#delete"><code>dm_rows_delete()</code></a> - deletes
+rows</li>
 </ul>
-</div>
 <div id="the-dm_rows_-process" class="section level2">
 <h2>The dm_rows_* process</h2>
-<p>All six methods take the same arguments and using them follows the same process:</p>
+<p>All six methods take the same arguments and using them follows the
+same process:</p>
 <ol style="list-style-type: decimal">
-<li>Create a temporary <em>changeset dm</em> that defines the intended changes on the RDBMS</li>
-<li>If desired, simulate changes with <code>in_place = FALSE</code> to double-check</li>
+<li>Create a temporary <em>changeset dm</em> object that defines the
+intended changes on the RDBMS</li>
+<li>If desired, simulate changes with <code>in_place = FALSE</code> to
+double-check</li>
 <li>Apply changes with <code>in_place = TRUE</code>.</li>
 </ol>
-<p>To start, a dm object is created containing the tables, and rows, that you want to change. This changeset dm is then copied into the same source as the dm you want to modify. With the dm in the same RDBMS as the destination dm, you call the appropriate method, such as <code>dm_rows_insert()</code>, to make your planned changes, along with an argument of <code>in_place = FALSE</code> so you can confirm you achieve the changes that you want.</p>
-<p>This verification can be done visually, looking at row counts and the like, or using {dm}’s constraint checking method, <code>dm_examine_constraints()</code>. The biggest danger is damaging key relations between data spread across multiple tables by deleting or duplicating rows and their keys. <code>dm_examine_constraints()</code> will catch errors where primary keys are duplicated or foreign keys do not have a matching primary key (unless the foreign key value is <code>NA</code>).</p>
-<p>With the changes confirmed, you execute the method again, this time with the argument <code>in_place = TRUE</code> to make the changes permanent. Note that <code>in_place = FALSE</code> is the default: you must opt in to actually change data on the database.</p>
-<p>Each method has its own requirements in order to maintain database consistency. These involve constraints on primary key values as they are how rows are identified.</p>
+<p>To start, a <code>dm</code> object is created containing the tables
+and rows that you want to change. This changeset <code>dm</code> is then
+copied into the same source as the dm you want to modify. With the dm in
+the same RDBMS as the destination dm, you call the appropriate method,
+such as <code>dm_rows_insert()</code>, to make your planned changes,
+along with an argument of <code>in_place = FALSE</code> so you can
+confirm you achieve the changes that you want.</p>
+<p>This verification can be done visually, looking at row counts and the
+like, or using {dm}’s constraint checking method,
+<code>dm_examine_constraints()</code>. The biggest danger is damaging
+key relations between data spread across multiple tables by deleting or
+duplicating rows and their keys. <code>dm_examine_constraints()</code>
+will catch errors where primary keys are duplicated or foreign keys do
+not have a matching primary key (unless the foreign key value is
+<code>NA</code>).</p>
+<p>With the changes confirmed, you execute the method again, this time
+with the argument <code>in_place = TRUE</code> to make the changes
+permanent. Note that <code>in_place = FALSE</code> is the default: you
+must opt in to actually change data on the database.</p>
+<p>Each method has its own requirements in order to maintain database
+consistency. These involve constraints on primary key values that
+uniquely identify rows.</p>
 <table>
 <colgroup>
 <col width="36%" />
@@ -183,35 +401,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td><code>dm_rows_insert()</code></td>
-<td>The primary keys must differ from existing records.</td>
+<td>Records with existing primary keys are silently ignored (via
+<code>dplyr::rows_insert(conflict = &quot;ignore&quot;)</code>).</td>
 </tr>
 <tr class="even">
+<td><code>dm_rows_append()</code></td>
+<td>All records are inserted, the underlying database might check for
+uniqueness of primary keys (and fail the operation) if a constraint is
+set.</td>
+</tr>
+<tr class="odd">
 <td><code>dm_rows_update()</code></td>
 <td>Primary keys must match for all records to be updated.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>dm_rows_patch()</code></td>
-<td>Updates missing values in existing records. Primary keys must match for all records to be patched.</td>
-</tr>
-<tr class="even">
-<td><code>dm_rows_upsert()</code></td>
-<td>Updates existing records and adds new records, based on the primary key.</td>
+<td>Updates missing values in existing records. Primary keys must match
+for all records to be patched.</td>
 </tr>
 <tr class="odd">
-<td><code>dm_rows_delete()</code></td>
-<td>Removes matching records based on the primary key.</td>
+<td><code>dm_rows_upsert()</code></td>
+<td>Updates existing records and adds new records, based on the primary
+key.</td>
 </tr>
 <tr class="even">
-<td><code>dm_rows_truncate()</code></td>
-<td>Removes all records, only for tables in the changeset dm.</td>
+<td><code>dm_rows_delete()</code></td>
+<td>Removes matching records based on the primary key. Primary keys must
+match for all records to be deleted.</td>
 </tr>
 </tbody>
 </table>
-<p>To ensure the integrity of all relations during the process, all methods automatically determine the correct processing order for the tables involved. For operations that create records, parent tables are processed before child tables. For <code>dm_rows_delete()</code> and <code>dm_rows_truncate()</code>, child tables are processed before their parent tables. For more details on this see <code>vignette(&quot;howto-dm-theory&quot;)</code> and <code>vignette(&quot;howto-dm-db&quot;)</code>.</p>
+<p>To ensure the integrity of all relations during the process, all
+methods automatically determine the correct processing order for the
+tables involved. For operations that create records, parent tables
+(which hold primary keys) are processed before child tables (which hold
+foreign keys). For <code>dm_rows_delete()</code>, child tables are
+processed before their parent tables. Note that the user is still
+responsible for setting transactions to ensure integrity of operations
+across multiple tables. For more details on this see
+<code>vignette(&quot;howto-dm-theory&quot;)</code> and
+<code>vignette(&quot;howto-dm-db&quot;)</code>.</p>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
-<p>To demonstrate the use of these table modifying methods we will create a simple dm object with two tables linked by a foreign key. Note the foreign key of <code>NA</code> in the <code>child</code> table.</p>
+<p>To demonstrate the use of these table modifying methods, we will
+create a simple <code>dm</code> object with two tables linked by a
+foreign key. Note that the <code>child</code> table has a foreign key
+missing (<code>NA</code>).</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">pk =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
@@ -285,29 +521,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </g>
 </svg>
 
-<p>{dm} doesn’t check your key values when you create a dm, we add this check:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>{dm} doesn’t check your key values when you create a dm, we add this
+check:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_examine_constraints</span>(demo_dm)</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> All constraints satisfied.
 </CODE></PRE>
-<p>Then we copy <code>demo_dm</code> into an SQLite database. Note: the default for the method used, <code>copy_dm_to()</code>, is to create temporary tables that will be automatically deleted when your session ends. As <code>demo_sql</code> will be the destination dm for the examples, the argument <code>temporary = FALSE</code> is used to make this distinction apparent.</p>
+<p>Then we copy <code>demo_dm</code> into an SQLite database. Note: the
+default for the method used, <code>copy_dm_to()</code>, is to create
+temporary tables that will be automatically deleted when your session
+ends. As <code>demo_sql</code> will be the destination dm for the
+examples, the argument <code>temporary = FALSE</code> is used to make
+this distinction apparent.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sqlite_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>demo_sql <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(sqlite_db, demo_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>demo_sql</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.38.0 []
+#&gt; src:  sqlite 3.38.5 []
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `parent`, `child`
 #&gt; Columns: 5
 #&gt; Primary keys: 2
 #&gt; Foreign keys: 1
 </CODE></PRE>
-<p>{dm}’s table modification methods can be piped together to create a repeatable sequence of operations that returns a dm incorporating all the changes required. This is a common use case for {dm} – building by hand a sequence of operations using temporary results until it is complete and correct, then committing the result.</p>
+<p>{dm}’s table modification methods can be piped together to create a
+repeatable sequence of operations that returns a dm incorporating all
+the changes required. This is a common use case for {dm} – manually
+building a sequence of operations using temporary results until it is
+complete and correct, and then committing the result.</p>
 </div>
 <div id="insert" class="section level2">
 <h2><code>dm_rows_insert()</code></h2>
-<p>To demonstrate <code>dm_rows_insert()</code> we create a dm with tables containing the rows to insert and copy it to <code>sqlite_db</code>, the same source as <code>demo_sql</code>. For all of the <code>dm_rows_*</code> methods the source and destination dm objects must be in the same RDBMS. You will get an error message if this is not the case.</p>
-<p>The code below adds <code>parent</code> and <code>child</code> table entries for the letter “D”. First, the changeset dm is created and temporarily copied to the database:</p>
+<p>To demonstrate <code>dm_rows_insert()</code>, we create a dm with
+tables containing the rows to insert and copy it to
+<code>sqlite_db</code>, the same source as <code>demo_sql</code>. For
+all of the <code>dm_rows_*</code> methods, the source and destination
+<code>dm</code> objects must be in the same RDBMS. You will get an error
+message if this is not the case.</p>
+<p>The code below adds <code>parent</code> and <code>child</code> table
+entries for the letter “D”. First, the changeset dm is created and
+temporarily copied to the database:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>new_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>new_parent</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 × 2</span>
@@ -325,15 +578,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dm_insert_in <span class="ot">&lt;-</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p>The changeset dm is then used as an argument to <code>dm_rows_insert()</code>.</p>
+<p>The changeset dm is then used as an argument to
+<code>dm_rows_insert()</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span></code></pre></div>
-<p>This gives us a warning that changes will not be persisted. Inspecting the <code>child</code> table of the resulting <code>dm_insert_out</code> and <code>demo_sql</code>, we can see that’s exactly what happened. {dm} returned to us a dm object with our inserted rows in place, but the underlying database has not changed.</p>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Result is returned as a dm object with lazy tables. Use `in_place = FALSE`</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; to mute this message, or `in_place = TRUE` to write to the underlying</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; tables.</span></span></code></pre></div>
+<p>This gives us a warning that changes will not persist (i.e., they are
+temporary). Inspecting the <code>child</code> table of the resulting
+<code>dm_insert_out</code> and <code>demo_sql</code>, we can see that’s
+exactly what happened. {dm} returned to us a dm object with our inserted
+rows in place, but the underlying database has not changed.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   [?? x 3]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0 []</span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   SQL [4 x 3]</span>
+#&gt; <span style="color: #555555;"># Database: sqlite 3.38.5 []</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> a         1     1
@@ -342,22 +602,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">4</span> d         4     4
 </CODE></PRE>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0 []</span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [3 x 3]</span>
+#&gt; <span style="color: #555555;"># Database: sqlite 3.38.5 []</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> a         1     1
 #&gt; <span style="color: #555555;">2</span> b         2     1
 #&gt; <span style="color: #555555;">3</span> c         3    <span style="color: #BB0000;">NA</span>
 </CODE></PRE>
-<p>We repeat the operation, this time with the argument <code>in_place = TRUE</code> and the changes now persist in <code>demo_sql</code>.</p>
+<p>We repeat the operation, this time with the argument
+<code>in_place = TRUE</code> and the changes now persist in
+<code>demo_sql</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0 []</span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [4 x 3]</span>
+#&gt; <span style="color: #555555;"># Database: sqlite 3.38.5 []</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> a         1     1
@@ -368,7 +630,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="update" class="section level2">
 <h2><code>dm_rows_update()</code></h2>
-<p><code>dm_rows_update()</code> works the same as <code>dm_rows_insert()</code>. We create the dm object and copy it to the same source as the destination. Here we will change the foreign key for the row in <code>child</code> containing “b” to point to the correct row in <code>parent</code>. And we will persist the changes.</p>
+<p><code>dm_rows_update()</code> works the same as
+<code>dm_rows_insert()</code>. We create the dm object and copy it to
+the same source as the destination. Here we will change the foreign key
+for the row in <code>child</code> containing “b” to point to the correct
+row in <code>parent</code>. And we will persist the changes.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>updated_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;b&quot;</span>, <span class="at">pk =</span> <span class="dv">2</span>, <span class="at">fk =</span> <span class="dv">2</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>updated_child</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 × 3</span>
@@ -385,8 +651,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_update</span>(dm_update_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0 []</span>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [4 x 3]</span>
+#&gt; <span style="color: #555555;"># Database: sqlite 3.38.5 []</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> a         1     1
@@ -397,7 +663,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="delete" class="section level2">
 <h2><code>dm_rows_delete()</code></h2>
-<p><code>dm_rows_delete()</code> is not currently implemented to work with an RDBMS, so we will shift our demonstrations back to the local R environment. We’ve made changes to <code>demo_sql</code> so we use <code>collect()</code> to copy the current tables out of SQLite. Note that persistence is not a concern with local dm objects. Every operation returns a new dm object containing the changes made.</p>
+<p><code>dm_rows_delete()</code> is not currently implemented to work
+with an RDBMS, so we will shift our demonstrations back to the local R
+environment. We’ve made changes to <code>demo_sql</code>, so we use
+<code>collect()</code> to copy the current tables out of SQLite. Note
+that persistence is not a concern for <em>local</em> <code>dm</code>
+objects. Every operation returns a new dm object containing the changes
+made.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>local_dm <span class="ot">&lt;-</span> <span class="fu">collect</span>(demo_sql)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>local_dm<span class="sc">$</span>parent</span></code></pre></div>
@@ -421,12 +693,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dm_deleted <span class="ot">&lt;-</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_delete</span>(local_dm, .)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span></code></pre></div>
-<PRE class="fansi fansi-message"><CODE>#&gt; Ignoring extra columns: value, fk
-#&gt; Ignoring extra columns: value
-</CODE></PRE>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dm_deleted<span class="sc">$</span>child</span></code></pre></div>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Result is returned as a dm object with lazy tables. Use `in_place = FALSE` to mute this message, or `in_place = TRUE` to write to the underlying tables.</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Ignoring extra `y` columns: value, fk</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Ignoring extra `y` columns: value</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>dm_deleted<span class="sc">$</span>child</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 × 3</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
@@ -437,20 +708,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="patch" class="section level2">
 <h2><code>dm_rows_patch()</code></h2>
-<p><code>dm_rows_patch()</code> updates missing values in existing records. We use it here to fix the missing foreign key in the <code>child</code> table.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>patched_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;c&quot;</span>, <span class="at">pk =</span> <span class="dv">3</span>, <span class="at">fk =</span> <span class="dv">3</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>patched_child</span></code></pre></div>
+<p><code>dm_rows_patch()</code> updates missing values in existing
+records. We use it here to fix the missing foreign key in the
+<code>child</code> table.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>patched_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;c&quot;</span>, <span class="at">pk =</span> <span class="dv">3</span>, <span class="at">fk =</span> <span class="dv">3</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>patched_child</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 × 3</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> c         3     3
 </CODE></PRE>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dm_patched <span class="ot">&lt;-</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> patched_child) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_patch</span>(dm_deleted, .)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>dm_patched<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dm_patched <span class="ot">&lt;-</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> patched_child) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_patch</span>(dm_deleted, .)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Result is returned as a dm object with lazy tables. Use `in_place = FALSE`</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; to mute this message, or `in_place = TRUE` to write to the underlying</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; tables.</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>dm_patched<span class="sc">$</span>child</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 3 × 3</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
@@ -461,89 +736,88 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="upsert" class="section level2">
 <h2><code>dm_rows_upsert()</code></h2>
-<p><code>dm_rows_upsert()</code> updates rows with supplied values if they exist or inserts the supplied values as new rows if they don’t. In this example we add the letter “D” back to our dm, and update the foreign key for “b”.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>upserted_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>upserted_parent</span></code></pre></div>
+<p><code>dm_rows_upsert()</code> updates rows with supplied values if
+they exist or inserts the supplied values as new rows if they don’t. In
+this example we add the letter “D” back to our dm, and update the
+foreign key for “b”.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>upserted_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>upserted_parent</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 × 2</span>
 #&gt;   value    pk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> D         4
 </CODE></PRE>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>upserted_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="at">pk =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>upserted_child</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>upserted_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="at">pk =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>upserted_child</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 2 × 3</span>
 #&gt;   value    pk    fk
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> b         2     3
 #&gt; <span style="color: #555555;">2</span> d         4     4
 </CODE></PRE>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dm_upserted <span class="ot">&lt;-</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> upserted_parent, <span class="at">child =</span> upserted_child) <span class="sc">%&gt;%</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_upsert</span>(dm_patched, .)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Not persisting, use `in_place = FALSE` to turn off this message.</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>parent</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dm_upserted <span class="ot">&lt;-</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> upserted_parent, <span class="at">child =</span> upserted_child) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_upsert</span>(dm_patched, .)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Result is returned as a dm object with lazy tables. Use `in_place = FALSE`</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; to mute this message, or `in_place = TRUE` to write to the underlying</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; tables.</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>parent</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 × 2</span>
 #&gt;   value    pk
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
 #&gt; <span style="color: #555555;">1</span> A         1
 #&gt; <span style="color: #555555;">2</span> B         2
 #&gt; <span style="color: #555555;">3</span> C         3
 #&gt; <span style="color: #555555;">4</span> D         4
 </CODE></PRE>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>child</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 × 3</span>
 #&gt;   value    pk    fk
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
+#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;">1</span> a         1     1
 #&gt; <span style="color: #555555;">2</span> b         2     3
 #&gt; <span style="color: #555555;">3</span> c         3     3
 #&gt; <span style="color: #555555;">4</span> d         4     4
 </CODE></PRE>
-</div>
-<div id="truncate" class="section level2">
-<h2><code>dm_rows_truncate()</code></h2>
-<p><code>dm_rows_truncate()</code> deletes all the rows in a table while leaving all other related information intact, including column names, column types, and key relations. The function derives its name from the SQL <code>TRUNCATE TABLE</code> statement, so we will return to our SQLite database to demonstrate its use. The example below truncates only the <code>child</code> table. Note how a modified version of the destination dm is used as “changeset dm”: the rows in the changeset dm do not matter here.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dm_trunc_in <span class="ot">&lt;-</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(child)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>dm_trunc_in</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.38.0 []
-#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
-#&gt; Tables: `child`
-#&gt; Columns: 3
-#&gt; Primary keys: 1
-#&gt; Foreign keys: 0
-</CODE></PRE>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dm_trunc_out <span class="ot">&lt;-</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_truncate</span>(dm_trunc_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`child`&gt; [?? x 3]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0 []</span>
-#&gt; <span style="color: #555555;"># … with 3 variables: value &lt;chr&gt;, pk &lt;int&gt;, fk &lt;dbl&gt;</span>
-</CODE></PRE>
 <p>When done, do not forget to disconnect:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(sqlite_db)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(sqlite_db)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>The <code>dm_rows_*</code> methods give you row-level granularity over the modifications you need to make to your relational model. By using the <code>in_place</code> argument they all share you can construct and verify your modifications before committing them. There are a few limitations, as mentioned in the tutorial, but these will be addressed in future updates to {dm}.</p>
+<p>The <code>dm_rows_*</code> methods give you row-level granularity
+over the modifications you need to make to your relational model. Using
+the common <code>in_place</code> argument, they all can construct and
+verify your modifications before committing them. There are a few
+limitations, as mentioned in the tutorial, but these will be addressed
+in future updates to {dm}.</p>
 </div>
-<div id="next-steps" class="section level2">
-<h2>Next Steps</h2>
-<p>If this tutorial answered some questions, but opened others, these resources might be of assistance.</p>
-<p>Is your data in an RDBMS? <code>vignette(&quot;howto-dm-db&quot;)</code> offers a detailed look at working with an existing relational data model.</p>
-<p>If your data is in data frames, then you may want to read <code>vignette(&quot;howto-dm-df&quot;)</code> next.</p>
-<p>If you feel you need to know more about relational data models in order to get the most out of dm, check out <code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
-<p>If you’re familiar with relational data models but want to know how to work with them in dm, then any of <code>vignette(&quot;tech-dm-join&quot;)</code>, <code>vignette(&quot;tech-dm-filter&quot;)</code>, or <code>vignette(&quot;tech-dm-zoom&quot;)</code> is a good next step.</p>
+<div id="further-reading" class="section level2">
+<h2>Further Reading</h2>
+<p>If this tutorial answered some questions, but opened others, these
+resources might be of assistance.</p>
+<p>Is your data in an RDBMS? <code>vignette(&quot;howto-dm-db&quot;)</code> offers
+a detailed look at working with an existing relational data model.</p>
+<p>If your data is in data frames, then you may want to read
+<code>vignette(&quot;howto-dm-df&quot;)</code> next.</p>
+<p>If you feel you need to know more about relational data models in
+order to get the most out of dm, check out
+<code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
+<p>If you’re familiar with relational data models but want to know how
+to work with them in dm, then any of
+<code>vignette(&quot;tech-dm-join&quot;)</code>,
+<code>vignette(&quot;tech-dm-filter&quot;)</code>, or
+<code>vignette(&quot;tech-dm-zoom&quot;)</code> is a good next step.</p>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
-<li id="fn1"><p>Be aware that when using <code>dm_examine_constraints()</code> NULL (<code>NA</code>) foreign keys are allowed and will be counted as a match. In some cases this doesn’t make sense and non-NULL columns should be enforced by the RDBMS. Currently {dm} does not specify or check non-NULL constraints for columns.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Be aware that when using
+<code>dm_examine_constraints()</code>, missing (denoted by
+<code>NULL</code> in SQL, while <code>NA</code> in R) foreign keys are
+allowed and will be counted as a match. In some cases this doesn’t make
+sense and non-NULL columns should be enforced by the RDBMS. Currently,
+{dm} does not specify or check non-NULL constraints for columns.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

@@ -1,21 +1,26 @@
 ## ----setup, include = FALSE----------------------------------------------
 source("setup/setup.R")
 
-## ----connect-------------------------------------------------------------
+## ----connect, eval = FALSE-----------------------------------------------
+#  library(RMariaDB)
+#  
+#  fin_db <- dbConnect(
+#    MariaDB(),
+#    username = "guest",
+#    password = "relational",
+#    dbname = "Financial_ijs",
+#    host = "relational.fit.cvut.cz"
+#  )
+
+## ----connect-real, show = FALSE------------------------------------------
 library(RMariaDB)
 
-fin_db <- dbConnect(
-  MariaDB(),
-  username = 'guest',
-  password = 'relational',
-  dbname = 'Financial_ijs',
-  host = 'relational.fit.cvut.cz'
-)
+fin_db <- dm:::financial_db_con()
 
-## ----load, message = FALSE-----------------------------------------------
+## ----load-full-----------------------------------------------------------
 library(dm)
 
-fin_dm <- dm_from_src(fin_db)
+fin_dm <- dm_from_con(fin_db)
 fin_dm
 
 ## ----names---------------------------------------------------------------
@@ -29,12 +34,19 @@ fin_dm_small <-
   fin_dm %>%
   dm_select_tbl(loans, accounts, districts, trans)
 
+## ----load----------------------------------------------------------------
+library(dm)
+
+fin_dm_small <- 
+  dm_from_con(fin_db, learn_keys = FALSE) %>% 
+  dm_select_tbl(loans, accounts, districts, trans)
+
 ## ----keys----------------------------------------------------------------
 fin_dm_keys <-
   fin_dm_small %>%
-  dm_add_pk(accounts, id) %>%
+  dm_add_pk(table = accounts, columns = id) %>%
   dm_add_pk(loans, id) %>%
-  dm_add_fk(loans, account_id, accounts) %>%
+  dm_add_fk(table = loans, columns = account_id, ref_table = accounts) %>%
   dm_add_pk(trans, id) %>%
   dm_add_fk(trans, account_id, accounts) %>%
   dm_add_pk(districts, id) %>%

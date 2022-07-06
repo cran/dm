@@ -1,20 +1,25 @@
 ## ----setup, include = FALSE----------------------------------------------
 source("setup/setup.R")
 
-## ------------------------------------------------------------------------
-library(RMariaDB)
-my_db <- dbConnect(
-  MariaDB(),
-  username = "guest",
-  password = "relational",
-  dbname = "Financial_ijs",
-  host = "relational.fit.cvut.cz"
-)
+## ----eval = FALSE--------------------------------------------------------
+#  library(RMariaDB)
+#  
+#  my_db <- dbConnect(
+#    MariaDB(),
+#    username = "guest",
+#    password = "relational",
+#    dbname = "Financial_ijs",
+#    host = "relational.fit.cvut.cz"
+#  )
 
-## ----message = FALSE-----------------------------------------------------
+## ----show = FALSE--------------------------------------------------------
+library(RMariaDB)
+my_db <- dm:::financial_db_con()
+
+## ------------------------------------------------------------------------
 library(dm)
 
-my_dm <- dm_from_src(my_db)
+my_dm <- dm_from_con(my_db)
 my_dm
 
 ## ------------------------------------------------------------------------
@@ -26,6 +31,12 @@ accounts <- tbl(my_db, "accounts")
 
 my_manual_dm <- dm(loans, accounts)
 my_manual_dm
+
+## ----load----------------------------------------------------------------
+library(dm)
+
+fin_dm <- dm_from_con(my_db, learn_keys = FALSE)
+fin_dm
 
 ## ------------------------------------------------------------------------
 my_dm_keys <-

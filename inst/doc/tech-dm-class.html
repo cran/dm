@@ -11,11 +11,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-04-08" />
+<meta name="date" content="2022-07-06" />
 
 <title>Class dm and basic operations</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -126,7 +138,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -139,36 +331,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2022-04-08</h4>
+<h4 class="date">2022-07-06</h4>
 
 
 
-<p>The goal of the {dm} package and the <code>dm</code> class that comes with it, is to make your life easier when you are dealing with data from several different tables.</p>
+<p>The goal of the {dm} package and the <code>dm</code> class that comes
+with it, is to make your life easier when you are dealing with data from
+several different tables.</p>
 <p>Let’s take a look at the <code>dm</code> class.</p>
 <div id="class-dm" class="section level2">
 <h2>Class <code>dm</code></h2>
-<p>The <code>dm</code> class consists of a collection of tables and metadata about the tables, such as</p>
+<p>The <code>dm</code> class consists of a collection of tables and
+metadata about the tables, such as</p>
 <ul>
 <li>the names of the tables</li>
 <li>the names of the columns of the tables</li>
-<li>the primary and foreign keys of the tables to link the tables together</li>
-<li>the data (either as data frames or as references to database tables)</li>
+<li>the primary and foreign keys of the tables to link the tables
+together</li>
+<li>the data (either as data frames or as references to database
+tables)</li>
 </ul>
-<p>All tables in a <code>dm</code> must be obtained from the same data source; csv files and spreadsheets would need to be imported to data frames in R.</p>
+<p>All tables in a <code>dm</code> must be obtained from the same data
+source; csv files and spreadsheets would need to be imported to data
+frames in R.</p>
 </div>
 <div id="ex_dm" class="section level2">
 <h2>Examples of <code>dm</code> objects</h2>
-<p>There are currently three options available for creating a <code>dm</code> object. The relevant functions for creating <code>dm</code> objects are:</p>
+<p>There are currently three options available for creating a
+<code>dm</code> object. The relevant functions for creating
+<code>dm</code> objects are:</p>
 <ol style="list-style-type: decimal">
 <li><code>dm()</code></li>
 <li><code>as_dm()</code></li>
 <li><code>new_dm()</code></li>
-<li><code>dm_from_src()</code></li>
+<li><code>dm_from_con()</code></li>
 </ol>
-<p>To illustrate these options, we will now create the same <code>dm</code> in several different ways. We can use the tables from the well-known {nycflights13} package.</p>
+<p>To illustrate these options, we will now create the same
+<code>dm</code> in several different ways. We can use the tables from
+the well-known {nycflights13} package.</p>
 <div id="pass-the-tables-directly" class="section level3">
 <h3>Pass the tables directly</h3>
-<p>Create a <code>dm</code> object directly by providing data frames to <code>dm()</code>:</p>
+<p>Create a <code>dm</code> object directly by providing data frames to
+<code>dm()</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span></code></pre></div>
@@ -181,7 +385,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="start-with-an-empty-dm" class="section level3">
 <h3>Start with an empty <code>dm</code></h3>
-<p>Start with an empty <code>dm</code> object that has been created with <code>dm()</code> or <code>new_dm()</code>, and add tables to that object:</p>
+<p>Start with an empty <code>dm</code> object that has been created with
+<code>dm()</code> or <code>new_dm()</code>, and add tables to that
+object:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>empty_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>()</span>
@@ -197,7 +403,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="coerce-a-list-of-tables" class="section level3">
 <h3>Coerce a list of tables</h3>
-<p>Turn a named list of tables into a <code>dm</code> with <code>as_dm()</code>:</p>
+<p>Turn a named list of tables into a <code>dm</code> with
+<code>as_dm()</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_dm</span>(<span class="fu">list</span>(<span class="at">airlines =</span> airlines,</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">airports =</span> airports,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">flights =</span> flights,</span>
@@ -212,46 +419,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="turn-tables-from-a-src-into-a-dm" class="section level3">
 <h3>Turn tables from a <code>src</code> into a <code>dm</code></h3>
-<p>Squeeze all (or a subset of) tables belonging to a <code>src</code> object into a <code>dm</code> using <code>dm_from_src()</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sqlite_src <span class="ot">&lt;-</span> dbplyr<span class="sc">::</span><span class="fu">nycflights13_sqlite</span>()</span>
+<p>Squeeze all (or a subset of) tables belonging to a <code>src</code>
+object into a <code>dm</code> using <code>dm_from_con()</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sqlite_con <span class="ot">&lt;-</span> dbplyr<span class="sc">::</span><span class="fu">nycflights13_sqlite</span>()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(sqlite_src)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_con</span>(sqlite_con)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.38.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]
+#&gt; src:  sqlite 3.38.5 [/Users/kirill/Library/R/arm64/4.1/library/dplyr/db/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
 </CODE></PRE>
-<p>The function <code>dm_from_src(src, table_names = NULL)</code> includes all available tables on a source in the <code>dm</code> object. This means that you can use this, for example, on a postgres database that you access via <code>src_postgres()</code> (with the appropriate arguments <code>dbname</code>, <code>host</code>, <code>port</code>, …), to produce a <code>dm</code> object with all the tables on the database.</p>
+<p>The function <code>dm_from_con(con, table_names = NULL)</code>
+includes all available tables on a source in the <code>dm</code> object.
+This means that you can use this, for example, on a postgres database
+that you access via <code>DBI::dbConnect(RPostgres::Postgres())</code>
+(with the appropriate arguments <code>dbname</code>, <code>host</code>,
+<code>port</code>, …), to produce a <code>dm</code> object with all the
+tables on the database.</p>
 </div>
 <div id="low-level-construction" class="section level3">
 <h3>Low-level construction</h3>
-<p>Another way of creating a <code>dm</code> object is calling <code>new_dm()</code> on a list of <code>tbl</code> objects:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_dm <span class="ot">&lt;-</span> <span class="fu">new_dm</span>(<span class="fu">list</span>(<span class="at">trees =</span> trees, <span class="at">mtcars =</span> mtcars))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>base_dm</span></code></pre></div>
+<p>Another way of creating a <code>dm</code> object is calling
+<code>new_dm()</code> on a list of <code>tbl</code> objects:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_dm <span class="ot">&lt;-</span> <span class="fu">new_dm</span>(<span class="fu">list</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">airlines =</span> airlines,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">airports =</span> airports,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">flights =</span> flights,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">planes =</span> planes,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">weather =</span> weather</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>base_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
-#&gt; Tables: `trees`, `mtcars`
-#&gt; Columns: 14
+#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
+#&gt; Columns: 53
 #&gt; Primary keys: 0
 #&gt; Foreign keys: 0
 </CODE></PRE>
-<p>This constructor is optimized for speed and does not perform integrity checks. Use with caution, validate using <code>validate_dm()</code> if necessary.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">validate_dm</span>(base_dm)</span></code></pre></div>
+<p>This constructor is optimized for speed and does not perform
+integrity checks. Use with caution, validate using
+<code>dm_validate()</code> if necessary.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_validate</span>(base_dm)</span></code></pre></div>
 </div>
 </div>
 <div id="access-tables" class="section level2">
 <h2>Access tables</h2>
-<p>We can get the list of tables with <code>dm_get_tables()</code> and the <code>src</code> object with <code>dm_get_src()</code>.</p>
+<p>We can get the list of tables with <code>dm_get_tables()</code> and
+the <code>src</code> object with <code>dm_get_con()</code>.</p>
 <p>In order to pull a specific table from a <code>dm</code>, use:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(flights_dm, <span class="st">&quot;airports&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `tbl.dm()` was deprecated in dm 0.2.0.</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Use `dm[[table_name]]` instead to access a specific table.</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flights_dm[[<span class="st">&quot;airports&quot;</span>]]</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`airports`&gt; [?? x 8]</span>
-#&gt; <span style="color: #555555;"># Database: sqlite 3.38.0
-#&gt; #   [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]</span>
+#&gt; <span style="color: #555555;"># Database: sqlite 3.38.5 [/Users/kirill/Library/R/arm64/4.1/library/dplyr/db/nycflights13.sqlite]</span>
 #&gt;    faa   name                            lat    lon   alt    tz dst   tzone
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>
 #&gt; <span style="color: #555555;"> 1</span> 04G   Lansdowne Airport              41.1  -<span style="color: #BB0000;">80.6</span>  <span style="text-decoration: underline;">1</span>044    -<span style="color: #BB0000;">5</span> A     Amer…
@@ -266,7 +487,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">10</span> 0S9   Jefferson County Intl          48.1 -<span style="color: #BB0000;">123.</span>    108    -<span style="color: #BB0000;">8</span> A     Amer…
 #&gt; <span style="color: #555555;"># … with more rows</span>
 </CODE></PRE>
-<p>But how can we use {dm}-functions to manage the primary keys of the tables in a <code>dm</code> object?</p>
+<p>But how can we use {dm}-functions to manage the primary keys of the
+tables in a <code>dm</code> object?</p>
 </div>
 <div id="pk" class="section level2">
 <h2>Primary keys of <code>dm</code> objects</h2>
@@ -277,14 +499,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>dm_rm_pk()</code></li>
 <li><code>dm_enum_pk_candidates()</code></li>
 </ol>
-<p>If you created a <code>dm</code> object according to the examples in <a href="#ex_dm">“Examples of <code>dm</code> objects”</a>, your object does not yet have any primary keys set. So let’s add one.</p>
-<p>We use the <code>nycflights13</code> tables, i.e. <code>flights_dm</code> from above.</p>
+<p>If you created a <code>dm</code> object according to the examples in
+<a href="#ex_dm">“Examples of <code>dm</code> objects”</a>, your object
+does not yet have any primary keys set. So let’s add one.</p>
+<p>We use the <code>nycflights13</code> tables,
+i.e. <code>flights_dm</code> from above.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm, airports)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.38.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]
+#&gt; src:  sqlite 3.38.5 [/Users/kirill/Library/R/arm64/4.1/library/dplyr/db/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -294,7 +519,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The <code>dm</code> now has a primary key:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm_with_key, airports)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
-<p>To get an overview over all tables with primary keys, use <code>dm_get_all_pks()</code>:</p>
+<p>To get an overview over all tables with primary keys, use
+<code>dm_get_all_pks()</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_pks</span>(flights_dm_with_key)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 × 2</span>
 #&gt;   table    pk_col
@@ -305,7 +531,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_rm_pk</span>(flights_dm_with_key, airports) <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_has_pk</span>(airports)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
-<p>If you still need to get to know your data better, and it is already available in the form of a <code>dm</code> object, you can use the <code>dm_enum_pk_candidates()</code> function in order to get information about which columns of the table are unique keys:</p>
+<p>If you still need to get to know your data better, and it is already
+available in the form of a <code>dm</code> object, you can use the
+<code>dm_enum_pk_candidates()</code> function in order to get
+information about which columns of the table are unique keys:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 8 × 3</span>
 #&gt;   columns candidate why                                                    
@@ -319,14 +548,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">7</span> dst     FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: A (1388), U (47), N (23)<span style="color: #555555;">&quot;</span>       
 #&gt; <span style="color: #555555;">8</span> tzone   FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: America/New_York (519), America…
 </CODE></PRE>
-<p>The <code>flights</code> table does not have any one-column primary key candidates:</p>
+<p>The <code>flights</code> table does not have any one-column primary
+key candidates:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1 × 2</span>
 #&gt;   candidate     n
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
 #&gt; <span style="color: #555555;">1</span> FALSE        19
 </CODE></PRE>
-<p><code>dm_add_pk()</code> has a <code>check</code> argument. If set to <code>TRUE</code>, the function checks if the column of the table given by the user is unique. For performance reasons, the default is <code>check = FALSE</code>. See also [dm_examine_constraints()] for checking all constraints in a <code>dm</code>.</p>
+<p><code>dm_add_pk()</code> has a <code>check</code> argument. If set to
+<code>TRUE</code>, the function checks if the column of the table given
+by the user is unique. For performance reasons, the default is
+<code>check = FALSE</code>. See also [dm_examine_constraints()] for
+checking all constraints in a <code>dm</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_add_pk</span>(flights_dm, airports, tzone, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_not_unique_key()`:[22m</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m (`tzone`) not a unique key of `airports`.</span></span></code></pre></div>
@@ -340,11 +574,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>dm_rm_fk()</code></li>
 <li><code>dm_enum_fk_candidates()</code></li>
 </ol>
-<p>Now it gets (even more) interesting: we want to define relations between different tables. With the <code>dm_add_fk()</code> function you can define which column of which table points to another table’s column.</p>
-<p>This is done by choosing a foreign key from one table that will point to a primary key of another table. The primary key of the referred table must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will find the primary key column of the referenced table by itself and make the indicated column of the child table point to it.</p>
+<p>Now it gets (even more) interesting: we want to define relations
+between different tables. With the <code>dm_add_fk()</code> function you
+can define which column of which table points to another table’s
+column.</p>
+<p>This is done by choosing a foreign key from one table that will point
+to a primary key of another table. The primary key of the referred table
+must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will
+find the primary key column of the referenced table by itself and make
+the indicated column of the child table point to it.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
-#&gt; src:  sqlite 3.38.0 [/var/folders/cw/805_99kx0lq50gkr0hr81_y40000gp/T//RtmpUwV9tR/nycflights13.sqlite]
+#&gt; src:  sqlite 3.38.5 [/Users/kirill/Library/R/arm64/4.1/library/dplyr/db/nycflights13.sqlite]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `sqlite_stat1`, … (7 total)
 #&gt; Columns: 62
@@ -355,14 +596,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_ref_tbl_has_no_pk()`:[22m</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m ref_table `airports` needs a primary key first. Use `dm_enum_pk_candidates()` to find appropriate columns and `dm_add_pk()` to define a primary key.</span></span></code></pre></div>
-<p>Let’s create a <code>dm</code> object with a foreign key relation to work with later on:</p>
+<p>Let’s create a <code>dm</code> object with a foreign key relation to
+work with later on:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="ot">&lt;-</span> <span class="fu">dm_add_fk</span>(flights_dm_with_key, flights, origin, airports)</span></code></pre></div>
-<p>What if we tried to add another foreign key relation from <code>flights</code> to <code>airports</code> to the object? Column <code>dest</code> might work, since it also contains airport codes:</p>
+<p>What if we tried to add another foreign key relation from
+<code>flights</code> to <code>airports</code> to the object? Column
+<code>dest</code> might work, since it also contains airport codes:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, dest, airports, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_not_subset_of()`:[22m</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m Column (`dest`) of table `flights` contains values (see examples above) that are not present in column (`faa`) of table `airports`.</span></span></code></pre></div>
-<p>Checks are opt-in and executed only if <code>check = TRUE</code>. You can still add a foreign key with the default <code>check = FALSE</code>. See also [dm_examine_constraints()] for checking all constraints in a <code>dm</code>.</p>
-<p>Get an overview of all foreign key relations with<code>dm_get_all_fks()</code>:</p>
+<p>Checks are opt-in and executed only if <code>check = TRUE</code>. You
+can still add a foreign key with the default <code>check = FALSE</code>.
+See also <code>dm_examine_constraints()</code> for checking all
+constraints in a <code>dm</code>.</p>
+<p>Get an overview of all foreign key relations
+with<code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 5 × 5</span>
 #&gt;   child_table child_fk_cols     parent_table parent_key_cols   on_delete
@@ -373,29 +621,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">4</span> flights     tailnum           planes       tailnum           no_action
 #&gt; <span style="color: #555555;">5</span> flights     origin, time_hour weather      origin, time_hour no_action
 </CODE></PRE>
-<p>Remove foreign key relations with <code>dm_rm_fk()</code> (parameter <code>columns = NULL</code> means that all relations will be removed, with a message):</p>
+<p>Remove foreign key relations with <code>dm_rm_fk()</code> (parameter
+<code>columns = NULL</code> means that all relations will be removed,
+with a message):</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(<span class="at">table =</span> flights, <span class="at">column =</span> dest, <span class="at">ref_table =</span> airports) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1m[33mError[39m in [1m[1m`abort_is_not_fkc()`:[22m</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33m![39m No foreign keys to remove.</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `dm_get_fk()` was deprecated in dm 0.2.1.</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Please use `dm_get_all_fks()` instead.</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;list_of&lt;character&gt;[0]&gt;</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="at">columns =</span> <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_fk</span>(flights, airports)</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Removing foreign keys: %&gt;%</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rm_fk(flights, origin, airports)</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: `dm_get_fk()` was deprecated in dm 0.2.1.</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Please use `dm_get_all_fks()` instead.</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;list_of&lt;character&gt;[0]&gt;</span></span></code></pre></div>
-<p>Since the primary keys are defined in the <code>dm</code> object, you do not usually need to provide the referenced column name of <code>ref_table</code>.</p>
-<p>Another function for getting to know your data better (cf. <code>dm_enum_pk_candidates()</code> in <a href="#pk">“Primary keys of <code>dm</code> objects”</a>) is <code>dm_enum_fk_candidates()</code>. Use it to get an overview over foreign key candidates that point from one table to another:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(flights_dm_with_key, weather, airports)</span></code></pre></div>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 0 × 5</span>
+#&gt; <span style="color: #555555;"># … with 5 variables: child_table &lt;chr&gt;, child_fk_cols &lt;keys&gt;,</span>
+#&gt; <span style="color: #555555;">#   parent_table &lt;chr&gt;, parent_key_cols &lt;keys&gt;, on_delete &lt;chr&gt;</span>
+</CODE></PRE>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="at">columns =</span> <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Removing foreign keys: %&gt;%</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rm_fk(flights, origin, airports)</span></span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 0 × 5</span>
+#&gt; <span style="color: #555555;"># … with 5 variables: child_table &lt;chr&gt;, child_fk_cols &lt;keys&gt;,</span>
+#&gt; <span style="color: #555555;">#   parent_table &lt;chr&gt;, parent_key_cols &lt;keys&gt;, on_delete &lt;chr&gt;</span>
+</CODE></PRE>
+<p>Since the primary keys are defined in the <code>dm</code> object, you
+do not usually need to provide the referenced column name of
+<code>ref_table</code>.</p>
+<p>Another function for getting to know your data better
+(cf. <code>dm_enum_pk_candidates()</code> in <a href="#pk">“Primary keys
+of <code>dm</code> objects”</a>) is
+<code>dm_enum_fk_candidates()</code>. Use it to get an overview over
+foreign key candidates that point from one table to another:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(flights_dm_with_key, weather, airports)</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 15 × 3</span>
 #&gt;    columns    candidate why                                                
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                                              

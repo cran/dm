@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 0.2.8
-Date: 2022-04-07
+Version: 0.3.0
+Date: 2022-07-06
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -25,6 +25,14 @@ Authors@R:
       person(given = "James",
              family = "Wondrasek",
              role = "ctb"),
+      person(given = "Indrajeet",
+             family = "Patil",
+             comment = c(ORCID = "0000-0003-1995-6531"),
+             role = "ctb"),
+      person(given = "Maëlle",
+             family = "Salmon",
+             comment = c(ORCID = "0000-0002-2815-0399"),
+             role = "ctb"),
       person(given = "energie360° AG",
              role = "fnd",
              email = "info@energie360.ch"),
@@ -39,18 +47,19 @@ License: MIT + file LICENSE
 URL: https://cynkra.github.io/dm/, https://github.com/cynkra/dm
 BugReports: https://github.com/cynkra/dm/issues
 Depends: R (>= 3.3)
-Imports: backports, cli (>= 2.2.0), DBI, dplyr (>= 1.0.3), ellipsis,
-        glue, igraph, lifecycle, magrittr, memoise, methods, pillar (>=
-        1.6.2), purrr, rlang (>= 1.0.1), tibble, tidyr (>= 1.0.0),
-        tidyselect (>= 1.0.1), vctrs (>= 0.3.2)
-Suggests: brio, covr, crayon, dbplyr, DiagrammeR, DiagrammeRsvg,
-        digest, duckdb, fansi, keyring, knitr, mockr, nycflights13,
-        odbc, pixarfilms, pool, progress, RMariaDB (>= 1.0.10),
-        rmarkdown, RPostgres, RSQLite (>= 2.2.8), testthat (>= 3.1.2),
-        tidyverse, waldo, withr
+Imports: backports, cli (>= 2.2.0), DBI, dplyr (>= 1.0.9), glue,
+        igraph, lifecycle, magrittr, memoise, methods, pillar (>=
+        1.7.0), purrr, rlang (>= 1.0.2), tibble (>= 3.0.0), tidyr (>=
+        1.0.0), tidyselect (>= 1.0.1), vctrs (>= 0.3.2)
+Suggests: brio, covr, crayon, dbplyr (>= 2.2.0), DiagrammeR,
+        DiagrammeRsvg, digest, duckdb (>= 0.4.0), fansi, forcats,
+        jsonlite, keyring, knitr, mockr, nycflights13, odbc,
+        pixarfilms, pool, progress, RMariaDB (>= 1.2.2), rmarkdown,
+        RPostgres, RSQLite (>= 2.2.8), testthat (>= 3.1.2), tidyverse,
+        waldo, withr
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
@@ -58,15 +67,17 @@ Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: true
 NeedsCompilation: no
-Packaged: 2022-04-08 12:53:42 UTC; kirill
+Packaged: 2022-07-06 15:29:46 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Antoine Fabri [ctb],
   Darko Bergant [aut],
   Katharina Brunner [ctb],
   James Wondrasek [ctb],
+  Indrajeet Patil [ctb] (<https://orcid.org/0000-0003-1995-6531>),
+  Maëlle Salmon [ctb] (<https://orcid.org/0000-0002-2815-0399>),
   energie360° AG [fnd],
   cynkra GmbH [fnd, cph]
 Maintainer: Kirill Müller <krlmlr+r@mailbox.org>
 Repository: CRAN
-Date/Publication: 2022-04-08 13:22:29 UTC
+Date/Publication: 2022-07-06 15:50:02 UTC

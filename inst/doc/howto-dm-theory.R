@@ -6,17 +6,25 @@ library(tidyverse)
 library(dm)
 library(nycflights13)
 
-flights %>%
+nycflights13_df <- 
+  flights %>%
   left_join(airlines, by = "carrier") %>%
   left_join(planes, by = "tailnum") %>%
   left_join(airports, by = c("origin" = "faa")) %>%
   left_join(weather, by = c("origin", "time_hour"))
 
-## ----warning=F, message=F------------------------------------------------
+nycflights13_df
+
+## ----warning=FALSE, message=FALSE----------------------------------------
 dm <- dm_nycflights13(cycle = TRUE)
 
 dm %>%
   dm_draw()
+
+## ------------------------------------------------------------------------
+object.size(dm)
+
+object.size(nycflights13_df)
 
 ## ------------------------------------------------------------------------
 dm %>%
@@ -29,6 +37,10 @@ dm %>%
 ## ------------------------------------------------------------------------
 dm %>%
   dm_enum_fk_candidates(flights, airlines)
+
+## ------------------------------------------------------------------------
+dm %>% 
+  dm_get_all_fks()
 
 ## ------------------------------------------------------------------------
 dm %>%
@@ -48,7 +60,7 @@ flights %>%
 
 ## ------------------------------------------------------------------------
 planes %>%
-  decompose_table(model_id, model, manufacturer, type, engines, seats, manufacturer, speed)
+  decompose_table(model_id, model, manufacturer, type, engines, seats, speed)
 
 ## ------------------------------------------------------------------------
 con_sqlite <- DBI::dbConnect(RSQLite::SQLite())
@@ -59,7 +71,7 @@ copy_dm_to(con_sqlite, dm)
 DBI::dbListTables(con_sqlite)
 
 ## ------------------------------------------------------------------------
-dm_from_src(con_sqlite)
+dm_from_con(con_sqlite)
 
 ## ----disconnect----------------------------------------------------------
 DBI::dbDisconnect(con_sqlite)

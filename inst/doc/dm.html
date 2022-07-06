@@ -11,11 +11,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-04-08" />
+<meta name="date" content="2022-07-06" />
 
 <title>Getting started with dm</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -126,7 +138,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -139,51 +331,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Getting started with dm</h1>
-<h4 class="date">2022-04-08</h4>
+<h4 class="date">2022-07-06</h4>
 
 
 
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>In this article we’re going show you how easy it is to move from connecting to the database holding your data to producing the results you need. It’s meant to be a quick and friendly introduction to {dm}, so it is low on details and caveats. Links to detailed documentation are provided at the end. (If your data is in data frames instead of a database and you’re in a hurry, jump over to <code>vignette(&quot;howto-dm-df&quot;)</code>.)</p>
-</div>
+<p>In this article, we’re going show you how easy it is to move from
+connecting to the database holding your data to producing the results
+you need. It’s meant to be a quick and friendly introduction to {dm}, so
+it is low on details and caveats. Links to detailed documentation are
+provided at the end. (If your data is in data frames instead of a
+database and you’re in a hurry, jump over to
+<code>vignette(&quot;howto-dm-df&quot;)</code>.)</p>
 <div id="creating-a-dm-object" class="section level2">
 <h2>Creating a dm object</h2>
-<p>dm objects can be created from individual tables or loaded directly from a relational data model on an RDBMS (relational database management system).</p>
-<p>For this demonstration we’re going work with a model hosted on a public server. The first thing we need is a connection to the RDBMS hosting the data.</p>
+<p>dm objects can be created from individual tables or loaded directly
+from a relational data model on an RDBMS (relational database management
+system).</p>
+<p>For this demonstration, we’re going to work with a model hosted on a
+public server. The first thing we need is a connection to the RDBMS
+hosting the data.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RMariaDB)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fin_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MariaDB</span>(),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&#39;guest&#39;</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&#39;relational&#39;</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&#39;Financial_ijs&#39;</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&#39;relational.fit.cvut.cz&#39;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&quot;guest&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&quot;relational&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&quot;Financial_ijs&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&quot;relational.fit.cvut.cz&quot;</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>We create a dm object from an RDBMS using <code>dm_from_src()</code>, passing in the connection object we just created as the first argument.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RMariaDB)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_src</span>(fin_db)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fin_dm</span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fin_db <span class="ot">&lt;-</span> dm<span class="sc">:::</span><span class="fu">financial_db_con</span>()</span></code></pre></div>
+<p>We create a dm object from an RDBMS using <code>dm_from_con()</code>,
+passing in the connection object we just created as the first
+argument.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_con</span>(fin_db)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Keys queried successfully, use `learn_keys = TRUE` to mute this message.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>fin_dm</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #00BB00;">──</span> <span style="color: #00BB00;">Table source</span> <span style="color: #00BB00;">───────────────────────────────────────────────────────────</span>
 #&gt; src:  mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]
 #&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
 #&gt; Tables: `accounts`, `cards`, `clients`, `disps`, `districts`, … (9 total)
 #&gt; Columns: 57
-#&gt; Primary keys: 0
-#&gt; Foreign keys: 0
+#&gt; Primary keys: 9
+#&gt; Foreign keys: 8
 </CODE></PRE>
-<p>The dm object interrogates the RDBMS for table and column information and, where implemented, primary and foreign keys. Currently, primary and foreign keys are only available from Postgres and SQL Server.</p>
+<p>The dm object interrogates the RDBMS for table and column
+information, and primary and foreign keys. Currently, primary and
+foreign keys are only available from SQL Server, Postgres and
+MariaDB.</p>
 </div>
 <div id="selecting-tables" class="section level2">
 <h2>Selecting tables</h2>
 <p>The dm object can be accessed like a named list of tables:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fin_dm)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;accounts&quot;  &quot;cards&quot;     &quot;clients&quot;   &quot;disps&quot;     &quot;districts&quot; &quot;loans&quot;    </span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;orders&quot;    &quot;tkeys&quot;     &quot;trans&quot;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fin_dm<span class="sc">$</span>loans</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fin_dm)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;accounts&quot;  &quot;cards&quot;     &quot;clients&quot;   &quot;disps&quot;     &quot;districts&quot; &quot;loans&quot;    </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;orders&quot;    &quot;tkeys&quot;     &quot;trans&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fin_dm<span class="sc">$</span>loans</span></code></pre></div>
 <PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   table&lt;`Financial_ijs`.`loans`&gt; [?? x 7]</span>
-#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+#&gt; <span style="color: #555555;"># Database: mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
 #&gt;       id account_id date       amount duration payments status
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;date&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> 
 #&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">4</span>959          2 1994-01-05  <span style="text-decoration: underline;">80</span>952       24     <span style="text-decoration: underline;">3</span>373 A     
@@ -198,40 +406,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">10</span>  <span style="text-decoration: underline;">4</span>990        110 1997-09-08 <span style="text-decoration: underline;">162</span>576       36     <span style="text-decoration: underline;">4</span>516 C     
 #&gt; <span style="color: #555555;"># … with more rows</span>
 </CODE></PRE>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">count</span>(fin_dm<span class="sc">$</span>trans)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   [?? x 1]</span>
-#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">count</span>(fin_dm<span class="sc">$</span>trans)</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   SQL [1 x 1]</span>
+#&gt; <span style="color: #555555;"># Database: mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
 #&gt;         n
 #&gt;   <span style="color: #555555; font-style: italic;">&lt;int64&gt;</span>
 #&gt; <span style="color: #555555;">1</span> 1<span style="text-decoration: underline;">056</span>320
 </CODE></PRE>
-<p>At the same time, most <code>dm</code> functions are pipe-friendly and support tidy evaluation. We can use <code>[</code> or the <code>dm_select_tbl()</code> verb to derive a smaller dm with the <code>loans</code>, <code>accounts</code>, <code>districts</code> and <code>trans</code> tables:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span> fin_dm[<span class="fu">c</span>(<span class="st">&quot;loans&quot;</span>, <span class="st">&quot;accounts&quot;</span>, <span class="st">&quot;districts&quot;</span>, <span class="st">&quot;trans&quot;</span>)]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  fin_dm <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(loans, accounts, districts, trans)</span></code></pre></div>
+<p>Additionally, most <code>dm</code> functions are <a href="https://r4ds.had.co.nz/pipes.html">pipe-friendly</a> and support
+<a href="https://adv-r.hadley.nz/metaprogramming.html">tidy
+evaluation</a>. We can use <code>[</code> or the
+<code>dm_select_tbl()</code> verb to derive a smaller dm with the
+<code>loans</code>, <code>accounts</code>, <code>districts</code> and
+<code>trans</code> tables:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span> fin_dm[<span class="fu">c</span>(<span class="st">&quot;loans&quot;</span>, <span class="st">&quot;accounts&quot;</span>, <span class="st">&quot;districts&quot;</span>, <span class="st">&quot;trans&quot;</span>)]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  fin_dm <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(loans, accounts, districts, trans)</span></code></pre></div>
 </div>
 <div id="linking-tables-by-adding-keys" class="section level2">
 <h2>Linking tables by adding keys</h2>
-<p>In many cases, <code>dm_from_src()</code> already returns a dm with all keys set. If not, dm allows us to define primary and foreign keys ourselves.</p>
-<p>In our data model, <code>id</code> columns uniquely identify records in the <code>accounts</code> and <code>loans</code> table, a primary key is added with <code>dm_add_pk()</code>. Each loan is linked to one account via the <code>account_id</code> column in the <code>loans</code> table, the relationship is established with <code>dm_add_fk()</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="ot">&lt;-</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_small <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(accounts, id) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans, id) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans, account_id, accounts) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(trans, id) <span class="sc">%&gt;%</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(trans, account_id, accounts) <span class="sc">%&gt;%</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(districts, id) <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(accounts, district_id, districts)</span></code></pre></div>
+<p>In many cases, <code>dm_from_con()</code> already returns a dm with
+all keys set. If not, dm allows us to define primary and foreign keys
+ourselves. For this, we use <code>learn_keys = FALSE</code> to obtain a
+<code>dm</code> object with only the tables.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fin_dm_small <span class="ot">&lt;-</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_from_con</span>(fin_db, <span class="at">learn_keys =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(loans, accounts, districts, trans)</span></code></pre></div>
+<p>In our data model, <code>id</code> columns uniquely identify records
+in the <code>accounts</code> and <code>loans</code> tables, and was used
+as a primary key. A primary key is defined with
+<code>dm_add_pk()</code>. Each loan is linked to one account via the
+<code>account_id</code> column in the <code>loans</code> table, the
+relationship is established with <code>dm_add_fk()</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="ot">&lt;-</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_small <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(<span class="at">table =</span> accounts, <span class="at">columns =</span> id) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans, id) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(<span class="at">table =</span> loans, <span class="at">columns =</span> account_id, <span class="at">ref_table =</span> accounts) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(trans, id) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(trans, account_id, accounts) <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(districts, id) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(accounts, district_id, districts)</span></code></pre></div>
 </div>
 <div id="visualizing-a-data-model" class="section level2">
 <h2>Visualizing a data model</h2>
-<p>Having a diagram of the data model is the quickest way to verify we’re on the right track. We can display a visual summary of the dm at any time. The default is to display the table name, any defined keys and their links to other tables.</p>
-<p>Visualizing the dm in its current state we see the keys we have created and how they link the tables together. Color guides the eye.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">green =</span> <span class="fu">c</span>(loans, accounts), <span class="at">darkblue =</span> trans, <span class="at">grey =</span> districts) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<p>Having a diagram of the data model is the quickest way to verify
+we’re on the right track. We can display a visual summary of the dm at
+any time. The default is to display the table name, any defined keys,
+and their links to other tables.</p>
+<p>Visualizing the dm in its current state, we can see the keys we have
+created and how they link the tables together. Color guides the eye.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">green =</span> <span class="fu">c</span>(loans, accounts), <span class="at">darkblue =</span> trans, <span class="at">grey =</span> districts) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.40.1 (20161225.0304)
@@ -310,14 +540,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="accessing-a-data-model-as-a-table" class="section level2">
 <h2>Accessing a data model as a table</h2>
-<p>If we want to perform modeling or analysis on this relational model we need to transform it into a tabular format that R functions can work with. <code>dm_squash_to_tbl()</code> will automatically follow foreign keys across tables to gather all the available columns into a single table.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   [?? x 25]</span>
-#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+<p>If we want to perform modeling or analysis on this relational model,
+we need to transform it into a tabular format that R functions can work
+with. <code>dm_squash_to_tbl()</code> will automatically follow foreign
+keys across tables to gather all the available columns into a single
+table.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   SQL [?? x 25]</span>
+#&gt; <span style="color: #555555;"># Database: mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
 #&gt;       id account_id loans.date amount duration payments status district_id
 #&gt;    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;int&gt;</span> <span style="color: #555555; font-style: italic;">&lt;date&gt;</span>      <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>
 #&gt; <span style="color: #555555;"> 1</span>  <span style="text-decoration: underline;">4</span>959          2 1994-01-05  <span style="text-decoration: underline;">80</span>952       24     <span style="text-decoration: underline;">3</span>373 A                1
@@ -335,46 +569,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">#   A6 &lt;int&gt;, A7 &lt;int&gt;, A8 &lt;int&gt;, A9 &lt;int&gt;, A10 &lt;dbl&gt;, A11 &lt;int&gt;,</span>
 #&gt; <span style="color: #555555;">#   A12 &lt;dbl&gt;, A13 &lt;dbl&gt;, A14 &lt;int&gt;, A15 &lt;int&gt;, A16 &lt;int&gt;</span>
 </CODE></PRE>
-<p>Apart from the rows printed above, no data has been fetched from the database. Use <code>select()</code> to reduce the number of columns fetched, and <code>collect()</code> to retrieve the entire result for local processing.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>model</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; lm(formula = amount ~ duration + A3, data = loans_df)</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       (Intercept)           duration  A3central Bohemia  </span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             14241               4109              -4044  </span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    A3east Bohemia    A3north Bohemia    A3north Moravia  </span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -20248             -32977              -2577  </span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   A3south Bohemia    A3south Moravia     A3west Bohemia  </span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             -5940             -16507             -32616</span></span></code></pre></div>
+<p>Apart from the rows printed above, no data has been fetched from the
+database. Use <code>select()</code> to reduce the number of columns
+fetched, and <code>collect()</code> to retrieve the entire result for
+local processing.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_squash_to_tbl</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Renaming ambiguous columns: %&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(loans, loans.date = date) %&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dm_rename(accounts, accounts.date = date)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>model</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; lm(formula = amount ~ duration + A3, data = loans_df)</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       (Intercept)           duration  A3central Bohemia  </span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             14241               4109              -4044  </span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    A3east Bohemia    A3north Bohemia    A3north Moravia  </span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -20248             -32977              -2577  </span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   A3south Bohemia    A3south Moravia     A3west Bohemia  </span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             -5940             -16507             -32616</span></span></code></pre></div>
 </div>
 <div id="operations-on-table-data-within-a-dm" class="section level2">
 <h2>Operations on table data within a dm</h2>
-<p>We don’t need to take the extra step of exporting the data to work with it. Through the dm object we have complete access to dplyr’s data manipulation verbs. These operate on the data within individual tables.</p>
-<p>To work with a particular table we use <code>dm_zoom_to()</code> to set the context to our chosen table. Then we can perform any of the operations we want.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="ot">&lt;-</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>fin_dm_total<span class="sc">$</span>total_loans</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   [?? x 2]</span>
-#&gt; <span style="color: #555555;"># Database: mysql [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
+<p>We don’t need to take the extra step of exporting the data to work
+with it. Through the dm object, we have complete access to dplyr’s data
+manipulation verbs. These operate on the data within individual
+tables.</p>
+<p>To work with a particular table we use <code>dm_zoom_to()</code> to
+set the context to our chosen table. Then we can perform any of the
+dplyr operations we want.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="ot">&lt;-</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>fin_dm_total<span class="sc">$</span>total_loans</span></code></pre></div>
+<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># Source:   SQL [?? x 2]</span>
+#&gt; <span style="color: #555555;"># Database: mysql  [guest@relational.fit.cvut.cz:NA/Financial_ijs]</span>
 #&gt;    account_id total_amount
 #&gt;         <span style="color: #555555; font-style: italic;">&lt;int&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>
 #&gt; <span style="color: #555555;"> 1</span>          2        <span style="text-decoration: underline;">80</span>952
@@ -389,54 +631,79 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 #&gt; <span style="color: #555555;">10</span>        110       <span style="text-decoration: underline;">162</span>576
 #&gt; <span style="color: #555555;"># … with more rows</span>
 </CODE></PRE>
-<p>Note that in the above example we use <code>dm_insert_zoomed()</code> to add the results as a new table to our data model. This table is temporary and will be deleted when our session ends. If you want to make permanent changes to your data model on an RDBMS please see the “Persisting results” section in <code>vignette(&quot;howto-dm-db&quot;)</code>.</p>
+<p>Note that, in the above example, we use
+<code>dm_insert_zoomed()</code> to add the results as a new table to our
+data model. This table is temporary and will be deleted when our session
+ends. If you want to make permanent changes to your data model on an
+RDBMS, please see the “Persisting results” section in
+<code>vignette(&quot;howto-dm-db&quot;)</code>.</p>
 </div>
 <div id="checking-constraints" class="section level2">
 <h2>Checking constraints</h2>
-<p>It’s always smart to check that your data model follows its specifications. When building our own model or changing existing models by adding tables or keys, it is even more important that the new model is validated.</p>
-<p><code>dm_examine_constrains()</code> checks all primary and foreign keys and reports if they violate their expected constraints.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
+<p>It’s always smart to check that your data model follows its
+specifications. When building our own model or changing existing models
+by adding tables or keys, it is even more important that the new model
+is validated.</p>
+<p><code>dm_examine_constrains()</code> checks all primary and foreign
+keys and reports if they violate their expected constraints.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fin_dm_total <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> All constraints satisfied.
 </CODE></PRE>
-<p>For more on constraint checking, including cardinality, finding candidate columns for keys, and normalization, see <code>vignette(&quot;tech-dm-low-level&quot;)</code>.</p>
+<p>For more on constraint checking, including cardinality, finding
+candidate columns for keys, and normalization, see
+<code>vignette(&quot;tech-dm-low-level&quot;)</code>.</p>
 </div>
 <div id="next-steps" class="section level2">
 <h2>Next Steps</h2>
-<p>Now that you have been introduced to the basic operation of dm, the next step is to learn more about the dm methods that your particular use case requires.</p>
-<p>Is your data in an RDBMS? Then move on to <code>vignette(&quot;howto-dm-db&quot;)</code> for a more detailed looking at working with an existing relational data model.</p>
-<p>If your data is in data frames, then you want to read <code>vignette(&quot;howto-dm-df&quot;)</code> next.</p>
-<p>If you feel you need to know more about relational data models in order to get the most out of dm, check out <code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
-<p>If you’re familiar with relational data models but want to know how to work with them in dm, then any of <code>vignette(&quot;tech-dm-join&quot;)</code>, <code>vignette(&quot;tech-dm-filter&quot;)</code>, or <code>vignette(&quot;tech-dm-zoom&quot;)</code> is a good next step.</p>
-</div>
-<div id="further-reading" class="section level2">
-<h2>Further reading</h2>
-<p><code>vignette(&quot;howto-dm-db&quot;)</code> - This article covers accessing and working with RDBMSs within your R session, including manipulating data, filling in missing relationships between tables, getting data out of the RDBMS and into your model, and deploying your data model to an RDBMS.</p>
-<p><code>vignette(&quot;howto-dm-df&quot;)</code> - Is your data in local data frames? This article covers creating a data model from your local data frames, including building the relationships in your data model, verifying your model, and leveraging the power of dplyr to operate on your data model.</p>
-<p><code>vignette(&quot;howto-dm-theory&quot;)</code> - Do you know all about data frames but very little about relational data models? This quick introduction will walk you through the key similarities and differences, and show you how to move from individual data frames to a relational data model.</p>
-<p><code>vignette(&quot;tech-dm-join&quot;)</code> - Joining is how separate, linked tables are virtually combined in order to perform operations, generate summaries, or prepare data for extraction. This article covers dm’s methods for creating the different kind of joins along with usage examples.</p>
-<p><code>vignette(&quot;tech-dm-zoom&quot;)</code> - Learn how to manipulate the data in the tables in your dm using dplyr verbs.</p>
-<p><code>vignette(&quot;tech-dm-filter&quot;)</code> - Need a subset of your data across tables? This introduction to dm’s filtering methods will show you how to apply them to data that is separated into multiple tables.</p>
-<p><code>vignette(&quot;tech-dm-draw&quot;)</code> - A quick guide to dm’s methods for drawing your data model for exploration, verification or documentation purposes. Learn how to customize the diagrams.</p>
-<p><code>vignette(&quot;tech-dm-low-level&quot;)</code> - If your data model needs to be rock solid, this article covers the dm methods for checking every aspect of the model. It covers key constraints, cardinalities between tables, and methods for normalization as you construct your data model.</p>
-<p><code>vignette(&quot;tech-dm-class&quot;)</code> - A detailed overview of the <code>&quot;dm&quot;</code> class.</p>
-<p><code>vignette(&quot;tech-dm-naming&quot;)</code> - Making sense of dm’s API.</p>
-<p><code>vignette(&quot;tech-dm-cdm&quot;)</code> - If you’re an early adopter, used dm version 0.0.5 or lower and want to migrate your code, this is for you.</p>
+<p>Now that you have been introduced to the basic operation of dm, the
+next step is to learn more about the dm methods that your particular use
+case requires.</p>
+<p>Is your data in an RDBMS? Then move on to
+<code>vignette(&quot;howto-dm-db&quot;)</code> for a more detailed looking at
+working with an existing relational data model.</p>
+<p>If your data is in data frames, then you want to read
+<code>vignette(&quot;howto-dm-df&quot;)</code> next.</p>
+<p>If you feel you need to know more about relational data models in
+order to get the most out of dm, check out
+<code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
+<p>If you’re familiar with relational data models, but want to know how
+to work with them in dm, then any of
+<code>vignette(&quot;tech-dm-join&quot;)</code>,
+<code>vignette(&quot;tech-dm-filter&quot;)</code>, or
+<code>vignette(&quot;tech-dm-zoom&quot;)</code> is a good next step.</p>
 </div>
 <div id="standing-on-the-shoulders-of-giants" class="section level2">
 <h2>Standing on the shoulders of giants</h2>
 <p>The {dm} package follows the tidyverse principles:</p>
 <ul>
-<li><code>dm</code> objects are immutable (your data will never be overwritten in place)</li>
-<li>most functions used on <code>dm</code> objects are pipeable (i.e., return new <code>dm</code> or table objects)</li>
-<li>tidy evaluation is used (unquoted function parameters are supported)</li>
+<li><code>dm</code> objects are immutable (your data will never be
+overwritten in place)</li>
+<li>most functions used on <code>dm</code> objects are pipeable (i.e.,
+return new <code>dm</code> or table objects)</li>
+<li>tidy evaluation is used (unquoted function arguments are
+supported)</li>
 </ul>
-<p>The {dm} package builds heavily upon the <a href="https://github.com/bergant/datamodelr">{datamodelr} package</a>, and upon the <a href="https://www.tidyverse.org/">tidyverse</a>. We’re looking forward to a good collaboration!</p>
-<p>The <a href="https://github.com/russHyde/polyply">{polyply} package</a> has a similar intent with a slightly different interface.</p>
-<p>The <a href="https://github.com/jangorecki/data.cube">{data.cube} package</a> has quite the same intent using <code>array</code>-like interface.</p>
-<p>Articles in the <a href="https://github.com/WinVector/rquery">{rquery} package</a> discuss <a href="https://github.com/WinVector/rquery/blob/master/extras/JoinController.md">join controllers</a> and <a href="https://github.com/WinVector/rquery/blob/master/extras/DependencySorting.md">join dependency sorting</a>, with the intent to move the declaration of table relationships from code to data.</p>
-<p>The <a href="https://github.com/thomasp85/tidygraph">{tidygraph} package</a> stores a network as two related tables of <code>nodes</code> and <code>edges</code>, compatible with {dplyr} workflows.</p>
-<p>In object-oriented programming languages, <a href="https://en.wikipedia.org/wiki/Object-relational_mapping">object-relational mapping</a> is a similar concept that attempts to map a set of related tables to a class hierarchy.</p>
+<p>The {dm} package builds heavily upon the <a href="https://github.com/bergant/datamodelr">{datamodelr} package</a>,
+and upon the <a href="https://www.tidyverse.org/">tidyverse</a>. We’re
+looking forward to a good collaboration!</p>
+<p>The <a href="https://github.com/russHyde/polyply">{polyply}
+package</a> has a similar intent with a slightly different
+interface.</p>
+<p>The <a href="https://github.com/jangorecki/data.cube">{data.cube}
+package</a> has quite the same intent using <code>array</code>-like
+interface.</p>
+<p>Articles in the <a href="https://github.com/WinVector/rquery">{rquery} package</a> discuss
+<a href="https://github.com/WinVector/rquery/blob/master/extras/JoinController.md">join
+controllers</a> and <a href="https://github.com/WinVector/rquery/blob/master/extras/DependencySorting.md">join
+dependency sorting</a>, with the intent to move the declaration of table
+relationships from code to data.</p>
+<p>The <a href="https://github.com/thomasp85/tidygraph">{tidygraph}
+package</a> stores a network as two related tables of <code>nodes</code>
+and <code>edges</code>, compatible with {dplyr} workflows.</p>
+<p>In object-oriented programming languages, <a href="https://en.wikipedia.org/wiki/Object-relational_mapping">object-relational
+mapping</a> is a similar concept that attempts to map a set of related
+tables to a class hierarchy.</p>
 </div>
 
 

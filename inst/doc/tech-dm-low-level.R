@@ -59,6 +59,9 @@ examine_cardinality(d1, a, d1, a)
 examine_cardinality(d1, a, d4, a)
 
 ## ------------------------------------------------------------------------
+examine_cardinality(d2, c, d1, a)
+
+## ------------------------------------------------------------------------
 mtcars_tibble <- as_tibble(mtcars)
 mtcars_tibble
 decomposed_table <- decompose_table(mtcars_tibble, am_gear_carb_id, am, gear, carb)

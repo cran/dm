@@ -64,11 +64,7 @@
 
 \item{...}{see corresponding function in package \pkg{dplyr} or \pkg{tidyr}}
 
-\item{.before}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Destination of
-columns selected by \code{...}. Supplying neither will move columns to the
-left-hand side; specifying both is an error.}
-
-\item{.after}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Destination of
+\item{.before, .after}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Destination of
 columns selected by \code{...}. Supplying neither will move columns to the
 left-hand side; specifying both is an error.}
 
@@ -113,6 +109,8 @@ This argument is taken by expression and supports
 names and column locations).}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Use these methods without the '.zoomed_dm' suffix (see examples).
 }
 \examples{
