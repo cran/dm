@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 0.3.0
-Date: 2022-07-06
+Version: 1.0.0
+Date: 2022-07-21
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -51,23 +51,24 @@ Imports: backports, cli (>= 2.2.0), DBI, dplyr (>= 1.0.9), glue,
         igraph, lifecycle, magrittr, memoise, methods, pillar (>=
         1.7.0), purrr, rlang (>= 1.0.2), tibble (>= 3.0.0), tidyr (>=
         1.0.0), tidyselect (>= 1.0.1), vctrs (>= 0.3.2)
-Suggests: brio, covr, crayon, dbplyr (>= 2.2.0), DiagrammeR,
-        DiagrammeRsvg, digest, duckdb (>= 0.4.0), fansi, forcats,
-        jsonlite, keyring, knitr, mockr, nycflights13, odbc,
-        pixarfilms, pool, progress, RMariaDB (>= 1.2.2), rmarkdown,
-        RPostgres, RSQLite (>= 2.2.8), testthat (>= 3.1.2), tidyverse,
-        waldo, withr
+Suggests: brio, colourpicker, covr, crayon, dbplyr (>= 2.2.0),
+        DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0), fansi,
+        forcats, htmltools, htmlwidgets, jsonlite, keyring, knitr,
+        mockr, nycflights13, odbc, pixarfilms, pool, progress,
+        reactable, RMariaDB (>= 1.2.2), rmarkdown, RPostgres, RSQLite
+        (>= 2.2.8), rstudioapi, shiny, shinyAce, shinydashboard,
+        testthat (>= 3.1.2), tidyverse, waldo, withr
 VignetteBuilder: knitr
-Encoding: UTF-8
-RoxygenNote: 7.2.0
+Config/autostyle/scope: line_breaks
+Config/autostyle/strict: true
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
         draw-dm, bind, rows-dm
-Config/autostyle/scope: line_breaks
-Config/autostyle/strict: true
+Encoding: UTF-8
+RoxygenNote: 7.2.1
 NeedsCompilation: no
-Packaged: 2022-07-06 15:29:46 UTC; kirill
+Packaged: 2022-07-21 17:30:01 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Antoine Fabri [ctb],
@@ -80,4 +81,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph]
 Maintainer: Kirill Müller <krlmlr+r@mailbox.org>
 Repository: CRAN
-Date/Publication: 2022-07-06 15:50:02 UTC
+Date/Publication: 2022-07-21 18:00:02 UTC

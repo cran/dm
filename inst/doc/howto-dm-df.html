@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-07-06" />
+<meta name="date" content="2022-07-21" />
 
 <title>Create a dm object from data frames</title>
 
@@ -331,7 +331,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Create a dm object from data frames</h1>
-<h4 class="date">2022-07-06</h4>
+<h4 class="date">2022-07-21</h4>
 
 
 
@@ -363,21 +363,6 @@ in our work environment, ready to be accessed.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>airports</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1,458 × 8</span>
-#&gt;    faa   name                            lat    lon   alt    tz dst   tzone
-#&gt;    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>
-#&gt; <span style="color: #555555;"> 1</span> 04G   Lansdowne Airport              41.1  -<span style="color: #BB0000;">80.6</span>  <span style="text-decoration: underline;">1</span>044    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 2</span> 06A   Moton Field Municipal Airport  32.5  -<span style="color: #BB0000;">85.7</span>   264    -<span style="color: #BB0000;">6</span> A     Amer…
-#&gt; <span style="color: #555555;"> 3</span> 06C   Schaumburg Regional            42.0  -<span style="color: #BB0000;">88.1</span>   801    -<span style="color: #BB0000;">6</span> A     Amer…
-#&gt; <span style="color: #555555;"> 4</span> 06N   Randall Airport                41.4  -<span style="color: #BB0000;">74.4</span>   523    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 5</span> 09J   Jekyll Island Airport          31.1  -<span style="color: #BB0000;">81.4</span>    11    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 6</span> 0A9   Elizabethton Municipal Airpo…  36.4  -<span style="color: #BB0000;">82.2</span>  <span style="text-decoration: underline;">1</span>593    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 7</span> 0G6   Williams County Airport        41.5  -<span style="color: #BB0000;">84.5</span>   730    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 8</span> 0G7   Finger Lakes Regional Airport  42.9  -<span style="color: #BB0000;">76.8</span>   492    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 9</span> 0P2   Shoestring Aviation Airfield   39.8  -<span style="color: #BB0000;">76.6</span>  <span style="text-decoration: underline;">1</span>000    -<span style="color: #BB0000;">5</span> U     Amer…
-#&gt; <span style="color: #555555;">10</span> 0S9   Jefferson County Intl          48.1 -<span style="color: #BB0000;">123.</span>    108    -<span style="color: #BB0000;">8</span> A     Amer…
-#&gt; <span style="color: #555555;"># … with 1,448 more rows</span>
-</CODE></PRE>
 <p>Your own data will probably not be available as an R package.
 Whatever format it is in, you will need to be able to load it as data
 frames into your R session. If the data is too large, consider using dm
@@ -394,12 +379,6 @@ to work with and how they are connected. For that we can use
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="ot">&lt;-</span> <span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
-#&gt; Columns: 53
-#&gt; Primary keys: 0
-#&gt; Foreign keys: 0
-</CODE></PRE>
 <p>The <code>as_dm()</code> function is an alternative that works if you
 already have a list of tables.</p>
 </div>
@@ -413,30 +392,8 @@ towards using dm and its data modeling functionality.</p>
 or by name) is similar to syntax for lists, and so you don’t need to
 learn any additional syntax to work with <code>dm</code> objects.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(flights_dm_no_keys)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;airlines&quot; &quot;airports&quot; &quot;flights&quot;  &quot;planes&quot;   &quot;weather&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys<span class="sc">$</span>airports</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 1,458 × 8</span>
-#&gt;    faa   name                            lat    lon   alt    tz dst   tzone
-#&gt;    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>
-#&gt; <span style="color: #555555;"> 1</span> 04G   Lansdowne Airport              41.1  -<span style="color: #BB0000;">80.6</span>  <span style="text-decoration: underline;">1</span>044    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 2</span> 06A   Moton Field Municipal Airport  32.5  -<span style="color: #BB0000;">85.7</span>   264    -<span style="color: #BB0000;">6</span> A     Amer…
-#&gt; <span style="color: #555555;"> 3</span> 06C   Schaumburg Regional            42.0  -<span style="color: #BB0000;">88.1</span>   801    -<span style="color: #BB0000;">6</span> A     Amer…
-#&gt; <span style="color: #555555;"> 4</span> 06N   Randall Airport                41.4  -<span style="color: #BB0000;">74.4</span>   523    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 5</span> 09J   Jekyll Island Airport          31.1  -<span style="color: #BB0000;">81.4</span>    11    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 6</span> 0A9   Elizabethton Municipal Airpo…  36.4  -<span style="color: #BB0000;">82.2</span>  <span style="text-decoration: underline;">1</span>593    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 7</span> 0G6   Williams County Airport        41.5  -<span style="color: #BB0000;">84.5</span>   730    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 8</span> 0G7   Finger Lakes Regional Airport  42.9  -<span style="color: #BB0000;">76.8</span>   492    -<span style="color: #BB0000;">5</span> A     Amer…
-#&gt; <span style="color: #555555;"> 9</span> 0P2   Shoestring Aviation Airfield   39.8  -<span style="color: #BB0000;">76.6</span>  <span style="text-decoration: underline;">1</span>000    -<span style="color: #BB0000;">5</span> U     Amer…
-#&gt; <span style="color: #555555;">10</span> 0S9   Jefferson County Intl          48.1 -<span style="color: #BB0000;">123.</span>    108    -<span style="color: #BB0000;">8</span> A     Amer…
-#&gt; <span style="color: #555555;"># … with 1,448 more rows</span>
-</CODE></PRE>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys[<span class="fu">c</span>(<span class="st">&quot;airports&quot;</span>, <span class="st">&quot;flights&quot;</span>)]</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
-#&gt; Tables: `airports`, `flights`
-#&gt; Columns: 27
-#&gt; Primary keys: 0
-#&gt; Foreign keys: 0
-</CODE></PRE>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys<span class="sc">$</span>airports</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys[<span class="fu">c</span>(<span class="st">&quot;airports&quot;</span>, <span class="st">&quot;flights&quot;</span>)]</span></code></pre></div>
 </div>
 <div id="defining-keys" class="section level2">
 <h2>Defining Keys</h2>
@@ -457,37 +414,18 @@ more information on keys and a crash course on databases, see
 <p><code>dm</code> offers <code>dm_enum_pk_candidates()</code> to
 identify viable primary keys for a table in the <code>dm</code> object,
 and <code>dm_add_pk()</code> to add them.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_no_keys,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> planes</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 9 × 3</span>
-#&gt;   columns      candidate why                                               
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                                             
-#&gt; <span style="color: #555555;">1</span> tailnum      TRUE      <span style="color: #555555;">&quot;&quot;</span>                                                
-#&gt; <span style="color: #555555;">2</span> year         FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: 2001 (284), 2000 (244), 20…
-#&gt; <span style="color: #555555;">3</span> type         FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: Fixed wing multi engine (3…
-#&gt; <span style="color: #555555;">4</span> manufacturer FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: BOEING (1630), AIRBUS INDU…
-#&gt; <span style="color: #555555;">5</span> model        FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: 737-7H4 (361), A320-232 (2…
-#&gt; <span style="color: #555555;">6</span> engines      FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: 2 (3288), 1 (27), 4 (4), 3…
-#&gt; <span style="color: #555555;">7</span> seats        FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: 149 (452), 140 (411), 55 (…
-#&gt; <span style="color: #555555;">8</span> speed        FALSE     <span style="color: #555555;">&quot;</span>has 3299 missing values, and duplicate values: 4…
-#&gt; <span style="color: #555555;">9</span> engine       FALSE     <span style="color: #555555;">&quot;</span>has duplicate values: Turbo-fan (2750), Turbo-je…
-</CODE></PRE>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_no_keys,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> planes</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Now, we can add the identified primary keys:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="ot">&lt;-</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_no_keys <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(<span class="at">table =</span> airlines, <span class="at">columns =</span> carrier) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airports, faa) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(planes, tailnum) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(weather, <span class="fu">c</span>(origin, time_hour))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
-#&gt; Columns: 53
-#&gt; Primary keys: 4
-#&gt; Foreign keys: 0
-</CODE></PRE>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(<span class="at">table =</span> airlines, <span class="at">columns =</span> carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airports, faa) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(planes, tailnum) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(weather, <span class="fu">c</span>(origin, time_hour))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks</span></code></pre></div>
 <p>Note that {dm} functions work with both named and positional argument
 specification, and compound keys can be specified using a vector
 argument.</p>
@@ -502,34 +440,11 @@ a table <em>looking for</em> a reference, and a table that is
 table that needs a foreign key to link it to a second table, and the
 <code>ref_table</code> argument specifies the table to be linked to,
 which needs a primary key already defined for it.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_only_pks,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> flights,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_table =</span> airlines</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 19 × 3</span>
-#&gt;    columns        candidate why                                            
-#&gt;    <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>         <span style="color: #555555; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                                          
-#&gt; <span style="color: #555555;"> 1</span> carrier        TRUE      <span style="color: #555555;">&quot;&quot;</span>                                             
-#&gt; <span style="color: #555555;"> 2</span> year           FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;"> 3</span> month          FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;"> 4</span> day            FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;"> 5</span> dep_time       FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;"> 6</span> sched_dep_time FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;"> 7</span> dep_delay      FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;double&gt; and `value1` …
-#&gt; <span style="color: #555555;"> 8</span> arr_time       FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;"> 9</span> sched_arr_time FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;">10</span> arr_delay      FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;double&gt; and `value1` …
-#&gt; <span style="color: #555555;">11</span> flight         FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;integer&gt; and `value1`…
-#&gt; <span style="color: #555555;">12</span> tailnum        FALSE     <span style="color: #555555;">&quot;</span>values of `flights$tailnum` not in `airlines$…
-#&gt; <span style="color: #555555;">13</span> origin         FALSE     <span style="color: #555555;">&quot;</span>values of `flights$origin` not in `airlines$c…
-#&gt; <span style="color: #555555;">14</span> dest           FALSE     <span style="color: #555555;">&quot;</span>values of `flights$dest` not in `airlines$car…
-#&gt; <span style="color: #555555;">15</span> air_time       FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;double&gt; and `value1` …
-#&gt; <span style="color: #555555;">16</span> distance       FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;double&gt; and `value1` …
-#&gt; <span style="color: #555555;">17</span> hour           FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;double&gt; and `value1` …
-#&gt; <span style="color: #555555;">18</span> minute         FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;double&gt; and `value1` …
-#&gt; <span style="color: #555555;">19</span> time_hour      FALSE     <span style="color: #555555;">&quot;</span>Can&#39;t combine `value1` &lt;datetime&lt;America/New_…
-</CODE></PRE>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dm =</span> flights_dm_only_pks,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> flights,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_table =</span> airlines</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Having chosen a column from the successful candidates provided by
 <code>dm_enum_fk_candidates()</code>, we use the
 <code>dm_add_fk()</code> function to establish the foreign key linking
@@ -538,19 +453,13 @@ the process for the <code>flights</code> and <code>airlines</code>
 tables that we started above. The <code>carrier</code> column in the
 <code>airlines</code> table will be added as the foreign key in
 <code>flights</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="ot">&lt;-</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_only_pks <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(<span class="at">table =</span> flights, <span class="at">columns =</span> tailnum, <span class="at">ref_table =</span> planes) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, carrier, airlines) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, <span class="fu">c</span>(origin, time_hour), weather)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;">──</span> <span style="color: #555555;">Metadata</span> <span style="color: #555555;">───────────────────────────────────────────────────────────────</span>
-#&gt; Tables: `airlines`, `airports`, `flights`, `planes`, `weather`
-#&gt; Columns: 53
-#&gt; Primary keys: 4
-#&gt; Foreign keys: 4
-</CODE></PRE>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="ot">&lt;-</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(<span class="at">table =</span> flights, <span class="at">columns =</span> tailnum, <span class="at">ref_table =</span> planes) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, carrier, airlines) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, <span class="fu">c</span>(origin, time_hour), weather)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys</span></code></pre></div>
 <p>Having created the required primary and foreign keys to link all the
 tables together, we now have a relational data model we can work
 with.</p>
@@ -561,403 +470,30 @@ with.</p>
 have successfully created the model we were aiming for. We can use
 <code>dm_draw()</code> at any stage of the process to generate a visual
 representation of the tables and the links between them:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">rankdir =</span> <span class="st">&quot;TB&quot;</span>, <span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">rankdir =</span> <span class="st">&quot;TB&quot;</span>, <span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
- -->
-<!-- Title: %0 Pages: 1 -->
-<svg width="419pt" height="449pt" viewBox="0.00 0.00 419.00 449.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 445)">
-<title>%0</title>
-<g id="a_graph0"><a xlink:title="Data Model">
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-445 415,-445 415,4 -4,4"></polygon>
-</a>
-</g>
-<!-- airlines -->
-<g id="node1" class="node">
-<title>airlines</title>
-<polygon fill="#efebdd" stroke="transparent" points="39,-143 39,-163 84,-163 84,-143 39,-143"></polygon>
-<text text-anchor="start" x="40.8969" y="-148.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
-<polygon fill="#ffffff" stroke="transparent" points="39,-123 39,-143 84,-143 84,-123 39,-123"></polygon>
-<text text-anchor="start" x="41" y="-128.4" font-family="Times,serif" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="#ffffff" stroke="transparent" points="39,-103 39,-123 84,-123 84,-103 39,-103"></polygon>
-<text text-anchor="start" x="41" y="-108.4" font-family="Times,serif" font-size="14.00" fill="#444444">name</text>
-<polygon fill="none" stroke="#555555" points="37.5,-102 37.5,-164 84.5,-164 84.5,-102 37.5,-102"></polygon>
-</g>
-<!-- airports -->
-<g id="node2" class="node">
-<title>airports</title>
-<polygon fill="#efebdd" stroke="transparent" points="361,-178 361,-198 407,-198 407,-178 361,-178"></polygon>
-<text text-anchor="start" x="362.6192" y="-183.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-158 361,-178 407,-178 407,-158 361,-158"></polygon>
-<text text-anchor="start" x="363" y="-163.4" font-family="Times,serif" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-138 361,-158 407,-158 407,-138 361,-138"></polygon>
-<text text-anchor="start" x="363" y="-143.4" font-family="Times,serif" font-size="14.00" fill="#444444">name</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-118 361,-138 407,-138 407,-118 361,-118"></polygon>
-<text text-anchor="start" x="363" y="-123.4" font-family="Times,serif" font-size="14.00" fill="#444444">lat</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-98 361,-118 407,-118 407,-98 361,-98"></polygon>
-<text text-anchor="start" x="363" y="-103.4" font-family="Times,serif" font-size="14.00" fill="#444444">lon</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-78 361,-98 407,-98 407,-78 361,-78"></polygon>
-<text text-anchor="start" x="363" y="-83.4" font-family="Times,serif" font-size="14.00" fill="#444444">alt</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-58 361,-78 407,-78 407,-58 361,-58"></polygon>
-<text text-anchor="start" x="363" y="-63.4" font-family="Times,serif" font-size="14.00" fill="#444444">tz</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-38 361,-58 407,-58 407,-38 361,-38"></polygon>
-<text text-anchor="start" x="363" y="-43.4" font-family="Times,serif" font-size="14.00" fill="#444444">dst</text>
-<polygon fill="#ffffff" stroke="transparent" points="361,-18 361,-38 407,-38 407,-18 361,-18"></polygon>
-<text text-anchor="start" x="363" y="-23.4" font-family="Times,serif" font-size="14.00" fill="#444444">tzone</text>
-<polygon fill="none" stroke="#555555" points="360,-17 360,-199 408,-199 408,-17 360,-17"></polygon>
-</g>
-<!-- flights -->
-<g id="node3" class="node">
-<title>flights</title>
-<polygon fill="#efebdd" stroke="transparent" points="120,-381 120,-401 214,-401 214,-381 120,-381"></polygon>
-<text text-anchor="start" x="149.1115" y="-386.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-361 120,-381 214,-381 214,-361 120,-361"></polygon>
-<text text-anchor="start" x="122" y="-366.4" font-family="Times,serif" font-size="14.00" fill="#444444">year</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-341 120,-361 214,-361 214,-341 120,-341"></polygon>
-<text text-anchor="start" x="122" y="-346.4" font-family="Times,serif" font-size="14.00" fill="#444444">month</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-321 120,-341 214,-341 214,-321 120,-321"></polygon>
-<text text-anchor="start" x="122" y="-326.4" font-family="Times,serif" font-size="14.00" fill="#444444">day</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-301 120,-321 214,-321 214,-301 120,-301"></polygon>
-<text text-anchor="start" x="122" y="-306.4" font-family="Times,serif" font-size="14.00" fill="#444444">dep_time</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-281 120,-301 214,-301 214,-281 120,-281"></polygon>
-<text text-anchor="start" x="121.5126" y="-286.4" font-family="Times,serif" font-size="14.00" fill="#444444">sched_dep_time</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-261 120,-281 214,-281 214,-261 120,-261"></polygon>
-<text text-anchor="start" x="122" y="-266.4" font-family="Times,serif" font-size="14.00" fill="#444444">dep_delay</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-241 120,-261 214,-261 214,-241 120,-241"></polygon>
-<text text-anchor="start" x="122" y="-246.4" font-family="Times,serif" font-size="14.00" fill="#444444">arr_time</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-221 120,-241 214,-241 214,-221 120,-221"></polygon>
-<text text-anchor="start" x="122" y="-226.4" font-family="Times,serif" font-size="14.00" fill="#444444">sched_arr_time</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-201 120,-221 214,-221 214,-201 120,-201"></polygon>
-<text text-anchor="start" x="122" y="-206.4" font-family="Times,serif" font-size="14.00" fill="#444444">arr_delay</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-181 120,-201 214,-201 214,-181 120,-181"></polygon>
-<text text-anchor="start" x="122" y="-186.4" font-family="Times,serif" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-161 120,-181 214,-181 214,-161 120,-161"></polygon>
-<text text-anchor="start" x="122" y="-166.4" font-family="Times,serif" font-size="14.00" fill="#444444">flight</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-141 120,-161 214,-161 214,-141 120,-141"></polygon>
-<text text-anchor="start" x="122" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-121 120,-141 214,-141 214,-121 120,-121"></polygon>
-<text text-anchor="start" x="122" y="-126.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-101 120,-121 214,-121 214,-101 120,-101"></polygon>
-<text text-anchor="start" x="122" y="-106.4" font-family="Times,serif" font-size="14.00" fill="#444444">dest</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-81 120,-101 214,-101 214,-81 120,-81"></polygon>
-<text text-anchor="start" x="122" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#444444">air_time</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-61 120,-81 214,-81 214,-61 120,-61"></polygon>
-<text text-anchor="start" x="122" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">distance</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-41 120,-61 214,-61 214,-41 120,-41"></polygon>
-<text text-anchor="start" x="122" y="-46.4" font-family="Times,serif" font-size="14.00" fill="#444444">hour</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-21 120,-41 214,-41 214,-21 120,-21"></polygon>
-<text text-anchor="start" x="122" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#444444">minute</text>
-<polygon fill="#ffffff" stroke="transparent" points="120,-1 120,-21 214,-21 214,-1 120,-1"></polygon>
-<text text-anchor="start" x="122" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">time_hour</text>
-<polygon fill="none" stroke="#555555" points="119,0 119,-402 215,-402 215,0 119,0"></polygon>
-</g>
-<!-- planes -->
-<g id="node4" class="node">
-<title>planes</title>
-<polygon fill="#efebdd" stroke="transparent" points="1,-385 1,-405 79,-405 79,-385 1,-385"></polygon>
-<text text-anchor="start" x="22.1178" y="-390.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-365 1,-385 79,-385 79,-365 1,-365"></polygon>
-<text text-anchor="start" x="3" y="-370.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-345 1,-365 79,-365 79,-345 1,-345"></polygon>
-<text text-anchor="start" x="3" y="-350.4" font-family="Times,serif" font-size="14.00" fill="#444444">year</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-325 1,-345 79,-345 79,-325 1,-325"></polygon>
-<text text-anchor="start" x="3" y="-330.4" font-family="Times,serif" font-size="14.00" fill="#444444">type</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-305 1,-325 79,-325 79,-305 1,-305"></polygon>
-<text text-anchor="start" x="2.6893" y="-310.4" font-family="Times,serif" font-size="14.00" fill="#444444">manufacturer</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-285 1,-305 79,-305 79,-285 1,-285"></polygon>
-<text text-anchor="start" x="3" y="-290.4" font-family="Times,serif" font-size="14.00" fill="#444444">model</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-265 1,-285 79,-285 79,-265 1,-265"></polygon>
-<text text-anchor="start" x="3" y="-270.4" font-family="Times,serif" font-size="14.00" fill="#444444">engines</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-245 1,-265 79,-265 79,-245 1,-245"></polygon>
-<text text-anchor="start" x="3" y="-250.4" font-family="Times,serif" font-size="14.00" fill="#444444">seats</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-225 1,-245 79,-245 79,-225 1,-225"></polygon>
-<text text-anchor="start" x="3" y="-230.4" font-family="Times,serif" font-size="14.00" fill="#444444">speed</text>
-<polygon fill="#ffffff" stroke="transparent" points="1,-205 1,-225 79,-225 79,-205 1,-205"></polygon>
-<text text-anchor="start" x="3" y="-210.4" font-family="Times,serif" font-size="14.00" fill="#444444">engine</text>
-<polygon fill="none" stroke="#555555" points="0,-204 0,-406 80,-406 80,-204 0,-204"></polygon>
-</g>
-<!-- weather -->
-<g id="node5" class="node">
-<title>weather</title>
-<polygon fill="#efebdd" stroke="transparent" points="256,-420 256,-440 326,-440 326,-420 256,-420"></polygon>
-<text text-anchor="start" x="268.8492" y="-425.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-400 256,-420 326,-420 326,-400 256,-400"></polygon>
-<text text-anchor="start" x="258" y="-405.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-380 256,-400 326,-400 326,-380 256,-380"></polygon>
-<text text-anchor="start" x="258" y="-385.4" font-family="Times,serif" font-size="14.00" fill="#444444">year</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-360 256,-380 326,-380 326,-360 256,-360"></polygon>
-<text text-anchor="start" x="258" y="-365.4" font-family="Times,serif" font-size="14.00" fill="#444444">month</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-340 256,-360 326,-360 326,-340 256,-340"></polygon>
-<text text-anchor="start" x="258" y="-345.4" font-family="Times,serif" font-size="14.00" fill="#444444">day</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-320 256,-340 326,-340 326,-320 256,-320"></polygon>
-<text text-anchor="start" x="258" y="-325.4" font-family="Times,serif" font-size="14.00" fill="#444444">hour</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-300 256,-320 326,-320 326,-300 256,-300"></polygon>
-<text text-anchor="start" x="258" y="-305.4" font-family="Times,serif" font-size="14.00" fill="#444444">temp</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-280 256,-300 326,-300 326,-280 256,-280"></polygon>
-<text text-anchor="start" x="258" y="-285.4" font-family="Times,serif" font-size="14.00" fill="#444444">dewp</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-260 256,-280 326,-280 326,-260 256,-260"></polygon>
-<text text-anchor="start" x="258" y="-265.4" font-family="Times,serif" font-size="14.00" fill="#444444">humid</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-240 256,-260 326,-260 326,-240 256,-240"></polygon>
-<text text-anchor="start" x="258" y="-245.4" font-family="Times,serif" font-size="14.00" fill="#444444">wind_dir</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-220 256,-240 326,-240 326,-220 256,-220"></polygon>
-<text text-anchor="start" x="257.5645" y="-225.4" font-family="Times,serif" font-size="14.00" fill="#444444">wind_speed</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-200 256,-220 326,-220 326,-200 256,-200"></polygon>
-<text text-anchor="start" x="258" y="-205.4" font-family="Times,serif" font-size="14.00" fill="#444444">wind_gust</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-180 256,-200 326,-200 326,-180 256,-180"></polygon>
-<text text-anchor="start" x="258" y="-185.4" font-family="Times,serif" font-size="14.00" fill="#444444">precip</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-160 256,-180 326,-180 326,-160 256,-160"></polygon>
-<text text-anchor="start" x="258" y="-165.4" font-family="Times,serif" font-size="14.00" fill="#444444">pressure</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-140 256,-160 326,-160 326,-140 256,-140"></polygon>
-<text text-anchor="start" x="258" y="-145.4" font-family="Times,serif" font-size="14.00" fill="#444444">visib</text>
-<polygon fill="#ffffff" stroke="transparent" points="256,-120 256,-140 326,-140 326,-120 256,-120"></polygon>
-<text text-anchor="start" x="258" y="-125.4" font-family="Times,serif" font-size="14.00" fill="#444444">time_hour</text>
-<polygon fill="none" stroke="#555555" points="255,-119 255,-441 327,-441 327,-119 255,-119"></polygon>
-</g>
-</g>
-</svg>
-
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airlines, carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(airlines, carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, tailnum, planes) <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
- -->
-<!-- Title: %0 Pages: 1 -->
-<svg width="176pt" height="164pt" viewBox="0.00 0.00 176.00 164.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 160)">
-<title>%0</title>
-<g id="a_graph0"><a xlink:title="Data Model">
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-160 172,-160 172,4 -4,4"></polygon>
-</a>
-</g>
-<!-- airlines -->
-<g id="node1" class="node">
-<title>airlines</title>
-<polygon fill="#efebdd" stroke="transparent" points="119,-69 119,-89 164,-89 164,-69 119,-69"></polygon>
-<text text-anchor="start" x="120.8969" y="-74.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
-<polygon fill="#ffffff" stroke="transparent" points="119,-49 119,-69 164,-69 164,-49 119,-49"></polygon>
-<text text-anchor="start" x="121" y="-55.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="none" stroke="#555555" points="117.5,-48 117.5,-90 164.5,-90 164.5,-48 117.5,-48"></polygon>
-</g>
-<!-- airports -->
-<g id="node2" class="node">
-<title>airports</title>
-<polygon fill="#efebdd" stroke="transparent" points="118,-122 118,-142 164,-142 164,-122 118,-122"></polygon>
-<text text-anchor="start" x="119.6192" y="-127.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
-<polygon fill="none" stroke="#555555" points="117,-121 117,-143 165,-143 165,-121 117,-121"></polygon>
-</g>
-<!-- flights -->
-<g id="node3" class="node">
-<title>flights</title>
-<polygon fill="#efebdd" stroke="transparent" points="44,-128 44,-148 83,-148 83,-128 44,-128"></polygon>
-<text text-anchor="start" x="45.6115" y="-133.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
-<polygon fill="none" stroke="#555555" points="42.5,-127 42.5,-149 83.5,-149 83.5,-127 42.5,-127"></polygon>
-</g>
-<!-- planes -->
-<g id="node4" class="node">
-<title>planes</title>
-<polygon fill="#efebdd" stroke="transparent" points="44,-68 44,-88 83,-88 83,-68 44,-68"></polygon>
-<text text-anchor="start" x="45.6178" y="-73.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
-<polygon fill="none" stroke="#555555" points="42.5,-67 42.5,-89 83.5,-89 83.5,-67 42.5,-67"></polygon>
-</g>
-<!-- weather -->
-<g id="node5" class="node">
-<title>weather</title>
-<polygon fill="#efebdd" stroke="transparent" points="3,-8 3,-28 51,-28 51,-8 3,-8"></polygon>
-<text text-anchor="start" x="4.8492" y="-13.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
-<polygon fill="none" stroke="#555555" points="2,-7 2,-29 52,-29 52,-7 2,-7"></polygon>
-</g>
-</g>
-</svg>
-
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, tailnum, planes) <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
- -->
-<!-- Title: %0 Pages: 1 -->
-<svg width="230pt" height="170pt" viewBox="0.00 0.00 230.00 170.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 166)">
-<title>%0</title>
-<g id="a_graph0"><a xlink:title="Data Model">
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-166 226,-166 226,4 -4,4"></polygon>
-</a>
-</g>
-<!-- airlines -->
-<g id="node1" class="node">
-<title>airlines</title>
-<polygon fill="#efebdd" stroke="transparent" points="5,-77 5,-97 50,-97 50,-77 5,-77"></polygon>
-<text text-anchor="start" x="6.8969" y="-82.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
-<polygon fill="#ffffff" stroke="transparent" points="5,-57 5,-77 50,-77 50,-57 5,-57"></polygon>
-<text text-anchor="start" x="7" y="-63.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="none" stroke="#555555" points="3.5,-56 3.5,-98 50.5,-98 50.5,-56 3.5,-56"></polygon>
-</g>
-<!-- airports -->
-<g id="node2" class="node">
-<title>airports</title>
-<polygon fill="#efebdd" stroke="transparent" points="4,-141 4,-161 50,-161 50,-141 4,-141"></polygon>
-<text text-anchor="start" x="5.6192" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
-<polygon fill="#ffffff" stroke="transparent" points="4,-121 4,-141 50,-141 50,-121 4,-121"></polygon>
-<text text-anchor="start" x="6" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="none" stroke="#555555" points="3,-120 3,-162 51,-162 51,-120 3,-120"></polygon>
-</g>
-<!-- flights -->
-<g id="node3" class="node">
-<title>flights</title>
-<polygon fill="#efebdd" stroke="transparent" points="82,-21 82,-41 128,-41 128,-21 82,-21"></polygon>
-<text text-anchor="start" x="87.1115" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
-<polygon fill="#ffffff" stroke="transparent" points="82,-1 82,-21 128,-21 128,-1 82,-1"></polygon>
-<text text-anchor="start" x="83.6115" y="-6.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#555555" points="81,0 81,-42 129,-42 129,0 81,0"></polygon>
-</g>
-<!-- planes -->
-<g id="node4" class="node">
-<title>planes</title>
-<polygon fill="#efebdd" stroke="transparent" points="172,-21 172,-41 218,-41 218,-21 172,-21"></polygon>
-<text text-anchor="start" x="177.1178" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
-<polygon fill="#ffffff" stroke="transparent" points="172,-1 172,-21 218,-21 218,-1 172,-1"></polygon>
-<text text-anchor="start" x="173.6115" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#555555" points="171,0 171,-42 219,-42 219,0 171,0"></polygon>
-</g>
-<!-- flights&#45;&gt;planes -->
-<g id="edge1" class="edge">
-<title>flights:tailnum-&gt;planes:tailnum</title>
-<path fill="none" stroke="#555555" d="M128,-11C143.5833,-11 149.8532,-11 161.6529,-11"></path>
-<polygon fill="#555555" stroke="#555555" points="162,-14.5001 172,-11 162,-7.5001 162,-14.5001"></polygon>
-</g>
-<!-- weather -->
-<g id="node5" class="node">
-<title>weather</title>
-<polygon fill="#efebdd" stroke="transparent" points="72.5,-85 72.5,-105 173.5,-105 173.5,-85 72.5,-85"></polygon>
-<text text-anchor="start" x="100.8492" y="-90.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
-<polygon fill="#ffffff" stroke="transparent" points="72.5,-65 72.5,-85 173.5,-85 173.5,-65 72.5,-65"></polygon>
-<text text-anchor="start" x="74.0056" y="-71.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">origin, time_hour</text>
-<polygon fill="none" stroke="#555555" points="71,-64 71,-106 174,-106 174,-64 71,-64"></polygon>
-</g>
-</g>
-</svg>
-
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
- -->
-<!-- Title: %0 Pages: 1 -->
-<svg width="250pt" height="230pt" viewBox="0.00 0.00 250.00 230.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 226)">
-<title>%0</title>
-<g id="a_graph0"><a xlink:title="Data Model">
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-226 246,-226 246,4 -4,4"></polygon>
-</a>
-</g>
-<!-- airlines -->
-<g id="node1" class="node">
-<title>airlines</title>
-<polygon fill="#efebdd" stroke="transparent" points="168.5,-201 168.5,-221 213.5,-221 213.5,-201 168.5,-201"></polygon>
-<text text-anchor="start" x="170.3969" y="-206.4" font-family="Times,serif" font-size="14.00" fill="#000000">airlines</text>
-<polygon fill="#ffffff" stroke="transparent" points="168.5,-181 168.5,-201 213.5,-201 213.5,-181 168.5,-181"></polygon>
-<text text-anchor="start" x="170.5" y="-187.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="none" stroke="#555555" points="167,-180 167,-222 214,-222 214,-180 167,-180"></polygon>
-</g>
-<!-- airports -->
-<g id="node2" class="node">
-<title>airports</title>
-<polygon fill="#efebdd" stroke="transparent" points="167.5,-81 167.5,-101 213.5,-101 213.5,-81 167.5,-81"></polygon>
-<text text-anchor="start" x="169.1192" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#000000">airports</text>
-<polygon fill="#ffffff" stroke="transparent" points="167.5,-61 167.5,-81 213.5,-81 213.5,-61 167.5,-61"></polygon>
-<text text-anchor="start" x="169.5" y="-67.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">faa</text>
-<polygon fill="none" stroke="#555555" points="166.5,-60 166.5,-102 214.5,-102 214.5,-60 166.5,-60"></polygon>
-</g>
-<!-- flights -->
-<g id="node3" class="node">
-<title>flights</title>
-<polygon fill="#efebdd" stroke="transparent" points="1.5,-141 1.5,-161 102.5,-161 102.5,-141 1.5,-141"></polygon>
-<text text-anchor="start" x="34.1115" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">flights</text>
-<polygon fill="#ffffff" stroke="transparent" points="1.5,-121 1.5,-141 102.5,-141 102.5,-121 1.5,-121"></polygon>
-<text text-anchor="start" x="3.5" y="-126.4" font-family="Times,serif" font-size="14.00" fill="#444444">carrier</text>
-<polygon fill="#ffffff" stroke="transparent" points="1.5,-101 1.5,-121 102.5,-121 102.5,-101 1.5,-101"></polygon>
-<text text-anchor="start" x="3.5" y="-106.4" font-family="Times,serif" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="#ffffff" stroke="transparent" points="1.5,-81 1.5,-101 102.5,-101 102.5,-81 1.5,-81"></polygon>
-<text text-anchor="start" x="3.5" y="-86.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin</text>
-<polygon fill="#ffffff" stroke="transparent" points="1.5,-61 1.5,-81 102.5,-81 102.5,-61 1.5,-61"></polygon>
-<text text-anchor="start" x="3.0056" y="-66.4" font-family="Times,serif" font-size="14.00" fill="#444444">origin, time_hour</text>
-<polygon fill="none" stroke="#555555" points="0,-60 0,-162 103,-162 103,-60 0,-60"></polygon>
-</g>
-<!-- flights&#45;&gt;airlines -->
-<g id="edge1" class="edge">
-<title>flights:carrier-&gt;airlines:carrier</title>
-<path fill="none" stroke="#555555" d="M102.5,-131C126.5668,-131 120.8029,-155.2496 139,-171 147.7956,-178.613 151.0394,-185.8305 158.4157,-189.1277"></path>
-<polygon fill="#555555" stroke="#555555" points="158.0291,-192.6157 168.5,-191 159.307,-185.7333 158.0291,-192.6157"></polygon>
-</g>
-<!-- flights&#45;&gt;airports -->
-<g id="edge2" class="edge">
-<title>flights:origin-&gt;airports:faa</title>
-<path fill="none" stroke="#555555" d="M102.5,-91C128.9473,-91 135.7361,-75.6875 157.2687,-71.8594"></path>
-<polygon fill="#555555" stroke="#555555" points="157.8281,-75.3248 167.5,-71 157.2421,-68.3494 157.8281,-75.3248"></polygon>
-</g>
-<!-- planes -->
-<g id="node4" class="node">
-<title>planes</title>
-<polygon fill="#efebdd" stroke="transparent" points="167.5,-141 167.5,-161 213.5,-161 213.5,-141 167.5,-141"></polygon>
-<text text-anchor="start" x="172.6178" y="-146.4" font-family="Times,serif" font-size="14.00" fill="#000000">planes</text>
-<polygon fill="#ffffff" stroke="transparent" points="167.5,-121 167.5,-141 213.5,-141 213.5,-121 167.5,-121"></polygon>
-<text text-anchor="start" x="169.1115" y="-127.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">tailnum</text>
-<polygon fill="none" stroke="#555555" points="166.5,-120 166.5,-162 214.5,-162 214.5,-120 166.5,-120"></polygon>
-</g>
-<!-- flights&#45;&gt;planes -->
-<g id="edge3" class="edge">
-<title>flights:tailnum-&gt;planes:tailnum</title>
-<path fill="none" stroke="#555555" d="M102.5,-111C128.9473,-111 135.7361,-126.3125 157.2687,-130.1406"></path>
-<polygon fill="#555555" stroke="#555555" points="157.2421,-133.6506 167.5,-131 157.8281,-126.6752 157.2421,-133.6506"></polygon>
-</g>
-<!-- weather -->
-<g id="node5" class="node">
-<title>weather</title>
-<polygon fill="#efebdd" stroke="transparent" points="140.5,-21 140.5,-41 241.5,-41 241.5,-21 140.5,-21"></polygon>
-<text text-anchor="start" x="168.8492" y="-26.4" font-family="Times,serif" font-size="14.00" fill="#000000">weather</text>
-<polygon fill="#ffffff" stroke="transparent" points="140.5,-1 140.5,-21 241.5,-21 241.5,-1 140.5,-1"></polygon>
-<text text-anchor="start" x="142.0056" y="-7.4" font-family="Times,serif" text-decoration="underline" font-size="14.00" fill="#444444">origin, time_hour</text>
-<polygon fill="none" stroke="#555555" points="139,0 139,-42 242,-42 242,0 139,0"></polygon>
-</g>
-<!-- flights&#45;&gt;weather -->
-<g id="edge4" class="edge">
-<title>flights:origin, time_hour-&gt;weather:origin, time_hour</title>
-<path fill="none" stroke="#555555" d="M102.5,-71C129.8727,-71 114.6101,-25.8792 130.6579,-13.8939"></path>
-<polygon fill="#555555" stroke="#555555" points="131.8935,-17.1789 140.5,-11 129.9188,-10.4631 131.8935,-17.1789"></polygon>
-</g>
-</g>
-</svg>
-
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 </div>
 <div id="integrity-checks" class="section level2">
 <h2>Integrity Checks</h2>
 <p>As well as checking our data model visually, dm can examine the
 constraints we have created by the addition of keys and verify that they
 are sensible.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> No constraints defined.
-</CODE></PRE>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #00BBBB;">ℹ</span> All constraints satisfied.
-</CODE></PRE>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
-<PRE class="fansi fansi-message"><CODE>#&gt; <span style="color: #BBBB00;">!</span> Unsatisfied constraints:
-</CODE></PRE>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #BB0000;">•</span> Table `flights`: foreign key `tailnum` into table `planes`: values of `flights$tailnum` not in `planes$tailnum`: N725MQ (575), N722MQ (513), N723MQ (507), N713MQ (483), N735MQ (396), …
-#&gt; <span style="color: #BB0000;">•</span> Table `flights`: foreign key `origin`, `time_hour` into table `weather`: values of `flights$origin`, `flights$time_hour` not in `weather$origin`, `weather$time_hour`: EWR, 2013-10-23 06:00:00 (34), EWR, 2013-08-19 17:00:00 (26), EWR, 2013-12-31 06:00:00 (26), EWR, 2013-12-31 07:00:00 (26), JFK, 2013-08-19 17:00:00 (26), …
-</CODE></PRE>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flights_dm_no_keys <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span></code></pre></div>
 <p>The results are presented in a human-readable form, and available as
 a tibble for programmatic inspection.</p>
 </div>
@@ -967,46 +503,18 @@ a tibble for programmatic inspection.</p>
 results.</p>
 <p>A data frame of primary keys is retrieved with
 <code>dm_get_all_pks()</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_pks</span>()</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 × 2</span>
-#&gt;   table    pk_col           
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>           
-#&gt; <span style="color: #555555;">1</span> airlines carrier          
-#&gt; <span style="color: #555555;">2</span> airports faa              
-#&gt; <span style="color: #555555;">3</span> planes   tailnum          
-#&gt; <span style="color: #555555;">4</span> weather  origin, time_hour
-</CODE></PRE>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>flights_dm_only_pks <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_pks</span>()</span></code></pre></div>
 <p>Similarly, a data frame of foreign keys is retrieved with
 <code>dm_get_all_fks()</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>()</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 4 × 5</span>
-#&gt;   child_table child_fk_cols     parent_table parent_key_cols   on_delete
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    
-#&gt; <span style="color: #555555;">1</span> flights     carrier           airlines     carrier           no_action
-#&gt; <span style="color: #555555;">2</span> flights     origin            airports     faa               no_action
-#&gt; <span style="color: #555555;">3</span> flights     tailnum           planes       tailnum           no_action
-#&gt; <span style="color: #555555;">4</span> flights     origin, time_hour weather      origin, time_hour no_action
-</CODE></PRE>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>()</span></code></pre></div>
 <p>We can use <code>tibble::as_tibble()</code> on the result of
 <code>dm_examine_constraints()</code> to programmatically inspect which
 constraints are not satisfied:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span></code></pre></div>
-<PRE class="fansi fansi-output"><CODE>#&gt; <span style="color: #555555;"># A tibble: 8 × 6</span>
-#&gt;   table    kind  columns           ref_table is_key problem                
-#&gt;   <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span> <span style="color: #555555; font-style: italic;">&lt;keys&gt;</span>            <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #555555; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #555555; font-style: italic;">&lt;chr&gt;</span>                  
-#&gt; <span style="color: #555555;">1</span> flights  FK    tailnum           planes    FALSE  <span style="color: #555555;">&quot;</span>values of `flights$ta…
-#&gt; <span style="color: #555555;">2</span> flights  FK    origin, time_hour weather   FALSE  <span style="color: #555555;">&quot;</span>values of `flights$or…
-#&gt; <span style="color: #555555;">3</span> airlines PK    carrier           <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
-#&gt; <span style="color: #555555;">4</span> airports PK    faa               <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
-#&gt; <span style="color: #555555;">5</span> planes   PK    tailnum           <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
-#&gt; <span style="color: #555555;">6</span> weather  PK    origin, time_hour <span style="color: #BB0000;">NA</span>        TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
-#&gt; <span style="color: #555555;">7</span> flights  FK    carrier           airlines  TRUE   <span style="color: #555555;">&quot;&quot;</span>                     
-#&gt; <span style="color: #555555;">8</span> flights  FK    origin            airports  TRUE   <span style="color: #555555;">&quot;&quot;</span>
-</CODE></PRE>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_all_keys <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>

@@ -13,106 +13,106 @@ source("setup/setup.R")
 #  )
 
 ## ----show = FALSE--------------------------------------------------------
-library(RMariaDB)
-my_db <- dm:::financial_db_con()
+#  library(RMariaDB)
+#  my_db <- dm:::financial_db_con()
 
 ## ------------------------------------------------------------------------
-library(dm)
-
-my_dm <- dm_from_con(my_db)
-my_dm
+#  library(dm)
+#  
+#  my_dm <- dm_from_con(my_db)
+#  my_dm
 
 ## ------------------------------------------------------------------------
-dbListTables(my_db)
-
-library(dbplyr)
-loans <- tbl(my_db, "loans")
-accounts <- tbl(my_db, "accounts")
-
-my_manual_dm <- dm(loans, accounts)
-my_manual_dm
+#  dbListTables(my_db)
+#  
+#  library(dbplyr)
+#  loans <- tbl(my_db, "loans")
+#  accounts <- tbl(my_db, "accounts")
+#  
+#  my_manual_dm <- dm(loans, accounts)
+#  my_manual_dm
 
 ## ----load----------------------------------------------------------------
-library(dm)
-
-fin_dm <- dm_from_con(my_db, learn_keys = FALSE)
-fin_dm
-
-## ------------------------------------------------------------------------
-my_dm_keys <-
-  my_manual_dm %>%
-  dm_add_pk(accounts, id) %>%
-  dm_add_pk(loans, id) %>%
-  dm_add_fk(loans, account_id, accounts) %>%
-  dm_set_colors(green = loans, orange = accounts)
-
-my_dm_keys %>%
-  dm_draw()
+#  library(dm)
+#  
+#  fin_dm <- dm_from_con(my_db, learn_keys = FALSE)
+#  fin_dm
 
 ## ------------------------------------------------------------------------
-trans <- tbl(my_db, "trans")
-
-my_dm_keys %>%
-  dm_add_tbl(trans)
-
-## ------------------------------------------------------------------------
-my_dm_keys
-
-my_dm_trans <-
-  my_dm_keys %>%
-  dm_add_tbl(trans)
-
-my_dm_trans
+#  my_dm_keys <-
+#    my_manual_dm %>%
+#    dm_add_pk(accounts, id) %>%
+#    dm_add_pk(loans, id) %>%
+#    dm_add_fk(loans, account_id, accounts) %>%
+#    dm_set_colors(green = loans, orange = accounts)
+#  
+#  my_dm_keys %>%
+#    dm_draw()
 
 ## ------------------------------------------------------------------------
-my_dm_keys %>%
-  dm_flatten_to_tbl(loans)
-
-my_dm_keys %>%
-  dm_flatten_to_tbl(loans) %>%
-  sql_render()
+#  trans <- tbl(my_db, "trans")
+#  
+#  my_dm_keys %>%
+#    dm(trans)
 
 ## ------------------------------------------------------------------------
-my_dm_total <-
-  my_dm_keys %>%
-  dm_zoom_to(loans) %>%
-  group_by(account_id) %>%
-  summarize(total_amount = sum(amount, na.rm = TRUE)) %>%
-  ungroup() %>%
-  dm_insert_zoomed("total_loans")
+#  my_dm_keys
+#  
+#  my_dm_trans <-
+#    my_dm_keys %>%
+#    dm(trans)
+#  
+#  my_dm_trans
 
 ## ------------------------------------------------------------------------
-my_dm_total %>%
-  dm_set_colors(violet = total_loans) %>%
-  dm_draw()
+#  my_dm_keys %>%
+#    dm_flatten_to_tbl(loans)
+#  
+#  my_dm_keys %>%
+#    dm_flatten_to_tbl(loans) %>%
+#    sql_render()
 
 ## ------------------------------------------------------------------------
-my_dm_total$total_loans
+#  my_dm_total <-
+#    my_dm_keys %>%
+#    dm_zoom_to(loans) %>%
+#    group_by(account_id) %>%
+#    summarize(total_amount = sum(amount, na.rm = TRUE)) %>%
+#    ungroup() %>%
+#    dm_insert_zoomed("total_loans")
 
 ## ------------------------------------------------------------------------
-my_dm_total$total_loans %>%
-  sql_render()
+#  my_dm_total %>%
+#    dm_set_colors(violet = total_loans) %>%
+#    dm_draw()
 
 ## ------------------------------------------------------------------------
-my_dm_local <-
-  my_dm_total %>%
-  collect()
-
-my_dm_local$total_loans
+#  my_dm_total$total_loans
 
 ## ------------------------------------------------------------------------
-my_dm_total %>%
-  dm_nrow()
+#  my_dm_total$total_loans %>%
+#    sql_render()
 
 ## ------------------------------------------------------------------------
-destination_db <- DBI::dbConnect(RSQLite::SQLite())
+#  my_dm_local <-
+#    my_dm_total %>%
+#    collect()
+#  
+#  my_dm_local$total_loans
 
-deployed_dm <- copy_dm_to(destination_db, my_dm_local)
+## ------------------------------------------------------------------------
+#  my_dm_total %>%
+#    dm_nrow()
 
-deployed_dm
-my_dm_local
+## ------------------------------------------------------------------------
+#  destination_db <- DBI::dbConnect(RSQLite::SQLite())
+#  
+#  deployed_dm <- copy_dm_to(destination_db, my_dm_local)
+#  
+#  deployed_dm
+#  my_dm_local
 
 ## ----disconnect----------------------------------------------------------
-DBI::dbDisconnect(destination_db)
-DBI::dbDisconnect(my_db)
+#  DBI::dbDisconnect(destination_db)
+#  DBI::dbDisconnect(my_db)
 
