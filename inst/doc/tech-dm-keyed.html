@@ -530,6 +530,16 @@ example below.</p>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>joined_flights_dm <span class="sc">%&gt;%</span> </span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 </div>
+<div id="use-case-6-retrieve-all-tables" class="section level3">
+<h3>Use case 6: Retrieve all tables</h3>
+<p>Retrieving all tables from a <code>dm</code> object requires a lot of
+boilerplate code. The <code>dm_deconstruct()</code> function helps
+creating that boilerplate. For a <code>dm</code> object, it prints the
+code necessary to create local variables for all tables.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_deconstruct</span>(dm)</span></code></pre></div>
+<p>This code can be copy-pasted into your script or function.</p>
+</div>
 </div>
 
 

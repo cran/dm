@@ -123,3 +123,7 @@ source("setup/setup.R")
 #  joined_flights_dm %>%
 #    dm_draw()
 
+## ------------------------------------------------------------------------
+#  dm <- dm_nycflights13()
+#  dm_deconstruct(dm)
+
