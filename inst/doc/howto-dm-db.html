@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2022-08-06" />
+<meta name="date" content="2022-09-20" />
 
 <title>Create a dm object from a database</title>
 
@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -121,13 +122,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -333,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Create a dm object from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2022-08-06</h4>
+<h4 class="date">2022-09-20</h4>
 
 
 
@@ -342,8 +350,8 @@ database management system (RDBMS) as straightforward as possible. To
 this end, a dm object can be created from any database that has a {<a href="https://dbi.r-dbi.org/">DBI</a>} backend available (<a href="https://github.com/r-dbi/backends">see list</a>).</p>
 <p>When a dm object is created via a DBI connection to an RDBMS, it can
 import all the tables in the database, the active schema, or a limited
-set. For some RDBMS, such as Postgres and SQL Server, primary and
-foreign keys are also imported and do not have to be manually added
+set. For some RDBMS, such as Postgres, SQL Server and MariaDB, primary
+and foreign keys are also imported and do not have to be manually added
 afterwards.</p>
 <p>To demonstrate, we will connect to a relational dataset repository
 (https://relational.fit.cvut.cz/) with a database server that is
@@ -353,9 +361,7 @@ data along with relevant account information and transactions. We chose
 this dataset because the relationships between <code>loan</code>,
 <code>account</code>, and <code>transactions</code> tables are a good
 representation of databases that record real-world business
-transactions. The repository uses a MariaDB server for which {dm}
-currently does not import primary or foreign keys, so we will need to
-add them.</p>
+transactions.</p>
 <p>Below, we open a connection to the publicly accessible database
 server using their documented connection parameters. Connection details
 vary from database to database. Before connecting to your own RDBMS, you
@@ -441,7 +447,7 @@ dm.</p>
 referenced table does not need to be <em>specified</em>, but the primary
 key must already be <em>defined</em>. And, as mentioned above, primary
 and foreign key constraints on the database are currently only imported
-for Postgres and SQL Server databases, and only when
+for Postgres, SQL Server databases and MariaDB, and only when
 <code>dm_from_con()</code> is used. This process of key definition needs
 to be done manually for other databases.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_dm_keys <span class="ot">&lt;-</span></span>

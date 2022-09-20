@@ -14,11 +14,13 @@ source("setup/setup.R")
 #  dm(empty_dm, airlines, airports, flights, planes, weather)
 
 ## ------------------------------------------------------------------------
-#  as_dm(list(airlines = airlines,
-#             airports = airports,
-#             flights = flights,
-#             planes = planes,
-#             weather = weather))
+#  as_dm(list(
+#    airlines = airlines,
+#    airports = airports,
+#    flights = flights,
+#    planes = planes,
+#    weather = weather
+#  ))
 
 ## ----message=FALSE-------------------------------------------------------
 #  sqlite_con <- dbplyr::nycflights13_sqlite()

@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 1.0.1
-Date: 2022-07-27
+Version: 1.0.2
+Date: 2022-09-20
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -10,7 +10,7 @@ Authors@R:
       person(given = "Kirill",
              family = "Müller",
              role = c("aut", "cre"),
-             email = "krlmlr+r@mailbox.org",
+             email = "kirill@cynkra.com",
              comment = c(ORCID = "0000-0002-1416-3412")),
       person(given = "Antoine",
              family = "Fabri",
@@ -68,7 +68,7 @@ Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
 Encoding: UTF-8
 RoxygenNote: 7.2.1
 NeedsCompilation: no
-Packaged: 2022-08-06 06:16:32 UTC; kirill
+Packaged: 2022-09-20 05:21:32 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Antoine Fabri [ctb],
@@ -79,6 +79,6 @@ Author: Tobias Schieferdecker [aut],
   Maëlle Salmon [ctb] (<https://orcid.org/0000-0002-2815-0399>),
   energie360° AG [fnd],
   cynkra GmbH [fnd, cph]
-Maintainer: Kirill Müller <krlmlr+r@mailbox.org>
+Maintainer: Kirill Müller <kirill@cynkra.com>
 Repository: CRAN
-Date/Publication: 2022-08-06 08:00:02 UTC
+Date/Publication: 2022-09-20 07:46:26 UTC
