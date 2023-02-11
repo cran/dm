@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2022-10-12" />
+<meta name="date" content="2023-02-11" />
 
 <title>Joining in relational data models</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Joining in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2022-10-12</h4>
+<h4 class="date">2023-02-11</h4>
 
 
 
@@ -350,11 +350,11 @@ attribute is merging the data.</p>
 <p>This document introduces you to the joining functions of {dm} and
 shows how to apply them using data from the <a href="https://github.com/tidyverse/nycflights13">{nycflights13}</a>
 package.</p>
-<p><a href="https://cynkra.github.io/dm/articles/howto-dm-theory#model">Relational
-data models</a> consist of multiple tables that are linked with <a href="https://cynkra.github.io/dm/articles/howto-dm-theory#fk">foreign
+<p><a href="https://dm.cynkra.com/articles/howto-dm-theory#model">Relational
+data models</a> consist of multiple tables that are linked with <a href="https://dm.cynkra.com/articles/howto-dm-theory#fk">foreign
 keys</a>. They are the building blocks for joining tables. Read more
-about relational data models in the vignette <a href="https://cynkra.github.io/dm/articles/howto-dm-theory">“Introduction
-to Relational Data Models”</a>.</p>
+about relational data models in the vignette <a href="https://dm.cynkra.com/articles/howto-dm-theory">“Introduction to
+Relational Data Models”</a>.</p>
 <p>First, we load the packages that we need:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
@@ -371,7 +371,7 @@ Transportation Statistics, and is documented in
 <p>First, we have to create a <code>dm</code> object from the
 {nycflights13} data. This is implemented with
 <code>dm_nycflights13()</code>.</p>
-<p>A <a href="https://cynkra.github.io/dm/articles/tech-dm-class.html#class-dm">data
+<p>A <a href="https://dm.cynkra.com/articles/tech-dm-class.html">data
 model object</a> contains the data as well as metadata.</p>
 <p>If you would like to create a <code>dm</code> from other tables,
 please look at <code>?dm</code> and the function
@@ -389,8 +389,8 @@ joins, two types of filtering joins, and a nesting join. See
 <h3>How it works</h3>
 <p>A join is the combination of two tables based on shared information.
 In technical terms, we merge the tables that need to be directly
-connected by a <a href="https://cynkra.github.io/dm/articles/howto-dm-theory#fk">foreign
-key relation</a>.</p>
+connected by a <a href="https://dm.cynkra.com/articles/howto-dm-theory#fk">foreign key
+relation</a>.</p>
 <p>The existing links can be inspected in two ways:</p>
 <ol style="list-style-type: decimal">
 <li>Visually, by drawing the data model with <code>dm_draw()</code></li>

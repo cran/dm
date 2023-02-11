@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2022-10-12" />
+<meta name="date" content="2023-02-11" />
 
 <title>Introduction to relational data models</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2022-10-12</h4>
+<h4 class="date">2023-02-11</h4>
 
 
 
@@ -475,8 +475,8 @@ storing data in single a data frame:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">object.size</span>(dm)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">object.size</span>(nycflights13_df)</span></code></pre></div>
-<p>Further Reading: The {dm} methods for <a href="https://cynkra.github.io/dm/articles/tech-dm-draw.html">visualizing
-data models</a>.</p>
+<p>Further Reading: The {dm} methods for <a href="https://dm.cynkra.com/articles/tech-dm-draw.html">visualizing data
+models</a>.</p>
 </div>
 <div id="pk" class="section level2">
 <h2>3. Primary Keys</h2>
@@ -500,7 +500,7 @@ column to serve as a simple primary key:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_enum_pk_candidates</span>(airports)</span></code></pre></div>
 <p>Further Reading: The {dm} package offers several functions for
-dealing with <a href="https://cynkra.github.io/dm/articles/tech-dm-class.html#pk">primary
+dealing with <a href="https://dm.cynkra.com/articles/tech-dm-class.html">primary
 keys</a>.</p>
 </div>
 <div id="fk" class="section level2">
@@ -529,7 +529,7 @@ relations present in a <code>dm</code> object using
 <code>dm_get_all_fks()</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dm <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>()</span></code></pre></div>
-<p>Further Reading: All {dm} functions for working with <a href="https://cynkra.github.io/dm/articles/tech-dm-class.html#foreign-keys">foreign
+<p>Further Reading: All {dm} functions for working with <a href="https://dm.cynkra.com/articles/tech-dm-class.html">foreign
 keys</a>.</p>
 </div>
 <div id="referential-integrity" class="section level2">
@@ -616,9 +616,9 @@ short for Structured Querying Language, plays an important role: it was
 invented for the purpose of querying relational databases.</p>
 <p>In production, the data is stored in a relational database and {dm}
 is used to work with the data.</p>
-<p>Therefore, {dm} can copy data <a href="https://cynkra.github.io/dm/articles/dm.html#copy">from and to
-databases</a>, and works transparently with both in-memory data and with
-relational database systems.</p>
+<p>Therefore, {dm} can copy data <a href="https://dm.cynkra.com/articles/dm.html">from and to databases</a>,
+and works transparently with both in-memory data and with relational
+database systems.</p>
 <p>For example, let’s create a local SQLite database and copy the
 <code>dm</code> object to it:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>con_sqlite <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
