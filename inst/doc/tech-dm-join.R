@@ -3,7 +3,6 @@ source("setup/setup.R")
 
 ## ------------------------------------------------------------------------
 #  library(dm)
-#  library(tidyverse)
 
 ## ------------------------------------------------------------------------
 #  dm <- dm_nycflights13()
@@ -58,5 +57,4 @@ source("setup/setup.R")
 #  dm_nycflights13() %>%
 #    dm_wrap_tbl(root = flights) %>%
 #    pull_tbl(flights)
-#  
 

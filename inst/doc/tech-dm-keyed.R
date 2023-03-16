@@ -92,7 +92,7 @@ source("setup/setup.R")
 #  flights_derived <-
 #    flights_dm %>%
 #    pull_tbl(flights, keyed = TRUE) %>%
-#    count(origin, carrier)
+#    dplyr::count(origin, carrier)
 #  
 #  derived_flights_dm <- dm(flights_derived, !!!flights_keyed)
 #  

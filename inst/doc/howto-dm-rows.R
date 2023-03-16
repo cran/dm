@@ -2,7 +2,6 @@
 source("setup/setup.R")
 
 ## ------------------------------------------------------------------------
-#  library(tidyverse)
 #  library(dm)
 #  parent <- tibble(value = c("A", "B", "C"), pk = 1:3)
 #  parent

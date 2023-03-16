@@ -2,7 +2,6 @@
 source("setup/setup.R")
 
 ## ----message=FALSE, warning=FALSE----------------------------------------
-#  library(tidyverse)
 #  library(nycflights13)
 #  library(dm)
 
@@ -64,7 +63,7 @@ sum_nrow_filtered <- NA
 
 ## ------------------------------------------------------------------------
 #  dm_delta_may$flights %>%
-#    count(month)
+#    dplyr::count(month)
 
 ## ------------------------------------------------------------------------
 #  airlines_filtered <- filter(airlines, name == "Delta Air Lines Inc.")
@@ -84,5 +83,5 @@ sum_nrow_filtered <- NA
 #      flights = (month == 1)
 #    ) %>%
 #    dm_get_tables() %>%
-#    map(dbplyr::sql_render)
+#    purrr::map(dbplyr::sql_render)
 

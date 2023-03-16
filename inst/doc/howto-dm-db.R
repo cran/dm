@@ -12,7 +12,7 @@ source("setup/setup.R")
 #    host = "relational.fit.cvut.cz"
 #  )
 
-## ----show = FALSE--------------------------------------------------------
+## ----echo = FALSE--------------------------------------------------------
 #  library(RMariaDB)
 #  my_db <- dm:::financial_db_con()
 
@@ -54,6 +54,39 @@ source("setup/setup.R")
 #  
 #  my_dm_keys %>%
 #    dm(trans)
+
+## ----error = TRUE--------------------------------------------------------
+#  unserialize(serialize(my_dm_keys, NULL))
+
+## ------------------------------------------------------------------------
+#  my_db_fun <- function() {
+#    dbConnect(
+#      MariaDB(),
+#      username = "guest",
+#      password = "relational",
+#      dbname = "Financial_ijs",
+#      host = "relational.fit.cvut.cz"
+#    )
+#  }
+#  
+#  my_dm_fun <- function(my_db = my_db_fun()) {
+#    loans <- tbl(my_db, "loans")
+#    accounts <- tbl(my_db, "accounts")
+#    dm(loans, accounts) %>%
+#      dm_add_pk(accounts, id) %>%
+#      dm_add_pk(loans, id) %>%
+#      dm_add_fk(loans, account_id, accounts) %>%
+#      dm_set_colors(green = loans, orange = accounts)
+#  }
+
+## ----echo = FALSE--------------------------------------------------------
+#  my_db_fun <- function() {
+#    dm:::financial_db_con()
+#  }
+
+## ----echo = FALSE--------------------------------------------------------
+#  my_dm_fun() %>%
+#    dm_draw()
 
 ## ------------------------------------------------------------------------
 #  my_dm_keys

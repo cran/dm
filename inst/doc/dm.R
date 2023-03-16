@@ -12,7 +12,7 @@ source("setup/setup.R")
 #    host = "relational.fit.cvut.cz"
 #  )
 
-## ----connect-real, show = FALSE------------------------------------------
+## ----connect-real, echo = FALSE------------------------------------------
 #  library(RMariaDB)
 #  
 #  fin_db <- dm:::financial_db_con()

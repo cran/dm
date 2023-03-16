@@ -2,7 +2,6 @@
 source("setup/setup.R")
 
 ## ------------------------------------------------------------------------
-#  library(tidyverse)
 #  library(dm)
 #  library(nycflights13)
 #  

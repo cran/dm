@@ -87,7 +87,7 @@ source("setup/setup.R")
 #  dm_with_summary <-
 #    flights_dm %>%
 #    dm_zoom_to(flights) %>%
-#    count(origin, carrier) %>%
+#    dplyr::count(origin, carrier) %>%
 #    dm_insert_zoomed("dep_carrier_count")
 #  dm_draw(dm_with_summary)
 

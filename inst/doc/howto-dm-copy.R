@@ -3,7 +3,6 @@ source("setup/setup.R")
 
 ## ------------------------------------------------------------------------
 #  library(dm)
-#  library(tidyverse)
 #  library(dbplyr)
 #  
 #  fin_dm <-

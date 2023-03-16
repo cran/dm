@@ -12,7 +12,7 @@
 
 <meta name="author" content="Katharina Brunner" />
 
-<meta name="date" content="2023-02-11" />
+<meta name="date" content="2023-03-16" />
 
 <title>Filtering in relational data models</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Filtering in relational data models</h1>
 <h4 class="author">Katharina Brunner</h4>
-<h4 class="date">2023-02-11</h4>
+<h4 class="date">2023-03-16</h4>
 
 
 
@@ -351,9 +351,8 @@ apply them to the data that is separated into multiple tables.</p>
 <p>Our example data is drawn from the <a href="https://github.com/tidyverse/nycflights13">{nycflights13}</a>
 package that contains five inter-linked tables.</p>
 <p>First, we will load the packages that we need:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span></code></pre></div>
 <div id="data-nycflights13" class="section level2">
 <h2>Data: nycflights13</h2>
 <p>To explore filtering with {dm}, we’ll use the {nycflights13} data
@@ -466,7 +465,7 @@ carrier:</p>
 <p>And indeed, all included flights departed in January
 (<code>month == 1</code>):</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dm_delta_may<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(month)</span></code></pre></div>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(month)</span></code></pre></div>
 <p>For comparison, let’s review the equivalent manual query for
 <code>flights</code> in <code>dplyr</code> syntax:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>airlines_filtered <span class="ot">&lt;-</span> <span class="fu">filter</span>(airlines, name <span class="sc">==</span> <span class="st">&quot;Delta Air Lines Inc.&quot;</span>)</span>
@@ -509,7 +508,7 @@ with <code>dbplyr::sql_render()</code>.</p>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">flights =</span> (month <span class="sc">==</span> <span class="dv">1</span>)</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_tables</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(dbplyr<span class="sc">::</span>sql_render)</span></code></pre></div>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(dbplyr<span class="sc">::</span>sql_render)</span></code></pre></div>
 <p>Further reading: {dm}’s function for copying data <a href="https://dm.cynkra.com/articles/dm.html">from and to
 databases</a>.</p>
 </div>
