@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-03-16" />
+<meta name="date" content="2023-07-21" />
 
 <title>Class dm and basic operations</title>
 
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Class dm and basic operations</h1>
-<h4 class="date">2023-03-16</h4>
+<h4 class="date">2023-07-21</h4>
 
 
 
@@ -380,41 +380,41 @@ the well-known {nycflights13} package.</p>
 <h3>Pass the tables directly</h3>
 <p>Create a <code>dm</code> object directly by providing data frames to
 <code>dm()</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">dm</span>(airlines, airports, flights, planes, weather)</span></code></pre></div>
 </div>
 <div id="start-with-an-empty-dm" class="section level3">
 <h3>Start with an empty <code>dm</code></h3>
 <p>Start with an empty <code>dm</code> object that has been created with
 <code>dm()</code> or <code>new_dm()</code>, and add tables to that
 object:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>empty_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>empty_dm</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dm</span>(empty_dm, airlines, airports, flights, planes, weather)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>empty_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>empty_dm</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">dm</span>(empty_dm, airlines, airports, flights, planes, weather)</span></code></pre></div>
 </div>
 <div id="coerce-a-list-of-tables" class="section level3">
 <h3>Coerce a list of tables</h3>
 <p>Turn a named list of tables into a <code>dm</code> with
 <code>as_dm()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_dm</span>(<span class="fu">list</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">airlines =</span> airlines,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">airports =</span> airports,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">flights =</span> flights,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">planes =</span> planes,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">weather =</span> weather</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">as_dm</span>(<span class="fu">list</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">airlines =</span> airlines,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">airports =</span> airports,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">flights =</span> flights,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">planes =</span> planes,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">weather =</span> weather</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>))</span></code></pre></div>
 </div>
 <div id="turn-tables-from-a-src-into-a-dm" class="section level3">
 <h3>Turn tables from a <code>src</code> into a <code>dm</code></h3>
 <p>Squeeze all (or a subset of) tables belonging to a <code>src</code>
 object into a <code>dm</code> using <code>dm_from_con()</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sqlite_con <span class="ot">&lt;-</span> dbplyr<span class="sc">::</span><span class="fu">nycflights13_sqlite</span>()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_con</span>(sqlite_con)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>flights_dm</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>sqlite_con <span class="ot">&lt;-</span> dbplyr<span class="sc">::</span><span class="fu">nycflights13_sqlite</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_con</span>(sqlite_con)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>flights_dm</span></code></pre></div>
 <p>The function <code>dm_from_con(con, table_names = NULL)</code>
 includes all available tables on a source in the <code>dm</code> object.
 This means that you can use this, for example, on a postgres database
@@ -427,18 +427,18 @@ tables on the database.</p>
 <h3>Low-level construction</h3>
 <p>Another way of creating a <code>dm</code> object is calling
 <code>new_dm()</code> on a list of <code>tbl</code> objects:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_dm <span class="ot">&lt;-</span> <span class="fu">new_dm</span>(<span class="fu">list</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">airlines =</span> airlines,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">airports =</span> airports,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">flights =</span> flights,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">planes =</span> planes,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">weather =</span> weather</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>base_dm</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>base_dm <span class="ot">&lt;-</span> <span class="fu">new_dm</span>(<span class="fu">list</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">airlines =</span> airlines,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">airports =</span> airports,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">flights =</span> flights,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">planes =</span> planes,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">weather =</span> weather</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>))</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>base_dm</span></code></pre></div>
 <p>This constructor is optimized for speed and does not perform
 integrity checks. Use with caution, validate using
 <code>dm_validate()</code> if necessary.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_validate</span>(base_dm)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">dm_validate</span>(base_dm)</span></code></pre></div>
 </div>
 </div>
 <div id="access-tables" class="section level2">
@@ -446,7 +446,7 @@ integrity checks. Use with caution, validate using
 <p>We can get the list of tables with <code>dm_get_tables()</code> and
 the <code>src</code> object with <code>dm_get_con()</code>.</p>
 <p>In order to pull a specific table from a <code>dm</code>, use:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flights_dm[[<span class="st">&quot;airports&quot;</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>flights_dm[[<span class="st">&quot;airports&quot;</span>]]</span></code></pre></div>
 <p>But how can we use {dm}-functions to manage the primary keys of the
 tables in a <code>dm</code> object?</p>
 </div>
@@ -464,33 +464,33 @@ tables in a <code>dm</code> object?</p>
 does not yet have any primary keys set. So let’s add one.</p>
 <p>We use the <code>nycflights13</code> tables,
 i.e. <code>flights_dm</code> from above.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm, airports)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm, airports)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>flights_dm_with_key <span class="ot">&lt;-</span> <span class="fu">dm_add_pk</span>(flights_dm, airports, faa)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>flights_dm_with_key</span></code></pre></div>
 <p>The <code>dm</code> now has a primary key:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm_with_key, airports)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">dm_has_pk</span>(flights_dm_with_key, airports)</span></code></pre></div>
 <p>To get an overview over all tables with primary keys, use
 <code>dm_get_all_pks()</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_pks</span>(flights_dm_with_key)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">dm_get_all_pks</span>(flights_dm_with_key)</span></code></pre></div>
 <p>Remove a primary key:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_rm_pk</span>(flights_dm_with_key, airports) <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_has_pk</span>(airports)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">dm_rm_pk</span>(flights_dm_with_key, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">dm_has_pk</span>(airports)</span></code></pre></div>
 <p>If you still need to get to know your data better, and it is already
 available in the form of a <code>dm</code> object, you can use the
 <code>dm_enum_pk_candidates()</code> function in order to get
 information about which columns of the table are unique keys:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, airports)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, airports)</span></code></pre></div>
 <p>The <code>flights</code> table does not have any one-column primary
 key candidates:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">dm_enum_pk_candidates</span>(flights_dm_with_key, flights) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(candidate)</span></code></pre></div>
 <p><code>dm_add_pk()</code> has a <code>check</code> argument. If set to
 <code>TRUE</code>, the function checks if the column of the table given
 by the user is unique. For performance reasons, the default is
 <code>check = FALSE</code>. See also [dm_examine_constraints()] for
 checking all constraints in a <code>dm</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(flights_dm, airports, tzone, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">try</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(flights_dm, airports, tzone, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div id="foreign-keys" class="section level2">
 <h2>Foreign keys</h2>
@@ -510,43 +510,43 @@ to a primary key of another table. The primary key of the referred table
 must be set with <code>dm_add_pk()</code>. <code>dm_add_fk()</code> will
 find the primary key column of the referenced table by itself and make
 the indicated column of the child table point to it.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>flights_dm_with_key <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span></code></pre></div>
 <p>This will throw an error:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">try</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, origin, airports)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s create a <code>dm</code> object with a foreign key relation to
 work with later on:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="ot">&lt;-</span> <span class="fu">dm_add_fk</span>(flights_dm_with_key, flights, origin, airports)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>flights_dm_with_fk <span class="ot">&lt;-</span> <span class="fu">dm_add_fk</span>(flights_dm_with_key, flights, origin, airports)</span></code></pre></div>
 <p>What if we tried to add another foreign key relation from
 <code>flights</code> to <code>airports</code> to the object? Column
 <code>dest</code> might work, since it also contains airport codes:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_with_fk <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, dest, airports, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">try</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  flights_dm_with_fk <span class="sc">%&gt;%</span> <span class="fu">dm_add_fk</span>(flights, dest, airports, <span class="at">check =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>)</span></code></pre></div>
 <p>Checks are opt-in and executed only if <code>check = TRUE</code>. You
 can still add a foreign key with the default <code>check = FALSE</code>.
 See also <code>dm_examine_constraints()</code> for checking all
 constraints in a <code>dm</code>.</p>
 <p>Get an overview of all foreign key relations
 with<code>dm_get_all_fks()</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">dm_get_all_fks</span>(<span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <p>Remove foreign key relations with <code>dm_rm_fk()</code> (parameter
 <code>columns = NULL</code> means that all relations will be removed,
 with a message):</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_with_fk <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dm_rm_fk</span>(<span class="at">table =</span> flights, <span class="at">column =</span> dest, <span class="at">ref_table =</span> airports) <span class="sc">%&gt;%</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="at">columns =</span> <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">try</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>    <span class="fu">dm_rm_fk</span>(<span class="at">table =</span> flights, <span class="at">column =</span> dest, <span class="at">ref_table =</span> airports) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>    <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>)</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>flights_dm_with_fk <span class="sc">%&gt;%</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, <span class="at">columns =</span> <span class="cn">NULL</span>, airports) <span class="sc">%&gt;%</span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a>  <span class="fu">dm_get_all_fks</span>(<span class="fu">c</span>(flights, airports))</span></code></pre></div>
 <p>Since the primary keys are defined in the <code>dm</code> object, you
 do not usually need to provide the referenced column name of
 <code>ref_table</code>.</p>
@@ -555,7 +555,7 @@ do not usually need to provide the referenced column name of
 of <code>dm</code> objects”</a>) is
 <code>dm_enum_fk_candidates()</code>. Use it to get an overview over
 foreign key candidates that point from one table to another:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(flights_dm_with_key, weather, airports)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">dm_enum_fk_candidates</span>(flights_dm_with_key, weather, airports)</span></code></pre></div>
 </div>
 
 

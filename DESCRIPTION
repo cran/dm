@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 1.0.5
-Date: 2023-03-16
+Version: 1.0.6
+Date: 2023-07-12
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -49,17 +49,19 @@ BugReports: https://github.com/cynkra/dm/issues
 Depends: R (>= 3.3)
 Imports: backports, cli (>= 2.2.0), DBI, dplyr (>= 1.1.0), glue,
         igraph, lifecycle (>= 1.0.3), magrittr, memoise, methods,
-        pillar (>= 1.7.0), purrr, rlang (>= 1.0.2), tibble (>= 3.0.0),
-        tidyr (>= 1.0.0), tidyselect (>= 1.0.1), vctrs (>= 0.3.2)
+        pillar (>= 1.7.0), purrr (>= 1.0.0), rlang (>= 1.0.2), tibble
+        (>= 3.0.0), tidyr (>= 1.0.0), tidyselect (>= 1.2.0), vctrs (>=
+        0.3.2)
 Suggests: brio, colourpicker, covr, crayon, dbplyr (>= 2.2.0),
         DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0), fansi,
         forcats, htmltools, htmlwidgets, jsonlite, keyring, knitr,
-        mockr, nycflights13, odbc, pixarfilms, pool, progress,
-        reactable, RMariaDB (>= 1.2.2), rmarkdown, RPostgres, RSQLite
-        (>= 2.2.8), rstudioapi, shiny, shinyAce, shinydashboard,
-        testthat (>= 3.1.2), waldo, withr
+        labelled (>= 2.12.0), mockr, nycflights13, odbc, pixarfilms,
+        pool, progress, reactable, RMariaDB (>= 1.2.2), rmarkdown,
+        RPostgres, RSQLite (>= 2.2.8), rstudioapi, shiny, shinyAce,
+        shinydashboard, testthat (>= 3.1.2), waldo, withr
 Config/Needs/website: brio, bslib, cynkra/cynkratemplate, htmltools,
         pagedown, purrr, rmarkdown, whisker, xml2
+Config/Needs/check: anthonynorth/roxyglobals
 VignetteBuilder: knitr
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: true
@@ -70,7 +72,7 @@ Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2023-03-16 15:59:46 UTC; kirill
+Packaged: 2023-07-21 12:56:46 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Antoine Fabri [ctb],
@@ -83,4 +85,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph]
 Maintainer: Kirill Müller <kirill@cynkra.com>
 Repository: CRAN
-Date/Publication: 2023-03-16 17:10:02 UTC
+Date/Publication: 2023-07-21 13:30:02 UTC

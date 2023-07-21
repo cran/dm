@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek" />
 
-<meta name="date" content="2023-03-16" />
+<meta name="date" content="2023-07-21" />
 
 <title>Insert, update, or remove rows in a database</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Insert, update, or remove rows in a
 database</h1>
 <h4 class="author">James Wondrasek</h4>
-<h4 class="date">2023-03-16</h4>
+<h4 class="date">2023-07-21</h4>
 
 
 
@@ -455,32 +455,32 @@ across multiple tables. For more details on this see
 create a simple <code>dm</code> object with two tables linked by a
 foreign key. Note that the <code>child</code> table has a foreign key
 missing (<code>NA</code>).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">pk =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>parent</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">pk =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="cn">NA</span>))</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>child</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>demo_dm <span class="ot">&lt;-</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> parent, <span class="at">child =</span> child) <span class="sc">%&gt;%</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(parent, pk) <span class="sc">%&gt;%</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(child, pk) <span class="sc">%&gt;%</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(child, fk, parent)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>demo_dm <span class="sc">%&gt;%</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">pk =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>parent</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>), <span class="at">pk =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="cn">NA</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>child</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>demo_dm <span class="ot">&lt;-</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> parent, <span class="at">child =</span> child) <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(parent, pk) <span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(child, pk) <span class="sc">%&gt;%</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(child, fk, parent)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>demo_dm <span class="sc">%&gt;%</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">view_type =</span> <span class="st">&quot;all&quot;</span>)</span></code></pre></div>
 <p>{dm} doesn’t check your key values when you create a dm, we add this
 check:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_examine_constraints</span>(demo_dm)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">dm_examine_constraints</span>(demo_dm)</span></code></pre></div>
 <p>Then we copy <code>demo_dm</code> into an SQLite database. Note: the
 default for the method used, <code>copy_dm_to()</code>, is to create
 temporary tables that will be automatically deleted when your session
 ends. As <code>demo_sql</code> will be the destination dm for the
 examples, the argument <code>temporary = FALSE</code> is used to make
 this distinction apparent.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sqlite_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>demo_sql <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(sqlite_db, demo_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>demo_sql</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>sqlite_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>demo_sql <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(sqlite_db, demo_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>demo_sql</span></code></pre></div>
 <p>{dm}’s table modification methods can be piped together to create a
 repeatable sequence of operations that returns a dm incorporating all
 the changes required. This is a common use case for {dm} – manually
@@ -498,33 +498,33 @@ get an error message if this is not the case.</p>
 <p>The code below adds <code>parent</code> and <code>child</code> table
 entries for the letter “D”. First, the changeset dm is created and
 temporarily copied to the database:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>new_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>new_parent</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>new_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;d&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>, <span class="at">fk =</span> <span class="dv">4</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>new_child</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>dm_insert_in <span class="ot">&lt;-</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>new_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>new_parent</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>new_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;d&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>, <span class="at">fk =</span> <span class="dv">4</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>new_child</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>dm_insert_in <span class="ot">&lt;-</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>The changeset dm is then used as an argument to
 <code>dm_rows_insert()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in)</span></code></pre></div>
 <p>This gives us a warning that changes will not persist (i.e., they are
 temporary). Inspecting the <code>child</code> table of the resulting
 <code>dm_insert_out</code> and <code>demo_sql</code>, we can see that’s
 exactly what happened. {dm} returned to us a dm object with our inserted
 rows in place, but the underlying database has not changed.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out<span class="sc">$</span>child</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>dm_insert_out<span class="sc">$</span>child</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
 <p>We repeat the operation, this time with the argument
 <code>in_place = TRUE</code> and the changes now persist in
 <code>demo_sql</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dm_insert_out <span class="ot">&lt;-</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">dm_rows_insert</span>(dm_insert_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
 </div>
 <div id="update" class="section level2">
 <h2><code>dm_rows_update()</code></h2>
@@ -533,17 +533,17 @@ rows in place, but the underlying database has not changed.</p>
 the same source as the destination. Here we will change the foreign key
 for the row in <code>child</code> containing “b” to point to the correct
 row in <code>parent</code>. And we will persist the changes.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>updated_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;b&quot;</span>, <span class="at">pk =</span> <span class="dv">2</span>, <span class="at">fk =</span> <span class="dv">2</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>updated_child</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dm_update_in <span class="ot">&lt;-</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> updated_child) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>dm_update_out <span class="ot">&lt;-</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_update</span>(dm_update_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>updated_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;b&quot;</span>, <span class="at">pk =</span> <span class="dv">2</span>, <span class="at">fk =</span> <span class="dv">2</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>updated_child</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>dm_update_in <span class="ot">&lt;-</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> updated_child) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(sqlite_db, ., <span class="at">temporary =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>dm_update_out <span class="ot">&lt;-</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  demo_sql <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="fu">dm_rows_update</span>(dm_update_in, <span class="at">in_place =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>demo_sql<span class="sc">$</span>child</span></code></pre></div>
 </div>
 <div id="delete" class="section level2">
 <h2><code>dm_rows_delete()</code></h2>
@@ -554,28 +554,28 @@ environment. We’ve made changes to <code>demo_sql</code>, so we use
 that persistence is not a concern for <em>local</em> <code>dm</code>
 objects. Every operation returns a new dm object containing the changes
 made.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>local_dm <span class="ot">&lt;-</span> <span class="fu">collect</span>(demo_sql)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>local_dm<span class="sc">$</span>parent</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>local_dm<span class="sc">$</span>child</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>dm_deleted <span class="ot">&lt;-</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_delete</span>(local_dm, .)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>dm_deleted<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>local_dm <span class="ot">&lt;-</span> <span class="fu">collect</span>(demo_sql)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>local_dm<span class="sc">$</span>parent</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>local_dm<span class="sc">$</span>child</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>dm_deleted <span class="ot">&lt;-</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> new_parent, <span class="at">child =</span> new_child) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">dm_rows_delete</span>(local_dm, .)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>dm_deleted<span class="sc">$</span>child</span></code></pre></div>
 </div>
 <div id="patch" class="section level2">
 <h2><code>dm_rows_patch()</code></h2>
 <p><code>dm_rows_patch()</code> updates missing values in existing
 records. We use it here to fix the missing foreign key in the
 <code>child</code> table.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>patched_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;c&quot;</span>, <span class="at">pk =</span> <span class="dv">3</span>, <span class="at">fk =</span> <span class="dv">3</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>patched_child</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>dm_patched <span class="ot">&lt;-</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> patched_child) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_patch</span>(dm_deleted, .)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>dm_patched<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>patched_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;c&quot;</span>, <span class="at">pk =</span> <span class="dv">3</span>, <span class="at">fk =</span> <span class="dv">3</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>patched_child</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>dm_patched <span class="ot">&lt;-</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">child =</span> patched_child) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">dm_rows_patch</span>(dm_deleted, .)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>dm_patched<span class="sc">$</span>child</span></code></pre></div>
 </div>
 <div id="upsert" class="section level2">
 <h2><code>dm_rows_upsert()</code></h2>
@@ -583,18 +583,18 @@ records. We use it here to fix the missing foreign key in the
 they exist or inserts the supplied values as new rows if they don’t. In
 this example we add the letter “D” back to our dm, and update the
 foreign key for “b”.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>upserted_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>upserted_parent</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>upserted_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="at">pk =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>upserted_child</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>dm_upserted <span class="ot">&lt;-</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> upserted_parent, <span class="at">child =</span> upserted_child) <span class="sc">%&gt;%</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rows_upsert</span>(dm_patched, .)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>parent</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>dm_upserted<span class="sc">$</span>child</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>upserted_parent <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="st">&quot;D&quot;</span>, <span class="at">pk =</span> <span class="dv">4</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>upserted_parent</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>upserted_child <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="at">pk =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>), <span class="at">fk =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>upserted_child</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>dm_upserted <span class="ot">&lt;-</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="fu">dm</span>(<span class="at">parent =</span> upserted_parent, <span class="at">child =</span> upserted_child) <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="fu">dm_rows_upsert</span>(dm_patched, .)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>dm_upserted<span class="sc">$</span>parent</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>dm_upserted<span class="sc">$</span>child</span></code></pre></div>
 <p>When done, do not forget to disconnect:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(sqlite_db)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(sqlite_db)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>

@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2023-03-16" />
+<meta name="date" content="2023-07-21" />
 
 <title>Copy tables to and from a database</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Copy tables to and from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2023-03-16</h4>
+<h4 class="date">2023-07-21</h4>
 
 
 
@@ -371,16 +371,16 @@ to manipulate a <strong>local</strong> SQLite database and a
 introduced in <code>vignette(&quot;howto-dm-db&quot;)</code> and will be discussed
 in more detail in the <a href="#copy-model">Copying a relational
 model</a> section.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>local_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(local_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>local_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span> <span class="fu">copy_dm_to</span>(local_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
 <div id="copying-tables" class="section level2">
 <h2>Copying and persisting individual tables</h2>
@@ -389,35 +389,35 @@ sources and create links to existing tables via foreign keys, or create
 new tables holding data summaries. The example below, already discussed
 in <code>vignette(&quot;howto-dm-db&quot;)</code>, computes the total amount of
 all loans for each account.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
 <p>The derived table <code>total_loans</code> is a <em>lazy table</em>
 powered by the {<a href="https://dbplyr.tidyverse.org/">dbplyr</a>}
 package: the results are not materialized, instead an SQL query is built
 and executed each time the data is requested.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>my_dm_total<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span></code></pre></div>
 <p>To avoid recomputing the query every time you use
 <code>total_loans</code>, call <code>compute()</code> right before
 inserting the derived table with <code>dm_insert_tbl()</code>.
 <code>compute()</code> forces the computation of a query and stores the
 full results in a table on the RDBMS.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_dm_total_computed <span class="ot">&lt;-</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compute</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>my_dm_total_computed<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>my_dm_total_computed <span class="ot">&lt;-</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">compute</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>my_dm_total_computed<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span></code></pre></div>
 <pre><code>#&gt; Error in sql_render(my_dm_total_computed$total_loans): could not find function &quot;sql_render&quot;</code></pre>
 <p>Note the differences in queries returned by
 <code>sql_render()</code>. <code>my_dm_total$total_loans</code> is still
@@ -441,9 +441,9 @@ persistent) tables by executing the associated SQL query and storing the
 full results. Depending on the size of your data, this may take
 considerable time or may even be unfeasible. It may be useful
 occasionally to create snapshots of data that is subject to change.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_dm_total_snapshot <span class="ot">&lt;-</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  my_dm_total <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compute</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>my_dm_total_snapshot <span class="ot">&lt;-</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  my_dm_total <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">compute</span>()</span></code></pre></div>
 </div>
 <div id="data-frames" class="section level2">
 <h2>Adding local data frames to an RDBMS</h2>
@@ -458,11 +458,11 @@ RDBMS, estimate a linear model from the data, then insert the residuals
 back into the RDBMS and link it to the existing tables. This is all done
 with a local SQLite database, but the process would work unchanged on
 any supported RDBMS.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans, <span class="at">.recursive =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>loans_df <span class="ot">&lt;-</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">dm_flatten_to_tbl</span>(loans, <span class="at">.recursive =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">select</span>(id, amount, duration, A3) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code></pre></div>
 <p>Please note the use of <code>recursive = TRUE</code> for
 <code>dm_flatten_to_tbl()</code>. This method gathers all linked
 information into a single wide table. It follows foreign key relations
@@ -477,14 +477,14 @@ the linear model and the residuals are stored along with the original
 associated <code>id</code> in a new tibble,
 <code>loans_residuals</code>. The <code>id</code> column is necessary to
 link the new tibble to the tables in the dm it was collected from.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>loans_residuals <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> loans_df<span class="sc">$</span>id,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">resid =</span> <span class="fu">unname</span>(<span class="fu">residuals</span>(model))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>loans_residuals</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount <span class="sc">~</span> duration <span class="sc">+</span> A3, <span class="at">data =</span> loans_df)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>loans_residuals <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">id =</span> loans_df<span class="sc">$</span>id,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">resid =</span> <span class="fu">unname</span>(<span class="fu">residuals</span>(model))</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>loans_residuals</span></code></pre></div>
 <p>Adding <code>loans_residuals</code> to the dm is done using
 <code>copy_to()</code>. The call to the method includes the argument
 <code>temporary = FALSE</code> because we want this table to persist
@@ -493,17 +493,17 @@ primary and foreign keys to integrate the table with the rest of our
 relational model. For more information on key creation, see
 <code>vignette(&quot;howto-dm-db&quot;)</code> and
 <code>vignette(&quot;howto-dm-theory&quot;)</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="ot">&lt;-</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_to</span>(deployed_dm, loans_residuals, <span class="at">temporary =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans_residuals, id) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans_residuals, id, loans)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">violet =</span> loans_residuals) <span class="sc">%&gt;%</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>my_dm_sqlite_resid<span class="sc">$</span>loans_residuals</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>my_dm_sqlite_resid <span class="ot">&lt;-</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">copy_to</span>(deployed_dm, loans_residuals, <span class="at">temporary =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(loans_residuals, id) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(loans_residuals, id, loans)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(<span class="at">violet =</span> loans_residuals) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>my_dm_sqlite_resid <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>  <span class="fu">dm_examine_constraints</span>()</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>my_dm_sqlite_resid<span class="sc">$</span>loans_residuals</span></code></pre></div>
 </div>
 <div id="copy-model" class="section level2">
 <h2>Persisting a relational model with <code>copy_dm_to()</code></h2>
@@ -519,22 +519,22 @@ locally first, before deploying it to a local SQLite database.</p>
 <code>trans</code> due to its size, then the <code>collect()</code>
 method retrieves the remaining tables and returns them as a local dm
 object.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_nrow</span>()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>fin_dm</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">dm_nrow</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">dm_financial</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(<span class="sc">-</span>trans) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>fin_dm</span></code></pre></div>
 <p>It is just as simple to move a local relational model into an
 RDBMS.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>destination_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>deployed_dm</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>destination_db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>())</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>deployed_dm <span class="ot">&lt;-</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>deployed_dm</span></code></pre></div>
 <p>Note that in the call to <code>copy_dm_to()</code> the argument
 <code>temporary = FALSE</code> is supplied. Without this argument, the
 model would still be copied into the database, but the argument would
@@ -554,12 +554,12 @@ names matching the table names in the dm object and the values
 containing the desired names in the RDBMS, or a function or one-sided
 formula. In the example below, <code>paste0()</code> is used to add a
 prefix to the table names to provide uniqueness.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dup_dm <span class="ot">&lt;-</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>, <span class="at">table_names =</span> <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;dup_&quot;</span>, .x))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>dup_dm</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">remote_name</span>(dup_dm<span class="sc">$</span>accounts)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">remote_name</span>(deployed_dm<span class="sc">$</span>accounts)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>dup_dm <span class="ot">&lt;-</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">copy_dm_to</span>(destination_db, fin_dm, <span class="at">temporary =</span> <span class="cn">FALSE</span>, <span class="at">table_names =</span> <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;dup_&quot;</span>, .x))</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>dup_dm</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">remote_name</span>(dup_dm<span class="sc">$</span>accounts)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="fu">remote_name</span>(deployed_dm<span class="sc">$</span>accounts)</span></code></pre></div>
 <p>Note the different table names for <code>dup_dm$accounts</code> and
 <code>deployed_dm$accounts</code>. For both, the table name is
 <code>accounts</code> in the <code>dm</code> object, but they link to
@@ -574,8 +574,8 @@ If you find you need to remove tables or perform operations directly on
 the RDBMS, see the {<a href="https://dbi.r-dbi.org/">DBI</a>}
 package.</p>
 <p>When done, do not forget to disconnect:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(destination_db)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(local_db)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(destination_db)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(local_db)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>

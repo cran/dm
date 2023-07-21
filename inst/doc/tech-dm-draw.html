@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-03-16" />
+<meta name="date" content="2023-07-21" />
 
 <title>Visualizing dm objects</title>
 
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Visualizing dm objects</h1>
-<h4 class="date">2023-03-16</h4>
+<h4 class="date">2023-07-21</h4>
 
 
 
@@ -355,18 +355,18 @@ object:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 </ol>
 <p>We use the prepared example <code>dm</code> object
 <code>dm_nycflights13(cycle = TRUE)</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>flights_dm_w_many_keys <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>flights_dm_w_many_keys</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>flights_dm_w_many_keys <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>flights_dm_w_many_keys</span></code></pre></div>
 <p>The schema is drawn with <code>dm_draw()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(flights_dm_w_many_keys)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">dm_draw</span>(flights_dm_w_many_keys)</span></code></pre></div>
 <p>You can use colors to visually group your tables into families to
 reflect their logical grouping. The available colors are either hexcoded
 colors or the standard R color names. The function
 <code>dm_get_available_colors()</code> forwards to
 <code>grDevices::colors()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_available_colors</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">dm_get_available_colors</span>()</span></code></pre></div>
 <p>Colors are assigned with <code>dm_set_colors()</code> using syntax
 known in the {tidyverse} as {tidyselect}-syntax, here in the form:
 <code>color = table</code>. <a href="https://tidyselect.r-lib.org/reference/language.html">Select
@@ -374,36 +374,36 @@ helper functions</a> are supported. The result of
 <code>dm_set_colors()</code> is a <code>dm</code> object. The
 information about the color is stored together with the rest of the
 metadata.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="ot">&lt;-</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  flights_dm_w_many_keys <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">maroon4 =</span> flights,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">orange =</span> <span class="fu">starts_with</span>(<span class="st">&quot;air&quot;</span>),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#5986C4&quot;</span> <span class="ot">=</span> planes</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="ot">&lt;-</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  flights_dm_w_many_keys <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">dm_set_colors</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">maroon4 =</span> flights,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">orange =</span> <span class="fu">starts_with</span>(<span class="st">&quot;air&quot;</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="st">&quot;#5986C4&quot;</span> <span class="ot">=</span> planes</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  )</span></code></pre></div>
 <p>Draw the schema with <code>dm_draw()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(flights_dm_w_many_keys_and_colors)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">dm_draw</span>(flights_dm_w_many_keys_and_colors)</span></code></pre></div>
 <p>The colors can be queried with <code>dm_get_colors()</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_get_colors</span>(flights_dm_w_many_keys_and_colors)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">dm_get_colors</span>(flights_dm_w_many_keys_and_colors)</span></code></pre></div>
 <p>See the documentation for <code>dm_draw()</code> for further options.
 One important argument is <code>view_type</code>. Besides the default
 <code>&quot;keys_only&quot;</code>, it accepts <code>&quot;all&quot;</code> to display all
 columns, and <code>&quot;title_only&quot;</code> to show only the title of the
 table.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">view_type =</span> <span class="st">&quot;title_only&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">dm_draw</span>(<span class="at">view_type =</span> <span class="st">&quot;title_only&quot;</span>)</span></code></pre></div>
 <p>If you would like to visualize only some of the tables, use
 <code>dm_select_tbl()</code> before drawing:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(flights, airports, planes) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(flights, airports, planes) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 <p>Finally, for exporting a drawing to <code>svg</code> you could use
 <code>DiagrammeRsvg::export_svg()</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(flights, airports, planes) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  DiagrammeRsvg<span class="sc">::</span><span class="fu">export_svg</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(<span class="st">&quot;flights_dm_w_many_keys_and_color.svg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>flights_dm_w_many_keys_and_colors <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">dm_select_tbl</span>(flights, airports, planes) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">dm_draw</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  DiagrammeRsvg<span class="sc">::</span><span class="fu">export_svg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">write</span>(<span class="st">&quot;flights_dm_w_many_keys_and_color.svg&quot;</span>)</span></code></pre></div>
 <div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>

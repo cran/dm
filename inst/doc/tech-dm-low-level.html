@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-03-16" />
+<meta name="date" content="2023-07-21" />
 
 <title>Model verification - keys, constraints and normalization</title>
 
@@ -339,7 +339,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Model verification - keys, constraints and
 normalization</h1>
-<h4 class="date">2023-03-16</h4>
+<h4 class="date">2023-07-21</h4>
 
 
 
@@ -347,7 +347,7 @@ normalization</h1>
 conducting basic tests about key conditions and about relations between
 tables. We will also describe functions that can be used for splitting
 and uniting tables.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dm)</span></code></pre></div>
 <div id="testing-key-constraints" class="section level2">
 <h2>Testing key constraints</h2>
 <p>This section contains information and examples about the following
@@ -361,40 +361,40 @@ functions:</p>
 relations, {dm} can help you to verify the assumed key relations and/or
 determine the existing key relations between the tables. For example, if
 you have tables:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>data_1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>data_2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>))</span></code></pre></div>
 <p>and you want to know if <code>a</code> is a primary key for
 <code>data_1</code>, you can use the <code>check_key()</code>
 function:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_key</span>(data_1, a)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">check_key</span>(data_1, a)</span></code></pre></div>
 <p>Mind the error message when a test is not passed.</p>
 <p>For <code>data_2</code>, column <code>a</code> is a key:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_key</span>(data_2, a)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">check_key</span>(data_2, a)</span></code></pre></div>
 <p>To see if a column of one table contains only those values that are
 also present in another column of another table, the
 <code>check_subset()</code> function can be used:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_subset</span>(data_1, a, data_2, a)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">check_subset</span>(data_1, a, data_2, a)</span></code></pre></div>
 <p>This function is important for determining if a column is a foreign
 key to some other table. What about the inverse relation?</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_subset</span>(data_2, a, data_1, a)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">check_subset</span>(data_2, a, data_1, a)</span></code></pre></div>
 <p>It should be kept in mind that <code>check_subset()</code> does not
 test if column <code>c2</code> is a unique key of table <code>t2</code>.
 In order to find out if a (child) table <code>t1</code> contains a
 column <code>c1</code> that is a foreign key to a (parent) table
 <code>t2</code> with the corresponding column <code>c2</code>, the
 following method should be used:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_key</span>(t2, c2)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">check_subset</span>(t1, c1, t2, c2)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">check_key</span>(t2, c2)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">check_subset</span>(t1, c1, t2, c2)</span></code></pre></div>
 <p>To check both directions at once, and to find out if the unique
 values of <code>c_1</code> in <code>t_1</code> are the same as those of
 <code>c_2</code> in <code>t_2</code>, {dm} provides the function
 <code>check_set_equality()</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_set_equality</span>(data_1, a, data_2, a)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">check_set_equality</span>(data_1, a, data_2, a)</span></code></pre></div>
 <p>Introducing one more table enables us to show how it looks when the
 test is passed:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data_3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">check_set_equality</span>(data_1, a, data_3, a)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>data_3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>), <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">check_set_equality</span>(data_1, a, data_3, a)</span></code></pre></div>
 <p>If the test is passed, the return value of the function will be the
 first table parameter (invisibly). This ensures that the functions can
 be conveniently used in a pipe configuration.</p>
@@ -455,32 +455,32 @@ these) between the two columns.</p>
 <div id="examples" class="section level3">
 <h3>Examples</h3>
 <p>Given the following three data frames:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">c =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>d3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">c =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>d4 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">c =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>d3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">c =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>d4 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">a =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">5</span>))</span></code></pre></div>
 <p>Here are some examples of how the cardinality testing functions can
 be used:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This does not pass, `c` is not unique key of d2:</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_0_n</span>(d2, c, d1, a)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This passes, multiple values in d2$c are allowed:</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_0_n</span>(d1, a, d2, c)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># This does not pass, injectivity is violated:</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_1_1</span>(d1, a, d2, c)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># This passes:</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">check_cardinality_0_1</span>(d1, a, d3, c)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># This does not pass, `c` is not unique key of d2:</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">check_cardinality_0_n</span>(d2, c, d1, a)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co"># This passes, multiple values in d2$c are allowed:</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">check_cardinality_0_n</span>(d1, a, d2, c)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># This does not pass, injectivity is violated:</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">check_cardinality_1_1</span>(d1, a, d2, c)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co"># This passes:</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="fu">check_cardinality_0_1</span>(d1, a, d3, c)</span></code></pre></div>
 <p><code>examine_cardinality()</code> returns the type of relation,
 e.g.:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d3, c)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d2, c)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d1, a)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d4, a)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d3, c)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d2, c)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d1, a)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d1, a, d4, a)</span></code></pre></div>
 <p>Just like the underlying cardinality functions, it will also inform
 you if any restrictions on cardinality are violated:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d2, c, d1, a)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">examine_cardinality</span>(d2, c, d1, a)</span></code></pre></div>
 </div>
 </div>
 <div id="table-surgery" class="section level2">
@@ -500,10 +500,10 @@ to the parent table’s corresponding column, which can be seen as the
 parent table’s primary key column. The function
 <code>decompose_table()</code> does that, as can be seen in the
 following example:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mtcars_tibble <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(mtcars)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mtcars_tibble</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>decomposed_table <span class="ot">&lt;-</span> <span class="fu">decompose_table</span>(mtcars_tibble, am_gear_carb_id, am, gear, carb)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>decomposed_table</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>mtcars_tibble <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(mtcars)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>mtcars_tibble</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>decomposed_table <span class="ot">&lt;-</span> <span class="fu">decompose_table</span>(mtcars_tibble, am_gear_carb_id, am, gear, carb)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>decomposed_table</span></code></pre></div>
 <p>A new column is created, with which the two tables can be joined
 again, essentially creating the original table.</p>
 <p>The functions that do the inverse operation, i.e. join a parent and a
@@ -513,11 +513,11 @@ child table and subsequently drop the <code>new_id_column</code>, are
 arguments two tables and the unquoted name of the ID column, and the
 latter takes as arguments a list of two tables plus the unquoted name of
 the ID column:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>parent_table <span class="ot">&lt;-</span> decomposed_table<span class="sc">$</span>parent_table</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>child_table <span class="ot">&lt;-</span> decomposed_table<span class="sc">$</span>child_table</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">reunite_parent_child</span>(child_table, parent_table, <span class="at">id_column =</span> am_gear_carb_id)</span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shortcut:</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">reunite_parent_child_from_list</span>(decomposed_table, <span class="at">id_column =</span> am_gear_carb_id)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>parent_table <span class="ot">&lt;-</span> decomposed_table<span class="sc">$</span>parent_table</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>child_table <span class="ot">&lt;-</span> decomposed_table<span class="sc">$</span>child_table</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">reunite_parent_child</span>(child_table, parent_table, <span class="at">id_column =</span> am_gear_carb_id)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Shortcut:</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">reunite_parent_child_from_list</span>(decomposed_table, <span class="at">id_column =</span> am_gear_carb_id)</span></code></pre></div>
 <p>Currently, these functions only exist as a low-level operation on
 tables. We plan to extend this operation to <code>dm</code> objects in
 the future.</p>

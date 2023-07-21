@@ -385,83 +385,83 @@ this, we once more make use of our trusted {nycflights13} data.</p>
 <p>Imagine you want to have a column in <code>flights</code>, specifying
 if a flight left before noon or after. Just like with {dplyr}, we can
 tackle this with <code>mutate()</code>. Let us do this step by step:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>flights_dm</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>flights_keyed <span class="ot">&lt;-</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_get_tables</span>(<span class="at">keyed =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># The print output for a `dm_keyed_tbl` looks very much like that from a normal</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># `tibble`, with additional details about keys.</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>flights_keyed<span class="sc">$</span>flights</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>flights_tbl_mutate <span class="ot">&lt;-</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">am_pm_dep =</span> <span class="fu">if_else</span>(dep_time <span class="sc">&lt;</span> <span class="dv">1200</span>, <span class="st">&quot;am&quot;</span>, <span class="st">&quot;pm&quot;</span>), <span class="at">.after =</span> dep_time)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>flights_tbl_mutate</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dm)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>flights_dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>(<span class="at">cycle =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>flights_dm</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>flights_keyed <span class="ot">&lt;-</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="fu">dm_get_tables</span>(<span class="at">keyed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># The print output for a `dm_keyed_tbl` looks very much like that from a normal</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co"># `tibble`, with additional details about keys.</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>flights_keyed<span class="sc">$</span>flights</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>flights_tbl_mutate <span class="ot">&lt;-</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">am_pm_dep =</span> <span class="fu">if_else</span>(dep_time <span class="sc">&lt;</span> <span class="dv">1200</span>, <span class="st">&quot;am&quot;</span>, <span class="st">&quot;pm&quot;</span>), <span class="at">.after =</span> dep_time)</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>flights_tbl_mutate</span></code></pre></div>
 <p>To update the original <code>dm</code> with a new
 <code>flights</code> table we use <code>dm()</code>. The bang-bang-bang
 (<code>!!!</code>) is a technical necessity that will become superfluous
 in a forthcoming release.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>updated_flights_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">flights =</span> flights_tbl_mutate,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;airports&quot;</span>, <span class="st">&quot;planes&quot;</span>, <span class="st">&quot;weather&quot;</span>)]</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># The only difference in the `dm` print output is the increased number of</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># columns</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>updated_flights_dm</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># The schematic view of the data model remains unchanged</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_draw</span>(updated_flights_dm)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>updated_flights_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">flights =</span> flights_tbl_mutate,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;airports&quot;</span>, <span class="st">&quot;planes&quot;</span>, <span class="st">&quot;weather&quot;</span>)]</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># The only difference in the `dm` print output is the increased number of</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># columns</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>updated_flights_dm</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co"># The schematic view of the data model remains unchanged</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">dm_draw</span>(updated_flights_dm)</span></code></pre></div>
 </div>
 <div id="use-case-2-creation-of-a-surrogate-key" class="section level3">
 <h3>Use case 2: Creation of a surrogate key</h3>
 <p>The same course of action could, for example, be employed to create a
 surrogate key for a table, a synthetic simple key that replaces a
 compound key. We can do this for the <code>weather</code> table.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>flights_keyed<span class="sc">$</span>weather</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Maybe there is some hidden candidate for a primary key that we overlooked?</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">enum_pk_candidates</span>(flights_keyed<span class="sc">$</span>weather)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Seems we have to construct a column with unique values</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># This can be done by combining column `origin` with `time_hour`, if the latter</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># is converted to a single time zone first; all within the `dm`:</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>weather_tbl_mutate <span class="ot">&lt;-</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>weather <span class="sc">%&gt;%</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># first convert all times to the same time zone:</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_hour_fmt =</span> <span class="fu">format</span>(time_hour, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># paste together as character the airport code and the time</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt) <span class="sc">%&gt;%</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(origin_slot_id, <span class="fu">everything</span>())</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># check if we the result is as expected:</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>weather_tbl_mutate <span class="sc">%&gt;%</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">enum_pk_candidates</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(candidate)</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># We apply the same transformation to create</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># the foreign key in the flights table:</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>flights_tbl_mutate <span class="ot">&lt;-</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_hour_fmt =</span> <span class="fu">format</span>(time_hour, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt) <span class="sc">%&gt;%</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(origin_slot_id, <span class="fu">everything</span>())</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>surrogate_flights_dm <span class="ot">&lt;-</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">weather =</span> weather_tbl_mutate,</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">flights =</span> flights_tbl_mutate,</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;airports&quot;</span>, <span class="st">&quot;planes&quot;</span>)]</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(weather, origin_slot_id) <span class="sc">%&gt;%</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin_slot_id, weather)</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>surrogate_flights_dm <span class="sc">%&gt;%</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>flights_keyed<span class="sc">$</span>weather</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># Maybe there is some hidden candidate for a primary key that we overlooked?</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">enum_pk_candidates</span>(flights_keyed<span class="sc">$</span>weather)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># Seems we have to construct a column with unique values</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co"># This can be done by combining column `origin` with `time_hour`, if the latter</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># is converted to a single time zone first; all within the `dm`:</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>weather_tbl_mutate <span class="ot">&lt;-</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>weather <span class="sc">%&gt;%</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="co"># first convert all times to the same time zone:</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_hour_fmt =</span> <span class="fu">format</span>(time_hour, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="co"># paste together as character the airport code and the time</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt) <span class="sc">%&gt;%</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="fu">select</span>(origin_slot_id, <span class="fu">everything</span>())</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co"># check if we the result is as expected:</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>weather_tbl_mutate <span class="sc">%&gt;%</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="fu">enum_pk_candidates</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>  <span class="fu">filter</span>(candidate)</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co"># We apply the same transformation to create</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co"># the foreign key in the flights table:</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>flights_tbl_mutate <span class="ot">&lt;-</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_hour_fmt =</span> <span class="fu">format</span>(time_hour, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;origin_slot_id&quot;</span>, origin, time_hour_fmt) <span class="sc">%&gt;%</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>  <span class="fu">select</span>(origin_slot_id, <span class="fu">everything</span>())</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>surrogate_flights_dm <span class="ot">&lt;-</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>  <span class="fu">dm</span>(</span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>    <span class="at">weather =</span> weather_tbl_mutate,</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>    <span class="at">flights =</span> flights_tbl_mutate,</span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;airports&quot;</span>, <span class="st">&quot;planes&quot;</span>)]</span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>  <span class="fu">dm_add_pk</span>(weather, origin_slot_id) <span class="sc">%&gt;%</span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>  <span class="fu">dm_add_fk</span>(flights, origin_slot_id, weather)</span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>surrogate_flights_dm <span class="sc">%&gt;%</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 </div>
 <div id="use-case-3-disentangle-dm" class="section level3">
 <h3>Use case 3: Disentangle <code>dm</code></h3>
@@ -475,18 +475,18 @@ many operations that only work on cycle-free data models, such as
 <code>dm_wrap_tbl()</code>. In such cases, it can be beneficial to
 “disentangle” the <code>dm</code> by duplicating the referred table. One
 way to do this in the {dm}-framework is as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>disentangled_flights_dm <span class="ot">&lt;-</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm</span>(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">destination =</span> flights_keyed<span class="sc">$</span>airports,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">origin =</span> flights_keyed<span class="sc">$</span>airports,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;flights&quot;</span>, <span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;planes&quot;</span>, <span class="st">&quot;weather&quot;</span>)]</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Key relations are also duplicated, so the wrong ones need to be removed</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, dest, origin) <span class="sc">%&gt;%</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, destination)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>disentangled_flights_dm <span class="sc">%&gt;%</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>disentangled_flights_dm <span class="ot">&lt;-</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">dm</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="at">destination =</span> flights_keyed<span class="sc">$</span>airports,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">origin =</span> flights_keyed<span class="sc">$</span>airports,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;flights&quot;</span>, <span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;planes&quot;</span>, <span class="st">&quot;weather&quot;</span>)]</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="co"># Key relations are also duplicated, so the wrong ones need to be removed</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, dest, origin) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">dm_rm_fk</span>(flights, origin, destination)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>disentangled_flights_dm <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 </div>
 <div id="use-case-4-add-summary-table-to-dm" class="section level3">
 <h3>Use case 4: Add summary table to <code>dm</code></h3>
@@ -494,15 +494,15 @@ way to do this in the {dm}-framework is as follows:</p>
 a <code>dm</code>. Foreign-key relations are taken care of
 automatically. This example shows an alternative approach of
 deconstruction reconstruction using <code>pull_tbl()</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>flights_derived <span class="ot">&lt;-</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull_tbl</span>(flights, <span class="at">keyed =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(origin, carrier)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>derived_flights_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(flights_derived, <span class="sc">!!!</span>flights_keyed)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>derived_flights_dm <span class="sc">%&gt;%</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>flights_derived <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  flights_dm <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">pull_tbl</span>(flights, <span class="at">keyed =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(origin, carrier)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>derived_flights_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(flights_derived, <span class="sc">!!!</span>flights_keyed)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>derived_flights_dm <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 </div>
 <div id="use-case-5-joining-tables" class="section level3">
 <h3>Use case 5: Joining tables</h3>
@@ -514,28 +514,28 @@ derived from a <code>dm</code> object allows omitting the
 safely inferred from the foreign keys stored in the
 <code>dm_keyed_tbl</code> objects. For the syntax, please see the
 example below.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>planes_for_join <span class="ot">&lt;-</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>planes <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tailnum, <span class="at">plane_type =</span> type)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>joined_flights_tbl <span class="ot">&lt;-</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># let&#39;s first reduce the number of columns of flights</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dep_delay<span class="sc">:-</span>arr_delay, <span class="sc">-</span>air_time<span class="sc">:-</span>minute, <span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">&quot;sched_&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># in the {dm}-method for the joins you can specify which columns you want to</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add to the subsetted table</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(planes_for_join)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>joined_flights_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">flights_plane_type =</span> joined_flights_tbl,</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;airports&quot;</span>, <span class="st">&quot;weather&quot;</span>)]</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># this is how the table looks now</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>joined_flights_dm<span class="sc">$</span>flights_plane_type</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># also here, the FK-relations are transferred to the new table</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>joined_flights_dm <span class="sc">%&gt;%</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>planes_for_join <span class="ot">&lt;-</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>planes <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">select</span>(tailnum, <span class="at">plane_type =</span> type)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>joined_flights_tbl <span class="ot">&lt;-</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  flights_keyed<span class="sc">$</span>flights <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="co"># let&#39;s first reduce the number of columns of flights</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>dep_delay<span class="sc">:-</span>arr_delay, <span class="sc">-</span>air_time<span class="sc">:-</span>minute, <span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">&quot;sched_&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="co"># in the {dm}-method for the joins you can specify which columns you want to</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="co"># add to the subsetted table</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">left_join</span>(planes_for_join)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>joined_flights_dm <span class="ot">&lt;-</span> <span class="fu">dm</span>(</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="at">flights_plane_type =</span> joined_flights_tbl,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="sc">!!!</span>flights_keyed[<span class="fu">c</span>(<span class="st">&quot;airlines&quot;</span>, <span class="st">&quot;airports&quot;</span>, <span class="st">&quot;weather&quot;</span>)]</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>)</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co"># this is how the table looks now</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>joined_flights_dm<span class="sc">$</span>flights_plane_type</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co"># also here, the FK-relations are transferred to the new table</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>joined_flights_dm <span class="sc">%&gt;%</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  <span class="fu">dm_draw</span>()</span></code></pre></div>
 </div>
 <div id="use-case-6-retrieve-all-tables" class="section level3">
 <h3>Use case 6: Retrieve all tables</h3>
@@ -543,8 +543,8 @@ example below.</p>
 boilerplate code. The <code>dm_deconstruct()</code> function helps
 creating that boilerplate. For a <code>dm</code> object, it prints the
 code necessary to create local variables for all tables.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dm_deconstruct</span>(dm)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">dm_nycflights13</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">dm_deconstruct</span>(dm)</span></code></pre></div>
 <p>This code can be copy-pasted into your script or function.</p>
 </div>
 </div>
