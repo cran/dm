@@ -8,16 +8,12 @@ copy_dm_to(
   dest,
   dm,
   ...,
-  types = NULL,
-  overwrite = NULL,
-  indexes = NULL,
-  unique_indexes = NULL,
   set_key_constraints = TRUE,
-  unique_table_names = NULL,
   table_names = NULL,
   temporary = TRUE,
   schema = NULL,
   progress = NA,
+  unique_table_names = NULL,
   copy_to = NULL
 )
 }
@@ -26,19 +22,14 @@ copy_dm_to(
 
 \item{dm}{A \code{dm} object.}
 
-\item{...}{Passed on to \code{\link[dplyr:copy_to]{dplyr::copy_to()}} or to the function specified
-by the \code{copy_to} argument.}
-
-\item{overwrite, types, indexes, unique_indexes}{Must remain \code{NULL}.}
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{set_key_constraints}{If \code{TRUE} will mirror \code{dm} primary and foreign key constraints on a database
-and create unique indexes.
+and create indexes for foreign key constraints.
 Set to \code{FALSE} if your data model currently does not satisfy primary or foreign key constraints.}
 
-\item{unique_table_names}{Deprecated.}
-
 \item{table_names}{Desired names for the tables on \code{dest}; the names within the \code{dm} remain unchanged.
-Can be \code{NULL}, a named character vector, a function or a one-sided formula.
+Can be \code{NULL}, a named character vector, or a vector of \link[DBI:Id]{DBI::Id} objects.
 
 If left \code{NULL} (default), the names will be determined automatically depending on the \code{temporary} argument:
 \enumerate{
@@ -83,12 +74,7 @@ Not all DBMS are supported.}
 hide in non-interactive mode, show in interactive mode. Requires the
 'progress' package.}
 
-\item{copy_to}{By default, \code{\link[dplyr:copy_to]{dplyr::copy_to()}} is called to upload the
-individual tables to the target data source.
-This argument allows overriding the standard behavior in cases
-when the default does not work as expected, such as spatial data frames
-or other tables with special data types.
-If not \code{NULL}, this argument is processed with \code{\link[rlang:as_function]{rlang::as_function()}}.}
+\item{unique_table_names, copy_to}{Must be \code{NULL}.}
 }
 \value{
 A \code{dm} object on the given \code{src} with the same table names
@@ -102,15 +88,8 @@ The default is to create temporary tables, set \code{temporary = FALSE} to creat
 Unless \code{set_key_constraints} is \code{FALSE}, primary key constraints are set on all databases,
 and in addition foreign key constraints are set on MSSQL and Postgres databases.
 }
-\details{
-No tables will be overwritten; passing \code{overwrite = TRUE} to the function will give an error.
-Types are determined separately for each table, setting the \code{types} argument will
-also throw an error.
-The arguments are included in the signature to avoid passing them via the
-\code{...} ellipsis.
-}
 \examples{
-\dontshow{if (rlang::is_installed("RSQLite") && rlang::is_installed("nycflights13") && rlang::is_installed("dbplyr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("RSQLite", "nycflights13", "dbplyr"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 con <- DBI::dbConnect(RSQLite::SQLite())
 
 # Copy to temporary tables, unique table names by default:

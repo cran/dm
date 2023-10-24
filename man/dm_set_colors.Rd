@@ -34,7 +34,7 @@ For \code{dm_get_available_colors()}, a vector with the available colors.
 The colors can either be either specified with hex color codes or using the names of the built-in R colors.
 An overview of the colors corresponding to the standard color names can be found at
 the bottom of
-\url{http://rpubs.com/krlmlr/colors}.
+\url{https://rpubs.com/krlmlr/colors}.
 
 \code{dm_get_colors()} returns the colors defined for a data model.
 
@@ -43,7 +43,7 @@ These are the standard colors also returned by \code{\link[grDevices:colors]{grD
 table color with the name "default".
 }
 \examples{
-\dontshow{if (rlang::is_installed("nycflights13") && rlang::is_installed("DiagrammeR")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("nycflights13", "DiagrammeR"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 dm_nycflights13(color = FALSE) \%>\%
   dm_set_colors(
     darkblue = starts_with("air"),

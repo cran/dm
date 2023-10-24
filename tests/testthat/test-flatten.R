@@ -88,10 +88,12 @@ test_that("`dm_flatten_to_tbl()` does the right things for 'inner_join()'", {
     pillar.bold = NULL,
   )
 
-  out <- expect_message_obj(dm_flatten_to_tbl(
-    dm_for_flatten(), fact,
-    .join = inner_join
-  ))
+  out <- expect_message_obj(
+    arrange(
+      dm_flatten_to_tbl(dm_for_flatten(), fact, .join = inner_join),
+      pick(everything())
+    )
+  )
   # FIXME: Debug GHA fail
   # expect_equivalent_tbl(out, result_from_flatten_new())
   expect_snapshot(
@@ -345,8 +347,6 @@ test_that("tests with 'bad_dm' work", {
     dm_flatten_to_tbl(bad_filtered_dm, tbl_1, .join = semi_join),
     bad_filtered_dm %>% dm_flatten_to_tbl(tbl_1, .join = semi_join)
   )
-
-  skip_if_not_installed("nycflights13")
 
   # fails when there is a cycle
   expect_dm_error(

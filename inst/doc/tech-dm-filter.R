@@ -73,7 +73,7 @@ sum_nrow_filtered <- NA
 #    semi_join(airports_filtered, by = c("origin" = "faa")) %>%
 #    filter(month == 5)
 
-## ---- warning=FALSE------------------------------------------------------
+## ----warning=FALSE-------------------------------------------------------
 #  dm %>%
 #    dm_select_tbl(flights, airlines, airports) %>%
 #    copy_dm_to(dbplyr::src_memdb(), .) %>%

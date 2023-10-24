@@ -26,6 +26,7 @@
 #'        and the operation is aborted if child rows exist
 #'     - `"cascade"` means that the child row is also deleted
 #'   This setting is picked up by [copy_dm_to()] with `set_key_constraints = TRUE`,
+#'   and by [dm_sql()],
 #'   and might be considered by [dm_rows_delete()] in a future version.
 #'
 #' @family foreign key functions
@@ -44,7 +45,7 @@
 #' @return An updated `dm` with an additional foreign key relation.
 #'
 #' @export
-#' @examplesIf rlang::is_installed("nycflights13") && rlang::is_installed("DiagrammeR")
+#' @examplesIf rlang::is_installed(c("nycflights13", "DiagrammeR"))
 #' nycflights_dm <- dm(
 #'   planes = nycflights13::planes,
 #'   flights = nycflights13::flights,
@@ -157,7 +158,7 @@ dm_add_fk_impl <- function(dm, table, column, ref_table, ref_column, on_delete) 
     new_fk(ref_column, table, column, on_delete)
   )
 
-  new_dm3(def)
+  dm_from_def(def)
 }
 
 #' Check if foreign keys exists
@@ -303,7 +304,7 @@ dm_get_all_fks_def_impl <- function(def, parent_table = NULL, ignore_on_delete =
 #' @return An updated `dm` without the matching foreign key relation(s).
 #'
 #' @export
-#' @examplesIf rlang::is_installed("nycflights13") && rlang::is_installed("DiagrammeR")
+#' @examplesIf rlang::is_installed(c("nycflights13", "DiagrammeR"))
 #' dm_nycflights13(cycle = TRUE) %>%
 #'   dm_rm_fk(flights, dest, airports) %>%
 #'   dm_draw()
@@ -433,7 +434,7 @@ dm_rm_fk_impl <- function(dm, table_name, cols, ref_table_name, ref_cols) {
   # Execute
   def$fks[idx] <- map2(def$fks[idx], idx_fk, ~ .x[-.y, ])
 
-  new_dm3(def)
+  dm_from_def(def)
 }
 
 #' Foreign key candidates

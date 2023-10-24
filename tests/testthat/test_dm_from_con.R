@@ -1,6 +1,4 @@
 test_that("table identifiers are quoted", {
-  skip_if_not_installed("dbplyr")
-
   con_db <- my_db_test_con()
 
   test_dm <- copy_dm_to(
@@ -18,7 +16,7 @@ test_that("table identifiers are quoted", {
   on.exit({
     walk(
       remote_tbl_names_copied,
-      ~ try(dbExecute(con_db, paste0("DROP TABLE ", .x)))
+      ~ try(DBI::dbExecute(con_db, paste0("DROP TABLE ", .x)))
     )
   })
 
@@ -39,8 +37,6 @@ test_that("table identifiers are quoted", {
 })
 
 test_that("table identifiers are quoted with learn_keys = FALSE", {
-  skip_if_not_installed("dbplyr")
-
   con_db <- my_db_test_con()
 
   test_dm <- copy_dm_to(
@@ -60,7 +56,7 @@ test_that("table identifiers are quoted with learn_keys = FALSE", {
   on.exit({
     walk(
       remote_tbl_names_copied,
-      ~ try(dbExecute(con_db, paste0("DROP TABLE ", .x)))
+      ~ try(DBI::dbExecute(con_db, paste0("DROP TABLE ", .x)))
     )
   })
 
@@ -76,8 +72,6 @@ test_that("table identifiers are quoted with learn_keys = FALSE", {
 
 
 test_that("dm_from_src() deprecated", {
-  skip_if_not_installed("dbplyr")
-
   con_db <- my_db_test_con()
 
   expect_deprecated(dm_from_src(src_from_src_or_con(con_db), learn_keys = FALSE))

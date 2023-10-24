@@ -30,9 +30,10 @@
 #' @param font_size `r lifecycle::badge("experimental")`
 #'
 #'   Font size for:
-#'     - `header`, defaults to `16`
-#'     - `column`, defaults to `16`
-#'     - `table_description`, defaults to `8`
+#'
+#'   - `header`, defaults to `16`
+#'   - `column`, defaults to `16`
+#'   - `table_description`, defaults to `8`
 #'
 #'   Can be set as a named integer vector, e.g. `c(table_headers = 18L, table_description = 6L)`.
 #'
@@ -46,7 +47,7 @@
 #' Currently, this is an object of class `grViz` (see also
 #' [DiagrammeR::grViz()]), but this is subject to change.
 #'
-#' @examplesIf rlang::is_installed("nycflights13") && rlang::is_installed("DiagrammeR")
+#' @examplesIf rlang::is_installed(c("nycflights13", "DiagrammeR"))
 #' dm_nycflights13() %>%
 #'   dm_draw()
 #'
@@ -227,7 +228,7 @@ dm_get_all_column_types <- function(x) {
 #' The colors can either be either specified with hex color codes or using the names of the built-in R colors.
 #' An overview of the colors corresponding to the standard color names can be found at
 #' the bottom of
-#' [http://rpubs.com/krlmlr/colors](http://rpubs.com/krlmlr/colors).
+#' [https://rpubs.com/krlmlr/colors](https://rpubs.com/krlmlr/colors).
 #'
 #' @inheritParams dm_draw
 #' @param ... Colors to set in the form `color = table`.
@@ -236,7 +237,7 @@ dm_get_all_column_types <- function(x) {
 #' @return For `dm_set_colors()`: the updated data model.
 #'
 #' @export
-#' @examplesIf rlang::is_installed("nycflights13") && rlang::is_installed("DiagrammeR")
+#' @examplesIf rlang::is_installed(c("nycflights13", "DiagrammeR"))
 #' dm_nycflights13(color = FALSE) %>%
 #'   dm_set_colors(
 #'     darkblue = starts_with("air"),
@@ -282,7 +283,7 @@ dm_set_colors <- function(dm, ...) {
     mutate(display = coalesce(new_display, display)) %>%
     select(-new_display)
 
-  new_dm3(def)
+  dm_from_def(def)
 }
 
 color_quos_to_display <- function(...) {

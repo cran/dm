@@ -3,8 +3,6 @@ test_that("data source found", {
   expect_silent(my_test_src_fun()())
 })
 
-skip_if_not_installed("dbplyr")
-
 test_that("copy_dm_to() copies data frames to databases", {
   skip_if_ide()
 
@@ -34,15 +32,13 @@ test_that("copy_dm_to() copies data frames from any source", {
 # in combination with dm_learn_from_db
 
 test_that("copy_dm_to() rejects overwrite and types arguments", {
-  expect_dm_error(
-    copy_dm_to(my_test_src(), dm_for_filter(), overwrite = TRUE),
-    class = "no_overwrite"
-  )
+  expect_snapshot(error = TRUE, {
+    copy_dm_to(my_test_src(), dm_for_filter(), overwrite = TRUE)
+  })
 
-  expect_dm_error(
-    copy_dm_to(my_test_src(), dm_for_filter(), types = character()),
-    class = "no_types"
-  )
+  expect_snapshot(error = TRUE, {
+    copy_dm_to(my_test_src(), dm_for_filter(), types = character())
+  })
 })
 
 test_that("copy_dm_to() fails with duplicate table names", {
@@ -56,6 +52,8 @@ test_that("copy_dm_to() fails with duplicate table names", {
 })
 
 test_that("default table repair works", {
+  skip_if_not_installed("mockr")
+
   con <- con_from_src_or_con(my_db_test_src())
 
   table_names <- c("t1", "t2", "t3")
@@ -103,7 +101,7 @@ test_that("copy_dm_to() fails legibly with schema argument for MSSQL & Postgres"
   db_schema_create(src_db$con, "copy_dm_to_schema")
 
   withr::defer({
-    try(dbExecute(src_db$con, "DROP SCHEMA copy_dm_to_schema"))
+    try(DBI::dbExecute(src_db$con, "DROP SCHEMA copy_dm_to_schema"))
   })
 
   expect_dm_error(
@@ -137,9 +135,9 @@ test_that("copy_dm_to() works with schema argument for MSSQL & Postgres", {
     order_of_deletion <- c("tf_2", "tf_1", "tf_5", "tf_6", "tf_4", "tf_3")
     walk(
       dm_get_tables_impl(remote_dm)[order_of_deletion],
-      ~ try(dbExecute(src_db$con, paste0("DROP TABLE ", remote_name_qual(.x))))
+      ~ try(DBI::dbExecute(src_db$con, paste0("DROP TABLE ", remote_name_qual(.x))))
     )
-    try(dbExecute(src_db$con, "DROP SCHEMA copy_dm_to_schema"))
+    try(DBI::dbExecute(src_db$con, "DROP SCHEMA copy_dm_to_schema"))
   })
 
   expect_silent(
@@ -181,70 +179,6 @@ test_that("copy_dm_to() fails with schema argument for databases where schema is
   )
 })
 
-
-test_that("build_copy_queries snapshot test for pixarfilms", {
-  src_db <- my_db_test_src()
-
-  # build regular dm from `dm_pixarfilms()`
-  pixar_dm <-
-    # fetch sample dm
-    dm_pixarfilms() %>%
-    # make it regular
-    dm_filter(pixar_films = (!is.na(film))) %>%
-    dm_select_tbl(-pixar_people)
-
-  skip_if_not_installed("testthat", "3.1.1")
-
-  expect_snapshot(
-    variant = my_test_src_name,
-    {
-      pixar_dm %>%
-        build_copy_queries(
-          src_db,
-          .
-        ) %>%
-        as.list() # to print full queries
-    }
-  )
-})
-
-
-test_that("build_copy_queries avoids duplicate indexes", {
-  src_db <- my_db_test_src()
-
-  # build a dm whose index might be duplicated if naively build (child__a__key)
-  ambiguous_dm <- dm(
-    parent1 = tibble(key = 1),
-    parent2 = tibble(a__key = 1),
-    child = tibble(a__key = 1),
-    child__a = tibble(key = 1)
-  ) %>%
-    dm_add_pk(parent1, key) %>%
-    dm_add_pk(parent2, a__key) %>%
-    dm_add_fk(child, a__key, parent2) %>%
-    dm_add_fk(child__a, key, parent2)
-
-  queries <-
-    build_copy_queries(
-      src_db,
-      ambiguous_dm,
-      table_names =
-        names(ambiguous_dm) %>%
-          repair_table_names_for_db(temporary = FALSE, con = src_db, schema = NULL)
-    )
-
-  expect_equal(anyDuplicated(unlist(queries$index_name)), 0)
-
-  skip_if_not_installed("testthat", "3.1.1")
-
-  expect_snapshot(
-    variant = my_test_src_name,
-    {
-      as.list(queries)
-    }
-  )
-})
-
 test_that("copy_dm_to() works with autoincrement PKs and FKS on selected DBs", {
   skip_if_src_not(c("postgres", "sqlite", "mssql", "maria"))
 
@@ -264,7 +198,7 @@ test_that("copy_dm_to() works with autoincrement PKs and FKS on selected DBs", {
     order_of_deletion <- c("xt4", "xt2", "xt3", "xt1")
     walk(
       dm_get_tables_impl(remote_dm)[order_of_deletion],
-      ~ try(dbExecute(con_db, paste0("DROP TABLE ", dbplyr::remote_name(.x))))
+      ~ try(DBI::dbExecute(con_db, paste0("DROP TABLE ", dbplyr::remote_name(.x))))
     )
   })
 

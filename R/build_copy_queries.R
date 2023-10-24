@@ -1,5 +1,13 @@
 #' @autoglobal
 build_copy_queries <- function(dest, dm, set_key_constraints = TRUE, temporary = TRUE, table_names = set_names(names(dm))) {
+  ## Reorder queries according to topological sort so pks are created before associated fks
+  graph <- create_graph_from_dm(dm, directed = TRUE)
+  topo <- names(igraph::topo_sort(graph, mode = "in"))
+
+  if (length(topo) == length(dm)) {
+    dm <- dm[topo]
+  }
+
   ## use 0-rows object
   ptype_dm <- collect(dm_ptype(dm))
 
@@ -12,13 +20,18 @@ build_copy_queries <- function(dest, dm, set_key_constraints = TRUE, temporary =
 
   ## helper to set on delete statement for fks if required
   set_on_delete_col <- function(x) {
-    map_chr(x, ~ {
-      switch(.x,
-        "no_action" = "",
-        "cascade" = " ON DELETE CASCADE",
-        abort(glue("on_delete column value '{.x}' not supported"))
-      )
-    })
+    if (is_duckdb(dest) && any(x == "cascade")) {
+      inform(glue('`on_delete = "cascade"` not supported for duckdb'))
+      ""
+    } else {
+      map_chr(x, ~ {
+        switch(.x,
+          "no_action" = "",
+          "cascade" = " ON DELETE CASCADE",
+          abort(glue('`on_delete = "{.x}"` not supported'))
+        )
+      })
+    }
   }
 
   ## fetch types, keys and uniques
@@ -59,7 +72,7 @@ build_copy_queries <- function(dest, dm, set_key_constraints = TRUE, temporary =
     # database-specific autoincrementing column types
     if (length(pk_col) > 0L) {
       # extract column name representing primary key
-      pk_col <- pk_col %>% extract2(1L)
+      pk_col <- pk_col[[1]]
 
       # Postgres:
       if (is_postgres(dest)) {
@@ -103,6 +116,8 @@ build_copy_queries <- function(dest, dm, set_key_constraints = TRUE, temporary =
 
     df_col_types
   }
+
+  tbl_defs <- tibble(name = names(ptype_dm))
 
   col_defs <-
     ptype_dm %>%
@@ -201,7 +216,8 @@ build_copy_queries <- function(dest, dm, set_key_constraints = TRUE, temporary =
 
   ## compile `CREATE TABLE ...` queries
   create_table_queries <-
-    col_defs %>%
+    tbl_defs %>%
+    left_join(col_defs, by = "name") %>%
     left_join(pk_defs, by = "name") %>%
     left_join(unique_defs, by = "name") %>%
     left_join(fk_defs, by = "name") %>%
@@ -221,16 +237,10 @@ build_copy_queries <- function(dest, dm, set_key_constraints = TRUE, temporary =
       "CREATE {if (temporary) 'TEMPORARY ' else ''}TABLE {purrr::map_chr(remote_name, ~ DBI::dbQuoteIdentifier(con, .x))} (\n  {all_defs}\n)"
     )))
 
-  queries <- left_join(create_table_queries, index_queries, by = "name")
-
-  ## Reorder queries according to topological sort so pks are created before associated fks
-  graph <- create_graph_from_dm(dm, directed = TRUE)
-  topo <- igraph::topo_sort(graph, mode = "in")
-  idx <- match(names(topo), queries$name)
-
-  if (length(idx) == nrow(create_table_queries)) {
-    queries <- queries[idx, ]
-  }
+  queries <-
+    tbl_defs %>%
+    left_join(create_table_queries, by = "name") %>%
+    left_join(index_queries, by = "name")
 
   queries
 }

@@ -1,4 +1,4 @@
-if (!is_attached("dm_cache")) {
+if (!rlang::is_attached("dm_cache")) {
   ((attach))(new_environment(), pos = length(search()) - 1, name = "dm_cache")
 }
 cache <- search_env("dm_cache")
@@ -80,6 +80,8 @@ my_test_src_cache %<--% {
 }
 
 my_test_src <- function() {
+  testthat::skip_if_not_installed("dbplyr")
+
   fun <- my_test_src_fun()
   if (is.null(fun)) {
     abort(paste0("Data source not known: ", my_test_src_name))
@@ -101,10 +103,13 @@ duckdb_test_src %<--% {
   if (getRversion() < "4.0") {
     testthat::skip("duckdb failing for R < 4.0")
   }
+  testthat::skip_if_not_installed("duckdb")
   dbplyr::src_dbi(DBI::dbConnect(duckdb::duckdb()), auto_disconnect = TRUE)
 }
 
 my_db_test_src <- function() {
+  testthat::skip_if_not_installed("dbplyr")
+
   if (is_db_test_src()) {
     my_test_src()
   } else {
@@ -184,7 +189,7 @@ dm_for_card %<--% {
     dc_2 = data_card_11(),
     dc_3 = data_card_12(),
     dc_4 = data_card_13(),
-    dc_5 = data_card_1(),
+    dc_5 = suppress_mssql_message(compute(data_card_1())),
     dc_6 = data_card_7()
   ) %>%
     dm_add_fk(dc_2, c(a, b), dc_1, c(a, b)) %>%
@@ -301,7 +306,9 @@ dm_for_filter_w_cycle %<-% {
     tf_1 = tf_1(), tf_2 = tf_2(), tf_3 = tf_3(), tf_4 = tf_4(), tf_5 = tf_5(), tf_6 = tf_6(), tf_7 = tf_7()
   ) %>%
     dm_add_pk(tf_1, a, autoincrement = TRUE) %>%
+    #
     dm_add_pk(tf_3, c(f, f1)) %>%
+    dm_add_uk(tf_3, g) %>%
     #
     dm_add_pk(tf_2, c) %>%
     dm_add_fk(tf_2, d, tf_1) %>%
@@ -330,11 +337,35 @@ dm_for_filter_db %<--% {
   copy_dm_to(my_db_test_src(), dm_for_filter())
 }
 
+dm_for_filter_df %<--% {
+  # FIXME: Do it the other way round, data frame first, then copy to db
+  dm_for_filter() %>%
+    collect() %>%
+    dm_zoom_to(tf_1) %>%
+    arrange(pick(everything())) %>%
+    dm_update_zoomed() %>%
+    dm_zoom_to(tf_2) %>%
+    arrange(pick(everything())) %>%
+    dm_update_zoomed() %>%
+    dm_zoom_to(tf_3) %>%
+    arrange(pick(everything())) %>%
+    dm_update_zoomed() %>%
+    dm_zoom_to(tf_4) %>%
+    arrange(pick(everything())) %>%
+    dm_update_zoomed() %>%
+    dm_zoom_to(tf_5) %>%
+    arrange(pick(everything())) %>%
+    dm_update_zoomed() %>%
+    dm_zoom_to(tf_6) %>%
+    arrange(pick(everything())) %>%
+    dm_update_zoomed()
+}
+
 dm_for_filter_duckdb %<--% copy_dm_to(duckdb_test_src(), dm_for_filter())
 
 dm_for_filter_rev %<-% {
   def_dm_for_filter <- dm_get_def(dm_for_filter())
-  new_dm3(def_dm_for_filter[rev(seq_len(nrow(def_dm_for_filter))), ])
+  dm_from_def(def_dm_for_filter[rev(seq_len(nrow(def_dm_for_filter))), ])
 }
 
 # Deprecated tests
@@ -673,7 +704,11 @@ bad_dm %<--% {
 }
 
 dm_nycflights_small_base %<-% {
-  dm(!!!dm_get_tables(dm_nycflights13()))
+  tables <- dm_get_tables(dm_nycflights13())
+  # https://github.com/tidyverse/dbplyr/pull/1195
+  tables$flights <- mutate(tables$flights, time_hour = as.character(time_hour))
+  tables$weather <- mutate(tables$weather, time_hour = as.character(time_hour))
+  dm(!!!tables)
 }
 
 # Do not add PK and FK constraints to the database
@@ -720,7 +755,7 @@ get_test_tables_from_postgres <- function() {
   con_postgres <- src_postgres$con
 
   con_postgres %>%
-    dbGetQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'") %>%
+    DBI::dbGetQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'") %>%
     as_tibble() %>%
     filter(grepl("^tf_[0-9]{1}_[0-9]{4}_[0-9]{2}_[0-9]{2}_[0-9]{2}_[0-9]{2}_[0-9]{2}_[0-9]+", table_name))
 }
@@ -736,6 +771,6 @@ clear_postgres <- function() {
   walk(
     get_test_tables_from_postgres() %>%
       pull(),
-    ~ dbExecute(con_postgres, glue("DROP TABLE {.x} CASCADE"))
+    ~ DBI::dbExecute(con_postgres, glue("DROP TABLE {.x} CASCADE"))
   )
 }

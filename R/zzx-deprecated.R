@@ -127,12 +127,20 @@ cdm_copy_to <- function(dest, dm, ..., types = NULL, overwrite = NULL, indexes =
     }
   }
 
-  copy_dm_to(
-    dest = dest, dm = dm, ... = ..., types = types,
-    overwrite = overwrite, indexes = indexes, unique_indexes = unique_indexes,
+  inject(copy_dm_to(
+    dest = dest,
+    dm = dm,
+    ... = ...,
+    !!!compact(list(
+      types = types,
+      overwrite = overwrite,
+      indexes = indexes,
+      unique_indexes = unique_indexes
+    )),
     set_key_constraints = set_key_constraints,
-    table_names = table_names, temporary = temporary
-  )
+    table_names = table_names,
+    temporary = temporary
+  ))
 }
 
 #' @rdname deprecated
@@ -483,7 +491,7 @@ cdm_rm_pk <- function(dm, table, rm_referencing_fks = FALSE) {
   }
   def$pks[def$table == table_name] <- list(new_pk())
   def$fks[def$table == table_name] <- list(new_fk())
-  new_dm3(def)
+  dm_from_def(def)
 }
 
 #' @rdname deprecated
@@ -558,7 +566,7 @@ cdm_zoom_to_tbl <- function(dm, table) {
       zoom = if_else(table == !!zoom, data, list(NULL)),
       col_tracker_zoom = if_else(table == !!zoom, cols, list(NULL))
     ) %>%
-    new_dm3(zoomed = TRUE)
+    dm_from_def(zoomed = TRUE)
 }
 
 #' @rdname deprecated
@@ -601,7 +609,7 @@ cdm_insert_zoomed_tbl <- function(dm, new_tbl_name = NULL, repair = "unique", qu
       pks = if_else(table == new_tbl_name_chr, !!upd_pk, pks),
       fks = if_else(table == new_tbl_name_chr, !!upd_inc_fks, fks)
     ) %>%
-    new_dm3(zoomed = TRUE, validate = FALSE)
+    dm_from_def(zoomed = TRUE, validate = FALSE)
 
   dm_wo_outgoing_fks %>%
     dm_insert_zoomed_outgoing_fks(new_tbl_name_chr, names_list$old_new_names[old_tbl_name], col_tracker_zoomed(dm)) %>%
@@ -616,7 +624,7 @@ dm_select_tbl_zoomed_impl <- function(dm, selected) {
     filter_recode_table_def(selected) %>%
     filter_recode_table_fks(selected)
 
-  new_dm3(def, zoomed = TRUE)
+  dm_from_def(def, zoomed = TRUE)
 }
 
 dm_add_tbl_zoomed_impl <- function(dm, tbls, table_name, filters = list_of(new_filter()),
@@ -630,7 +638,7 @@ dm_add_tbl_zoomed_impl <- function(dm, tbls, table_name, filters = list_of(new_f
   def_0$fks <- fks
   def_0$filters <- filters
 
-  new_dm3(vec_rbind(def, def_0), zoomed = TRUE)
+  dm_from_def(vec_rbind(def, def_0), zoomed = TRUE)
 }
 
 
@@ -714,7 +722,7 @@ dm_bind <- function(..., repair = "check_unique", quiet = FALSE) {
   dms <- list2(...)
 
   new_def <- dm_bind_impl(dms, repair, quiet)
-  new_dm3(new_def)
+  dm_from_def(new_def)
 }
 
 #' @description
@@ -771,7 +779,7 @@ rows_truncate.tbl_sql <- function(x, ...,
   if (!is_null(name)) {
     con <- dbplyr::remote_con(x)
     sql <- sql_rows_truncate(x)
-    dbExecute(con, sql, immediate = TRUE)
+    DBI::dbExecute(con, sql, immediate = TRUE)
     invisible(x)
   } else {
     x %>%

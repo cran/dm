@@ -12,12 +12,12 @@
 #' `pixar_films` contains missing values so cannot be made a proper primary key.
 #' Set to `TRUE` to remove those records.
 #'
-#' @return A `dm` object consisting of {pixarfilms} tables, complete with
+#' @return A `dm` object consisting of \pkg{pixarfilms} tables, complete with
 #'   primary and foreign keys and optionally colored.
 #'
 #' @export
 #' @autoglobal
-#' @examplesIf rlang::is_installed("pixarfilms") && rlang::is_installed("DiagrammeR")
+#' @examplesIf rlang::is_installed(c("pixarfilms", "DiagrammeR"))
 #' dm_pixarfilms()
 #' dm_pixarfilms() %>%
 #'   dm_draw()
@@ -25,10 +25,7 @@ dm_pixarfilms <- function(..., color = TRUE, consistent = FALSE) {
   check_dots_empty()
 
   # Check for data package installed
-  check_suggested("pixarfilms",
-    use = TRUE,
-    top_level_fun = "dm_pixarfilms"
-  )
+  check_suggested("pixarfilms", "dm_pixarfilms")
 
   # Extract data objects
   pixar_films <- pixarfilms::pixar_films

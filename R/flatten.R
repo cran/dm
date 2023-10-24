@@ -134,10 +134,7 @@ dm_flatten_to_tbl_impl <- function(dm, start, list_of_pts, join, join_name, squa
   order_df <- left_join(tibble(name = unname(list_of_pts)), order_df, by = "name")
 
   # list of join partners
-  ordered_table_list <-
-    prep_dm %>%
-    dm_get_tables() %>%
-    extract(order_df$name)
+  ordered_table_list <- dm_get_tables(prep_dm)[order_df$name]
   by <- map2(order_df$pred, order_df$name, ~ get_by(prep_dm, .x, .y))
 
   # perform the joins according to the list, starting with table `initial_LHS`
@@ -266,5 +263,5 @@ prepare_dm_for_flatten <- function(dm, tables, gotta_rename, position = "suffix"
 
   def <- dm_get_def(clean_dm)
   def$data[[which(def$table == start)]] <- start_tbl
-  new_dm3(def)
+  dm_from_def(def)
 }

@@ -12,10 +12,10 @@ systime_convenient <- function() {
   local_options(digits.secs = 6)
 
   if (Sys.getenv("IN_PKGDOWN") != "") {
-    "2020_08_28_07_13_03"
+    "20200828_071303"
   } else {
     time <- as.character(Sys.time())
-    gsub("[-:. ]", "_", time)
+    gsub("[-:.]", "", gsub(" ", "_", time))
   }
 }
 
@@ -24,18 +24,6 @@ get_pid <- function() {
     "12345"
   } else {
     as.character(Sys.getpid())
-  }
-}
-
-class_to_db_class <- function(dest, class_vector) {
-  if (is_mssql(dest) || is_postgres(dest)) {
-    case_when(
-      class_vector == "character" ~ "VARCHAR(100)",
-      class_vector == "integer" ~ "INT",
-      TRUE ~ class_vector
-    )
-  } else {
-    return(class_vector)
   }
 }
 
@@ -68,7 +56,17 @@ is_postgres <- function(dest) {
 }
 
 is_mariadb <- function(dest) {
-  inherits_any(dest, c("MariaDBConnection", "src_MariaDBConnection", "src_DoltConnection", "src_DoltLocalConnection"))
+  inherits_any(
+    dest,
+    c(
+      "MariaDBConnection",
+      "src_MariaDBConnection",
+      "MySQLConnection",
+      "src_MySQLConnection",
+      "src_DoltConnection",
+      "src_DoltLocalConnection"
+    )
+  )
 }
 
 schema_supported_dbs <- function() {

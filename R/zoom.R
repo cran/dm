@@ -31,13 +31,13 @@
 #' Calling [filter()] on a zoomed `dm` is different from calling [dm_filter()]:
 #' only with the latter, the filter expression is added to the list of table filters stored in the dm.
 #'
-#' Furthermore, different `join()`-variants from {dplyr} are also supported,
+#' Furthermore, different `join()`-variants from \pkg{dplyr} are also supported,
 #' e.g. [left_join()] and [semi_join()].
 #' (Support for [nest_join()] is planned.)
 #' The join-methods for `dm_zoomed` infer the columns to join by from the primary and foreign keys,
 #' and have an extra argument `select` that allows choosing the columns of the RHS table.
 #'
-#' And -- last but not least -- also the {tidyr}-functions [unite()] and [separate()] are supported for `dm_zoomed`.
+#' And -- last but not least -- also the \pkg{tidyr}-functions [unite()] and [separate()] are supported for `dm_zoomed`.
 #'
 #' @rdname dm_zoom_to
 #' @aliases zoomed_df
@@ -46,7 +46,7 @@
 #' @return For `dm_zoom_to()`: A `dm_zoomed` object.
 #'
 #' @export
-#' @examplesIf rlang::is_installed("nycflights13") && rlang::is_installed("DiagrammeR")
+#' @examplesIf rlang::is_installed(c("nycflights13", "DiagrammeR"))
 #' flights_zoomed <- dm_zoom_to(dm_nycflights13(), flights)
 #'
 #' flights_zoomed
@@ -86,7 +86,7 @@ dm_zoom_to <- function(dm, table) {
   def$zoom[[where]] <- zoomed_tbl
   def$col_tracker_zoom[[where]] <- set_names(colnames(zoomed_tbl))
 
-  new_dm3(def, zoomed = TRUE)
+  dm_from_def(def, zoomed = TRUE)
 }
 
 is_zoomed <- function(dm) {
@@ -204,7 +204,7 @@ dm_update_zoomed <- function(dm) {
 
   new_def %>%
     clean_zoom() %>%
-    new_dm3()
+    dm_from_def()
 }
 
 #' @rdname dm_zoom_to
@@ -227,14 +227,14 @@ dm_discard_zoomed <- function(dm) {
 
   def %>%
     clean_zoom() %>%
-    new_dm3()
+    dm_from_def()
 }
 
 dm_clean_zoomed <- function(dm) {
   dm %>%
     dm_get_def() %>%
     clean_zoom() %>%
-    new_dm3()
+    dm_from_def()
 }
 
 clean_zoom <- function(def) {
@@ -355,7 +355,7 @@ replace_zoomed_tbl <- function(dm, new_zoomed_tbl, tracked_cols = NULL) {
   if (!is_null(tracked_cols)) {
     def$col_tracker_zoom[[where]] <- tracked_cols
   }
-  new_dm3(def, zoomed = TRUE)
+  dm_from_def(def, zoomed = TRUE)
 }
 
 check_zoomed <- function(dm) {

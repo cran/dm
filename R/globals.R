@@ -47,6 +47,12 @@ utils::globalVariables(c(
   "ref_uuid", # <tbl_def_impl>
   "ref_column", # <tbl_def_impl>
   "column", # <tbl_def_impl>
+  "name", # <dm_ddl_pre>
+  "col_def", # <dm_ddl_pre>
+  "uk_def", # <dm_ddl_pre>
+  "fk_def", # <dm_ddl_pre>
+  "pk_def", # <dm_ddl_pre>
+  "remote_name", # <dm_ddl_pre>
   "renames", # <prepare_join>
   "kind", # <dm_get_data_model>
   "child_table", # <dm_get_data_model>
@@ -121,8 +127,6 @@ utils::globalVariables(c(
   "JSON_AGG", # <sql_json_nest.PqConnection>
   "JSON_BUILD_OBJECT", # <sql_json_nest.PqConnection>
   "JSON_BUILD_OBJECT", # <sql_json_pack.PqConnection>
-  "JSON_AGG", # <sql_json_nest.PqConnection>
-  "JSON_BUILD_OBJECT", # <sql_json_nest.PqConnection>
   "key", # <is_unique_key_se>
   "any_na", # <is_unique_key_se>
   ".", # <is_unique_key_se>

@@ -38,7 +38,7 @@
 #' new_dm(list(trees = trees, mtcars = mtcars))
 #'
 #' as_dm(list(trees = trees, mtcars = mtcars))
-#' @examplesIf rlang::is_installed("nycflights13") && rlang::is_installed("dbplyr")
+#' @examplesIf rlang::is_installed(c("nycflights13", "dbplyr"))
 #'
 #' is_dm(dm_nycflights13())
 #'
@@ -81,7 +81,7 @@ dm <- function(...,
   dm_tbl <- dm_impl(dots[!is_dm], names(quos_auto_name(quos[!is_dm])))
   def <- dm_bind_impl(c(dots[is_dm], list(dm_tbl)), .name_repair, .quiet, repair_arg = "")
 
-  dm <- new_dm3(def)
+  dm <- dm_from_def(def)
   dm_validate(dm)
   dm
 }
@@ -126,7 +126,7 @@ dm_impl <- function(tbls, names) {
 #' @export
 new_dm <- function(tables = list()) {
   def <- new_keyed_dm_def(tables)
-  new_dm3(def)
+  dm_from_def(def)
 }
 
 new_keyed_dm_def <- function(tables = list()) {
@@ -182,7 +182,7 @@ new_dm_def <- function(tables = list(),
   def
 }
 
-new_dm3 <- function(def, zoomed = FALSE, validate = TRUE) {
+dm_from_def <- function(def, zoomed = FALSE, validate = TRUE) {
   if (is.null(def[["uuid"]])) {
     def$uuid <- vec_new_uuid_along(def$table)
   } else {
@@ -218,12 +218,12 @@ dm_get_def <- function(x, quiet = FALSE) {
 
 new_pk <- function(column = list(), autoincrement = logical(length(column))) {
   stopifnot(is.list(column), is.logical(autoincrement))
-  tibble(column = column, autoincrement = autoincrement)
+  fast_tibble(column = column, autoincrement = autoincrement)
 }
 
 new_uk <- function(column = list()) {
   stopifnot(is.list(column))
-  tibble(column = column)
+  fast_tibble(column = column)
 }
 
 new_fk <- function(ref_column = list(),
@@ -238,11 +238,16 @@ new_fk <- function(ref_column = list(),
     length(on_delete) %in% c(1L, length(table))
   )
 
-  tibble(ref_column, table, column, on_delete)
+  fast_tibble(
+    ref_column = ref_column,
+    table = table,
+    column = column,
+    on_delete = on_delete
+  )
 }
 
 new_filter <- function(quos = list(), zoomed = logical()) {
-  tibble(filter_expr = unclass(quos), zoomed = zoomed)
+  fast_tibble(filter_expr = unclass(quos), zoomed = zoomed)
 }
 
 # Legacy!
@@ -314,6 +319,8 @@ as_dm <- function(x, ...) {
 
 #' @export
 as_dm.default <- function(x, ...) {
+  check_dots_empty()
+
   if (!is.list(x) || is.object(x)) {
     abort(paste0("Can't coerce <", class(x)[[1]], "> to <dm>."))
   }
@@ -337,11 +344,15 @@ tbl_src <- function(x) {
 
 #' @export
 as_dm.src <- function(x, ...) {
+  check_dots_empty()
+
   dm_from_con(con = con_from_src_or_con(x), table_names = NULL)
 }
 
 #' @export
 as_dm.DBIConnection <- function(x, ...) {
+  check_dots_empty()
+
   dm_from_con(con = x, table_names = NULL)
 }
 
@@ -452,7 +463,7 @@ new_dm_zoomed_df <- function(x, ...) {
 # this is called from `tibble:::trunc_mat()`, which is called from `tibble::format.tbl()`
 # therefore, we need to have our own subclass but the main class needs to be `tbl`
 #' @export
-tbl_sum.dm_zoomed_df <- function(x) {
+tbl_sum.dm_zoomed_df <- function(x, ...) {
   c(
     structure(attr(x, "name_df"), names = "Zoomed table"),
     NextMethod()
@@ -484,6 +495,8 @@ format.dm_zoomed_df <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) 
 
 #' @export
 `[[.dm` <- function(x, id, ...) {
+  check_dots_empty()
+
   # for both dm and dm_zoomed
   if (is.numeric(id)) id <- src_tbls_impl(x)[id] else id <- as_string(id)
   tbl_impl(x, id, quiet = TRUE)
@@ -660,7 +673,7 @@ src_tbls_impl <- function(dm, quiet = FALSE) {
 #' @return A `dm` object of the same structure as the input.
 #' @name materialize
 #' @export
-#' @examplesIf dm:::dm_has_financial()
+#' @examplesIf dm:::dm_has_financial() && rlang::is_installed("RSQLite")
 #' financial <- dm_financial_sqlite()
 #'
 #' financial %>%
@@ -684,7 +697,7 @@ compute.dm <- function(x, ...) {
     dm_apply_filters_impl() %>%
     dm_get_def() %>%
     mutate(data = map(data, compute, ...)) %>%
-    new_dm3()
+    dm_from_def()
 }
 
 #' Materialize
@@ -703,12 +716,17 @@ collect.dm <- function(x, ..., progress = NA) {
 
   ticker <- new_ticker("downloading data", nrow(def), progress = progress)
   def$data <- map(def$data, ticker(collect), ...)
-  new_dm3(def, zoomed = is_zoomed(x))
+  dm_from_def(def, zoomed = is_zoomed(x))
 }
 
 #' @export
 collect.dm_zoomed <- function(x, ...) {
-  message("Detaching table from dm, use `collect(pull_tbl())` instead to silence this message.")
+  check_dots_empty()
+
+  inform(c(
+    "Detaching table from dm.",
+    i = "Use `. %>% pull_tbl() %>% collect()` instead to silence this message."
+  ))
 
   collect(pull_tbl(x))
 }
@@ -740,7 +758,7 @@ tbl_vars.dm_zoomed <- function(x) {
 dm_reset_all_filters <- function(dm) {
   def <- dm_get_def(dm)
   def$filters <- list_of(new_filter())
-  new_dm3(def)
+  dm_from_def(def)
 }
 
 all_same_source <- function(tables) {
@@ -751,7 +769,7 @@ all_same_source <- function(tables) {
 
 # creates an empty `dm`-object, `src` is defined by implementation of `dm_get_src_impl()`.
 empty_dm <- function() {
-  new_dm3(
+  dm_from_def(
     tibble(
       table = character(),
       data = list(),
@@ -800,6 +818,8 @@ pull_tbl <- function(dm, table, ..., keyed = FALSE) {
 
 #' @export
 pull_tbl.dm <- function(dm, table, ..., keyed = FALSE) {
+  check_dots_empty()
+
   # for both dm and dm_zoomed
   # FIXME: shall we issue a special error in case someone tries sth. like: `pull_tbl(dm_for_filter, c(t4, t3))`?
   table_name <- as_string(enexpr(table))
@@ -812,6 +832,8 @@ pull_tbl.dm_zoomed <- function(dm, table, ..., keyed = FALSE) {
   if (isTRUE(keyed)) {
     abort("`keyed = TRUE` not supported for zoomed dm objects.")
   }
+
+  check_dots_empty()
 
   table_name <- as_string(enexpr(table))
   zoomed <- dm_get_zoom(dm)
@@ -830,12 +852,16 @@ pull_tbl.dm_zoomed <- function(dm, table, ..., keyed = FALSE) {
 
 #' @export
 as.list.dm <- function(x, ...) {
+  check_dots_empty()
+
   # for both dm and dm_zoomed
   dm_get_tables_impl(x)
 }
 
 #' @export
 as.list.dm_zoomed <- function(x, ...) {
+  check_dots_empty()
+
   as.list(tbl_zoomed(x))
 }
 
@@ -851,7 +877,7 @@ as.list.dm_zoomed <- function(x, ...) {
 #' keys, etc.) of all tables included in the `dm` object. It will additionally
 #' print details about outgoing foreign keys for the child table.
 #'
-#' `glimpse()` is provided by the pillar package, and re-exported by {dm}.
+#' `glimpse()` is provided by the pillar package, and re-exported by \pkg{dm}.
 #'  See [pillar::glimpse()] for more details.
 #'
 #' @examples

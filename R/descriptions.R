@@ -19,7 +19,7 @@
 #' @return For `dm_set_table_description()`: A `dm` object containing descriptions for specified tables.
 #' @export
 #'
-#' @examplesIf rlang::is_installed("nycflights13")
+#' @examplesIf rlang::is_installed(c("nycflights13", "labelled", "DiagrammeR"))
 #' desc_flights <- rlang::set_names(
 #'   "flights",
 #'   paste(
@@ -39,21 +39,20 @@
 #' dm_get_table_description(nyc_desc)
 #' dm_reset_table_description(nyc_desc, flights) %>%
 #'   dm_draw(font_size = c(header = 18L, table_description = 9L, column = 15L))
-#' @examplesIf rlang::is_installed("nycflights13") && rlang::is_installed("labelled")
 #'
 #' pull_tbl(nyc_desc, flights) %>%
 #'   labelled::label_attribute()
 dm_set_table_description <- function(dm, ...) {
   check_not_zoomed(dm)
 
-  check_suggested("labelled", use = TRUE, version = "2.12.0")
+  check_suggested("labelled (>= 2.12.0)", "dm_set_table_description")
 
   def <- dm_get_def(dm, quiet = TRUE)
   selected <- eval_select_indices(quo(c(...)), src_tbls_impl(dm))
   labels <- names(selected)
 
   out <- dm_set_table_description_impl(def, selected, labels)
-  new_dm3(out)
+  dm_from_def(out)
 }
 
 dm_set_table_description_impl <- function(def, selected, labels) {
@@ -78,7 +77,7 @@ dm_get_table_description <- function(dm, table = NULL, ...) {
   check_dots_empty()
   check_not_zoomed(dm)
 
-  check_suggested("labelled", use = TRUE, version = "2.12.0")
+  check_suggested("labelled (>= 2.12.0)", "dm_get_table_description")
 
   table_expr <- enexpr(table) %||% src_tbls_impl(dm, quiet = TRUE)
   tables <- eval_select_indices(table_expr, set_names(src_tbls_impl(dm, quiet = TRUE)))
@@ -116,7 +115,7 @@ dm_reset_table_description <- function(dm, table = NULL, ...) {
   check_dots_empty()
   check_not_zoomed(dm)
 
-  check_suggested("labelled", use = TRUE, version = "2.12.0")
+  check_suggested("labelled (>= 2.12.0)", "dm_reset_table_description")
 
   table_expr <- enexpr(table) %||% src_tbls_impl(dm, quiet = TRUE)
   def <- dm_get_def(dm, quiet = TRUE)
@@ -124,5 +123,5 @@ dm_reset_table_description <- function(dm, table = NULL, ...) {
   labels <- rep(list(NULL), length(tables))
 
   out <- dm_set_table_description_impl(def, tables, labels)
-  new_dm3(out)
+  dm_from_def(out)
 }

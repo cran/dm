@@ -1,5 +1,96 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# dm 1.0.7
+
+## Features
+
+- `copy_dm_to()` now warns unconditionally on unsupported arguments, and fails if `copy_to` is provided (#1944). Use the new `dm_sql()` function as a replacement for `copy_dm_to(copy_to = )` (#1915, #2011).
+
+- New `json_unnest()` and `json_unpack()`, currently implemented for data frames only (#991, #997).
+
+- `dm_rows_append()` also works for local dm, with support for autoincrement primary keys (#1727, #1745).
+
+- Breaking change: Add `check_dots_empty()` calls (#1929, #1943).
+
+- Test MySQL on GHA (#1940).
+
+- Improve MySQL compatibility regarding learning of database schemas and checking of constraints (#1938).
+
+## Breaking changes
+
+- Breaking change: Add `check_dots_empty()` calls (#1929, #1943).
+
+## Bug fixes
+
+- Compatibility with duckdb 0.9.1.
+
+- Minor fixes in `dm_pack_tbl()` and `dm_unwrap_tbl()` (#1947).
+
+## Documentation
+
+- Use `rlang::check_installed()` internally to install missing suggested packages on the fly (@olivroy, #2036, #2039, #2040).
+
+- Use vectorized `rlang::is_installed()`to decide if examples should be run (@olivroy, #2043).
+
+- Recategorize and describe function reference.
+
+- Better error and information messages when querying keys.
+
+- `collect.zoomed_dm()` shows a more helpful error message (#1929, #1945).
+
+- Add information on default font size to `?dm_draw` (#1935).
+
+- Add `db-*` rules to Makefile to simplify Docker-based database setup.
+
+- Remove curly braces, add `\pkg` (@olivroy, #2042).
+
+## Performance
+
+- Replace `tibble()` by `fast_tibble()` (@mgirlich, #1928).
+
+- Replace superseded `dplyr::recode()` (@mgirlich, #1927).
+
+## Testing
+
+- Remove most skips from tests (#2052).
+
+- Add explicit unique key to `dm_for_filter()`.
+
+- Add Postgres test for `dm_sql()`.
+
+- Switch internal testing to MariaDB.
+
+- Fast offline checks with new `"DM_OFFLINE"` environment variable.
+
+- New GHA checks for the case of missing suggested packages (#1952).
+
+## Chore
+
+- Make `check_suggested()` a standalone (#2054).
+
+- Backport changes from attempted CRAN release (#2046).
+
+- Move magrittr (#1975, #1983), DBI (#1974), and pillar (#1976) to `"Suggests"`.
+
+- Require RMariaDB 1.3.0, work around tidyverse/dbplyr#1190 and tidyverse/dbplyr#1195 (#1989).
+
+## Internal
+
+- Prefer `map*()` over `lapply()` and `vapply()`.
+
+- `styler::style_pkg(scope = "tokens")`.
+
+- Rename internal `new_dm3()` to `dm_from_def()` (#1225, #1949).
+
+- Remove dead code (#979, #1950, #1871).
+
+- Reorganize `build_copy_queries()` (#1923).
+
+- Avoid `dbplyr::ident_q()` (#1788).
+
+- Add ellipsis to `tbl_sum()` signature (#1941).
+
+
 # dm 1.0.6
 
 ## Bug fixes
