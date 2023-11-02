@@ -44,6 +44,8 @@ dm_sql <- function(
   #
   check_suggested("dbplyr", "dm_sql")
 
+  stopifnot(is(dest, "DBIConnection"))
+
   table_names <- ddl_check_table_names(table_names, dm)
 
   dm <- ddl_reorder_dm(dm, dest)
@@ -302,6 +304,8 @@ ddl_quote_enum_col <- function(x, con) {
 }
 
 ddl_get_col_defs <- function(tables, con, table_names, pks) {
+  duckdb_auto_warned <- FALSE
+
   get_sql_col_types <- function(tbl, name) {
     # autoincrementing is not possible for composite keys, so `pk_col` is guaranteed
     # to be a scalar
@@ -312,7 +316,16 @@ ddl_get_col_defs <- function(tables, con, table_names, pks) {
     # database-specific type conversions
     if (is_mariadb(con)) {
       # FIXME: This is wrong in general, only needed for index columns
-      types[types == "TEXT"] <- "VARCHAR(255)"
+      if (nrow(tbl) == 0) {
+        types[types == "TEXT"] <- "VARCHAR(255)"
+      } else {
+        for (i in which(types == "TEXT")) {
+          chars <- max(nchar(tbl[[i]], type = "bytes", keepNA = FALSE))
+          if (chars <= 255) {
+            types[[i]] <- paste0("VARCHAR(255)")
+          }
+        }
+      }
     }
     if (is_sqlite(con)) {
       types[types == "INT"] <- "INTEGER"
@@ -343,6 +356,15 @@ ddl_get_col_defs <- function(tables, con, table_names, pks) {
       # DuckDB:
       # Doesn't have a special data type. Uses `CREATE SEQUENCE` instead.
       # Ref: https://duckdb.org/docs/sql/statements/create_sequence
+      # https://stackoverflow.com/a/72883259/946850
+      if (is_duckdb(con)) {
+        if (!duckdb_auto_warned) {
+          cli_warn(
+            "Autoincrementing columns not yet supported for DuckDB, these won't be set in the remote database but are preserved in the `dm`"
+          )
+          duckdb_auto_warned <<- TRUE
+        }
+      }
 
       # SQLite:
       # For a primary key, autoincrementing works by default, and it is almost never

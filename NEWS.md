@@ -1,10 +1,45 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# dm 1.0.8
+
+## Bug fixes
+
+- `copy_dm_to()` creates string columns of necessary lengths for MariaDB and SQL Server. This worked before for SQL Server in dm 1.0.5, now also works on MariaDB (#311, #2066, #2082).
+
+## Features
+
+- Explicitly fail on `compute(temporary = TRUE)`, which never worked correctly (#2059, #2103).
+
+- Warn about DuckDB not supporting autoincrementing primary keys (#2099).
+
+## Chore
+
+- Make `check_suggested()` a standalone (#2054).
+
+## Documentation
+
+- Tweak vignette for `compute(temporary = TRUE)`.
+
+- Update documentation of `check_suggested()` (@olivroy, #2055).
+
+## Performance
+
+- Speed up `dm()`, `new_dm()`, `as_dm()` and `dm_validate()`. `dm()` and `as_dm()` no longer call `dm_validate()` (#2108).
+
+## Testing
+
+- Add test for `copy_dm_to(table_names = )` (#250, #2101).
+
+- Work around test failures for dbplyr 2.4.0.
+
+- Remove most skips from tests (#2052).
+
+
 # dm 1.0.7
 
 ## Features
 
-- `copy_dm_to()` now warns unconditionally on unsupported arguments, and fails if `copy_to` is provided (#1944). Use the new `dm_sql()` function as a replacement for `copy_dm_to(copy_to = )` (#1915, #2011).
+- `copy_dm_to()` now warns unconditionally on unsupported arguments, and fails if `copy_to` is provided (#1944). Use the new `dm_sql()` function as a replacement for `copy_dm_to(copy_to = )` (#1915, #2011, @jangorecki).
 
 - New `json_unnest()` and `json_unpack()`, currently implemented for data frames only (#991, #997).
 
@@ -28,7 +63,7 @@
 
 ## Documentation
 
-- Use `rlang::check_installed()` internally to install missing suggested packages on the fly (@olivroy, #2036, #2039, #2040).
+- Use `rlang::check_installed()` internally to install missing suggested packages on the fly (@olivroy, #1348, #2036, #2039, #2040).
 
 - Use vectorized `rlang::is_installed()`to decide if examples should be run (@olivroy, #2043).
 
@@ -341,7 +376,7 @@
 - `nest_join()` and `pack_join()` support `zoomed_df` objects (#1119, @IndrajeetPatil).
 
 
-## API 
+## API
 
 - Marked stable functions as stable, in particular `dm()` and related functions (#1032, #1040).
 
@@ -420,7 +455,7 @@
 ## Features
 
 - New `dm_wrap_tbl()`, `dm_unwrap_tbl()`, `dm_nest_tbl()`, `dm_unnest_tbl()`, `dm_pack_tbl()` and `dm_unpack_tbl()` (#595, #733, #737).
-- New `dm_examine_cardinality()` (#264, #735). 
+- New `dm_examine_cardinality()` (#264, #735).
 - New `pack_join()` generic and method for data frames, the same to `tidyr::pack()` as `dplyr::nest_join()` is to `tidyr::nest()` (#721, #722).
 - `dm_pixarfilms()` is exported and gains a `consistent = FALSE` argument; if `TRUE` the data is modified so that all referential constraints are satisfied (#703, #707, #708, @erictleung).
 
