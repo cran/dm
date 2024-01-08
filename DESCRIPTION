@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 1.0.8
-Date: 2023-11-02
+Version: 1.0.9
+Date: 2024-01-08
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -51,14 +51,14 @@ Imports: backports, cli (>= 2.2.0), dplyr (>= 1.1.0), glue, igraph,
         lifecycle (>= 1.0.3), memoise, methods, purrr (>= 1.0.0), rlang
         (>= 1.0.2), tibble (>= 3.0.0), tidyr (>= 1.0.0), tidyselect (>=
         1.2.0), vctrs (>= 0.3.2)
-Suggests: brio, colourpicker, covr, crayon, DBI, dbplyr (>= 2.3.4),
-        DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0), fansi,
-        forcats, htmltools, htmlwidgets, jsonlite, keyring, knitr,
-        labelled (>= 2.12.0), magrittr, mockr, nycflights13, odbc,
-        pillar, pixarfilms, pool, progress, reactable, RMariaDB (>=
-        1.3.0), rmarkdown, RPostgres, RSQLite (>= 2.2.8), rstudioapi,
-        shiny, shinyAce, shinydashboard, testthat (>= 3.1.2), waldo,
-        withr
+Suggests: brio, colourpicker, covr, crayon, DBI (>= 1.2.0), dbplyr (>=
+        2.3.4), DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0),
+        fansi, forcats, htmltools, htmlwidgets, jsonlite, keyring,
+        knitr, labelled (>= 2.12.0), magrittr, mockr, nycflights13,
+        odbc, pillar, pixarfilms, pool, progress, reactable, RMariaDB
+        (>= 1.3.0), rmarkdown, RPostgres, RSQLite (>= 2.2.8),
+        rstudioapi, shiny, shinyAce, shinydashboard, testthat (>=
+        3.1.2), waldo, withr
 Config/Needs/website: brio, bslib, cynkra/cynkratemplate, htmltools,
         pagedown, purrr, rmarkdown, whisker, xml2
 Config/Needs/check: anthonynorth/roxyglobals
@@ -72,7 +72,7 @@ Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2023-11-02 10:17:00 UTC; kirill
+Packaged: 2024-01-08 05:47:53 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Antoine Fabri [ctb],
@@ -85,4 +85,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph]
 Maintainer: Kirill Müller <kirill@cynkra.com>
 Repository: CRAN
-Date/Publication: 2023-11-02 14:30:02 UTC
+Date/Publication: 2024-01-08 12:00:05 UTC
