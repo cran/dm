@@ -1,10 +1,33 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# dm 1.0.11
+
+## Features
+
+- Add support for Redshift connections (@owenjonesuob, #2215).
+
+## Chore
+
+- Drop crayon and mockr dependencies (@olivroy, #2220).
+
+## Documentation
+
+- Use `index.md`.
+
+- Tweak formatting (@salim-b, #2232).
+
+- Fix typo (@salim-b, #2218).
+
+## Testing
+
+- Fix compatibility with waldo \>= 0.6.0 (#2240).
+
+
 # dm 1.0.10
 
 ## Chore
 
-- Establish compatibility with igraph \>= 2.0.0 (#2187) and withr 3.0.0(#2184).
+- Establish compatibility with igraph \>= 2.0.0 (#2187) and withr 3.0.0 (#2184).
 
 - Reexport `tibble::glimpse()` instead of `pillar::glimpse()` to avoid pillar dependency with roxygen2 7.3.0 (#2179).
 

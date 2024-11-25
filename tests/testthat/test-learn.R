@@ -1,5 +1,6 @@
 test_that("Standard learning from MSSQL (schema 'dbo') or Postgres (schema 'public') and get_src_tbl_names() works?", {
   skip_if_schema_not_supported()
+  skip_if(identical(Sys.getenv("R_COVR"), "true"))
 
   # dm_learn_from_mssql() --------------------------------------------------
   con_db <- my_test_con()
@@ -447,9 +448,9 @@ test_that("dm_from_con() with mariaDB", {
   my_db <- RMariaDB::dbConnect(
     RMariaDB::MariaDB(),
     username = "guest",
-    password = "relational",
+    password = "ctu-relational",
     dbname = "Financial_ijs",
-    host = "relational.fit.cvut.cz"
+    host = "relational.fel.cvut.cz"
   )
   expect_snapshot_output(my_dm <- dm_from_con(my_db))
   expect_snapshot(dm::dm_get_all_fks(my_dm))

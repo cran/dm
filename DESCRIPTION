@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 1.0.10
-Date: 2024-01-21
+Version: 1.0.11
+Date: 2024-11-24
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -51,14 +51,14 @@ Imports: backports, cli (>= 2.2.0), dplyr (>= 1.1.0), glue, igraph,
         lifecycle (>= 1.0.3), memoise, methods, purrr (>= 1.0.0), rlang
         (>= 1.0.2), tibble (>= 3.0.0), tidyr (>= 1.0.0), tidyselect (>=
         1.2.0), vctrs (>= 0.3.2)
-Suggests: brio, colourpicker, covr, crayon, DBI (>= 1.2.0), dbplyr (>=
-        2.3.4), DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0),
-        fansi, forcats, htmltools, htmlwidgets, jsonlite, keyring,
-        knitr, labelled (>= 2.12.0), magrittr, mockr, nycflights13,
-        odbc, pillar, pixarfilms, pool, progress, reactable, RMariaDB
-        (>= 1.3.0), rmarkdown, RPostgres, RSQLite (>= 2.2.8),
-        rstudioapi, shiny, shinyAce, shinydashboard, testthat (>=
-        3.1.2), waldo, withr
+Suggests: brio, colourpicker, covr, DBI (>= 1.2.0), dbplyr (>= 2.3.4),
+        DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0), fansi,
+        forcats, htmltools, htmlwidgets, jsonlite, keyring, knitr,
+        labelled (>= 2.12.0), magrittr, nycflights13, odbc (>= 1.4.2),
+        pillar, pixarfilms, pool, progress, reactable, RMariaDB (>=
+        1.3.3), rmarkdown, RPostgres, RSQLite (>= 2.2.8), rstudioapi,
+        shiny, shinyAce, shinydashboard, testthat (>= 3.2.0), waldo,
+        withr
 Config/Needs/website: brio, bslib, cynkra/cynkratemplate, htmltools,
         pagedown, purrr, rmarkdown, whisker, xml2
 Config/Needs/check: anthonynorth/roxyglobals
@@ -70,9 +70,9 @@ Config/testthat/parallel: true
 Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
         draw-dm, bind, rows-dm, learn
 Encoding: UTF-8
-RoxygenNote: 7.3.0.9000
+RoxygenNote: 7.3.2.9000
 NeedsCompilation: no
-Packaged: 2024-01-21 10:45:53 UTC; kirill
+Packaged: 2024-11-24 20:59:32 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
   Antoine Fabri [ctb],
@@ -85,4 +85,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph]
 Maintainer: Kirill Müller <kirill@cynkra.com>
 Repository: CRAN
-Date/Publication: 2024-01-21 16:32:48 UTC
+Date/Publication: 2024-11-25 09:00:09 UTC

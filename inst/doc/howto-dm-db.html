@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2024-01-21" />
+<meta name="date" content="2024-11-24" />
 
 <title>Create a dm object from a database</title>
 
@@ -51,7 +51,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -62,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Create a dm object from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2024-01-21</h4>
+<h4 class="date">2024-11-24</h4>
 
 
 
@@ -353,9 +353,9 @@ set. For some RDBMS, such as Postgres, SQL Server and MariaDB, primary
 and foreign keys are also imported and do not have to be manually added
 afterwards.</p>
 <p>To demonstrate, we will connect to a relational dataset repository
-(https://relational.fit.cvut.cz/) with a database server that is
+(https://relational.fel.cvut.cz/) with a database server that is
 publicly accessible without registration. It hosts a financial dataset
-(https://relational.fit.cvut.cz/dataset/Financial) that contains loan
+(https://relational.fel.cvut.cz/dataset/Financial) that contains loan
 data along with relevant account information and transactions. We chose
 this dataset because the relationships between <code>loan</code>,
 <code>account</code>, and <code>transactions</code> tables are a good
@@ -371,9 +371,9 @@ further information.</p>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>my_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">MariaDB</span>(),</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&quot;guest&quot;</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&quot;relational&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&quot;ctu-relational&quot;</span>,</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&quot;Financial_ijs&quot;</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&quot;relational.fit.cvut.cz&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&quot;relational.fel.cvut.cz&quot;</span></span>
 <span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>)</span></code></pre></div>
 <p>Creating a dm object takes a single call to
 <code>dm_from_con()</code> with the DBI connection object as its
@@ -425,7 +425,7 @@ ourselves. For this, we use <code>learn_keys = FALSE</code> to obtain a
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>fin_dm <span class="ot">&lt;-</span> <span class="fu">dm_from_con</span>(my_db, <span class="at">learn_keys =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>fin_dm</span></code></pre></div>
 <p>The model diagram
-(https://relational.fit.cvut.cz/assets/img/datasets-generated/financial.svg)
+(https://relational.fel.cvut.cz/assets/img/datasets-generated/financial.svg)
 provided by our test database loosely illustrates the intended
 relationships between tables. In the diagram, we can see that the
 <code>loans</code> table should be linked to the <code>accounts</code>
@@ -479,9 +479,9 @@ database connection:</p>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">dbConnect</span>(</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="fu">MariaDB</span>(),</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="at">username =</span> <span class="st">&quot;guest&quot;</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>    <span class="at">password =</span> <span class="st">&quot;relational&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>    <span class="at">password =</span> <span class="st">&quot;ctu-relational&quot;</span>,</span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    <span class="at">dbname =</span> <span class="st">&quot;Financial_ijs&quot;</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    <span class="at">host =</span> <span class="st">&quot;relational.fit.cvut.cz&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    <span class="at">host =</span> <span class="st">&quot;relational.fel.cvut.cz&quot;</span></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  )</span>
 <span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>}</span>
 <span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a></span>
