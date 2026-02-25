@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2025-07-02" />
+<meta name="date" content="2026-02-25" />
 
 <title>Create a dm object from a database</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Create a dm object from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2025-07-02</h4>
+<h4 class="date">2026-02-25</h4>
 
 
 
@@ -534,19 +534,17 @@ from <code>my_dm_keys</code>, with a new lazy table
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  my_dm_keys <span class="sc">%&gt;%</span></span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> account_id, <span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
 <p>Context is set to the table “loans” using
 <code>dm_zoom_to(loans)</code>. You can learn more about zooming in the
 tutorial <code>vignette(&quot;tech-dm-zoom&quot;)</code>. We then use {<a href="https://dplyr.tidyverse.org/">dplyr</a>} functions on the zoomed
 table to generate a new summary table.</p>
 <p><code>summarize()</code> returns a temporary table with one row for
-each group created by the preceding <code>group_by()</code> function.
-The columns in the temporary table are constrained to the columns passed
-as arguments to the <code>group_by()</code> function and the column(s)
-created by the <code>summarize()</code> function.</p>
+each group created by the <code>.by</code> argument. The columns in the
+temporary table are constrained to the columns passed as the
+<code>.by</code> argument and the column(s) created by the
+<code>summarize()</code> function.</p>
 <p><code>dm_insert_zoomed(&quot;total_loans&quot;)</code> adds the temporary table
 created by <code>summarize()</code> to the data model under a new name,
 <code>total_loans</code>. Because the grouping variable

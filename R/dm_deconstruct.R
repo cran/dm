@@ -27,9 +27,7 @@
 #' weather <- pull_tbl(dm, "weather", keyed = TRUE)
 #' by_origin <-
 #'   flights %>%
-#'   group_by(origin) %>%
-#'   summarize(mean_arr_delay = mean(arr_delay, na.rm = TRUE)) %>%
-#'   ungroup()
+#'   summarize(.by = origin, mean_arr_delay = mean(arr_delay, na.rm = TRUE))
 #'
 #' by_origin
 #' dm(airlines, airports, flights, planes, weather, by_origin) %>%
@@ -46,8 +44,12 @@ dm_deconstruct <- function(dm, dm_name = NULL) {
 
   names <- names(dm)
   code <- paste0(
-    tick_if_needed(names), " <- pull_tbl(", dm_name, ", ",
-    map_chr(names, deparse), ", keyed = TRUE)",
+    tick_if_needed(names),
+    " <- pull_tbl(",
+    dm_name,
+    ", ",
+    map_chr(names, deparse),
+    ", keyed = TRUE)",
     collapse = "\n"
   )
 

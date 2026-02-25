@@ -17,9 +17,7 @@ source("setup/setup.R")
 # my_dm_total <-
 #   deployed_dm %>%
 #   dm_zoom_to(loans) %>%
-#   group_by(account_id) %>%
-#   summarize(total_amount = sum(amount, na.rm = TRUE)) %>%
-#   ungroup() %>%
+#   summarize(.by = account_id, total_amount = sum(amount, na.rm = TRUE)) %>%
 #   dm_insert_zoomed("total_loans")
 
 ## ------------------------------------------------------------------------
@@ -30,9 +28,7 @@ source("setup/setup.R")
 # my_dm_total_computed <-
 #   deployed_dm %>%
 #   dm_zoom_to(loans) %>%
-#   group_by(account_id) %>%
-#   summarize(total_amount = sum(amount, na.rm = TRUE)) %>%
-#   ungroup() %>%
+#   summarize(.by = account_id, total_amount = sum(amount, na.rm = TRUE)) %>%
 #   compute() %>%
 #   dm_insert_zoomed("total_loans")
 # 

@@ -52,8 +52,17 @@
 #'     dm_add_pk(planes, manufacturer, check = TRUE)
 #' )
 #' @export
-dm_add_pk <- function(dm, table, columns, ..., autoincrement = FALSE, check = FALSE, force = FALSE) {
+dm_add_pk <- function(
+  dm,
+  table,
+  columns,
+  ...,
+  autoincrement = FALSE,
+  check = FALSE,
+  force = FALSE
+) {
   check_dots_empty()
+  dm_local_error_call()
 
   check_not_zoomed(dm)
 
@@ -65,14 +74,11 @@ dm_add_pk <- function(dm, table, columns, ..., autoincrement = FALSE, check = FA
   col_name <- names(eval_select_indices(col_expr, colnames(table)))
 
   if (autoincrement && length(col_name) > 1L) {
-    abort(
-      c(
-        "Composite primary keys cannot be autoincremented.",
-        "Provide only a single column name to `columns`."
-      )
-    )
+    cli::cli_abort(c(
+      "Composite primary keys cannot be autoincremented.",
+      "i" = "Provide only a single column name to {.arg columns}."
+    ))
   }
-
 
   if (check) {
     table_from_dm <- dm_get_filtered_table(dm, table_name)
@@ -90,8 +96,10 @@ dm_add_pk_impl <- function(dm, table, column, autoincrement, force) {
   i <- which(def$table == table)
 
   if (!force && NROW(def$pks[[i]]) > 0) {
-    if (!dm_is_strict_keys(dm) &&
-      identical(def$pks[[i]]$column[[1]], column)) {
+    if (
+      !dm_is_strict_keys(dm) &&
+        identical(def$pks[[i]]$column[[1]], column)
+    ) {
       return(dm)
     }
 
@@ -122,6 +130,7 @@ dm_add_pk_impl <- function(dm, table, column, autoincrement, force) {
 #' @export
 dm_has_pk <- function(dm, table, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
   table_name <- dm_tbl_name(dm, {{ table }})
   dm_has_pk_impl(dm, table_name)
@@ -144,9 +153,10 @@ dm_has_pk_impl <- function(dm, table) {
 #' @keywords internal
 dm_get_pk <- function(dm, table, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
 
-  deprecate_soft("0.2.1", "dm::dm_get_pk()", "dm::dm_get_all_pks()")
+  deprecate_warn("0.2.1", "dm::dm_get_pk()", "dm::dm_get_all_pks()")
 
   table_name <- dm_tbl_name(dm, {{ table }})
   new_keys(dm_get_pk_impl(dm, table_name))
@@ -185,6 +195,7 @@ dm_get_pk_impl <- function(dm, table_name) {
 #'   dm_get_all_pks()
 dm_get_all_pks <- function(dm, table = NULL, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
   table_expr <- enexpr(table) %||% src_tbls_impl(dm, quiet = TRUE)
   table_names <- eval_select_table(table_expr, set_names(src_tbls_impl(dm, quiet = TRUE)))
@@ -244,8 +255,9 @@ dm_get_all_pks_def_impl <- function(def, table = NULL) {
 #'   dm_rm_pk(airports) %>%
 #'   dm_draw()
 dm_rm_pk <- function(dm, table = NULL, columns = NULL, ..., fail_fk = NULL) {
+  dm_local_error_call()
   if (!is.null(fail_fk)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       "1.0.4",
       "dm_rm_pk(fail_fk =)",
       details = "When removing a primary key, potential associated foreign keys will be pointing at an implicit unique key."
@@ -259,7 +271,7 @@ dm_rm_pk_ <- function(dm, table, columns, ..., rm_referencing_fks = NULL) {
   check_not_zoomed(dm)
 
   if (!is.null(rm_referencing_fks)) {
-    deprecate_soft(
+    deprecate_warn(
       "0.2.1",
       "dm::dm_rm_pk(rm_referencing_fks = )",
       details = "When removing a primary key, potential associated foreign keys will be pointing at an implicit unique key."
@@ -272,7 +284,7 @@ dm_rm_pk_ <- function(dm, table, columns, ..., rm_referencing_fks = NULL) {
   dm_rm_pk_impl(dm, table_name, columns)
 }
 
-dm_rm_pk_impl <- function(dm, table_name, columns) {
+dm_rm_pk_impl <- function(dm, table_name, columns, error_call = caller_env()) {
   def <- dm_get_def(dm)
 
   if (is.null(table_name)) {
@@ -285,15 +297,19 @@ dm_rm_pk_impl <- function(dm, table_name, columns) {
   }
 
   if (!quo_is_null(columns)) {
-    ii <- map2_lgl(def$data[i], def$pks[i], ~ tryCatch(
-      {
-        vars <- eval_select_indices(columns, colnames(.x))
-        identical(names(vars), .y$column[[1]])
-      },
-      error = function(e) {
-        FALSE
-      }
-    ))
+    ii <- map2_lgl(
+      def$data[i],
+      def$pks[i],
+      ~ tryCatch(
+        {
+          vars <- eval_select_indices(columns, colnames(.x), error_call = error_call)
+          identical(names(vars), .y$column[[1]])
+        },
+        error = function(e) {
+          FALSE
+        }
+      )
+    )
 
     i <- i[ii]
   }
@@ -371,6 +387,7 @@ enum_pk_candidates <- function(table, ...) {
 #'   dm_enum_pk_candidates(airports)
 dm_enum_pk_candidates <- function(dm, table, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
   # FIXME: with "direct" filter maybe no check necessary: but do we want to check
   # for tables retrieved with `tbl()` or with `dm_get_tables()[[table_name]]`
@@ -386,16 +403,20 @@ dm_enum_pk_candidates <- function(dm, table, ...) {
 }
 
 #' @autoglobal
-enum_pk_candidates_impl <- function(table, columns = new_keys(colnames(table))) {
+enum_pk_candidates_impl <- function(
+  table,
+  columns = new_keys(colnames(table)),
+  max_value = MAX_COMMAS
+) {
   tibble(column = new_keys(columns)) %>%
-    mutate(why = map_chr(column, ~ check_pk(table, .x))) %>%
+    mutate(why = map_chr(column, ~ check_pk(table, .x, max_value = max_value))) %>%
     mutate(candidate = (why == "")) %>%
     select(column, candidate, why) %>%
     arrange(desc(candidate), column)
 }
 
-check_pk <- function(table, columns) {
-  duplicate_values <- is_unique_key_se(table, columns)
+check_pk <- function(table, columns, max_value = MAX_COMMAS) {
+  duplicate_values <- is_unique_key_se(table, columns, max_value = max_value)
   if (duplicate_values$unique) {
     return("")
   }
@@ -418,7 +439,7 @@ check_pk <- function(table, columns) {
 
   if (length(values) > 0) {
     values_count <- paste0(values, " (", n[!values_na], ")")
-    values_text <- commas(values_count, capped = TRUE, fun = fun)
+    values_text <- commas(values_count, max_commas = max_value, capped = TRUE, fun = fun)
     duplicate <- paste0("duplicate values: ", values_text)
   } else {
     duplicate <- NULL
@@ -432,28 +453,25 @@ check_pk <- function(table, columns) {
 # Error -------------------------------------------------------------------
 
 abort_pk_not_defined <- function() {
-  abort(error_txt_pk_not_defined(), class = dm_error_full("pk_not_defined"))
-}
-
-error_txt_pk_not_defined <- function() {
-  glue("No primary keys to remove.")
+  cli::cli_abort(
+    "No primary keys to remove.",
+    class = dm_error_full("pk_not_defined"),
+    call = dm_error_call()
+  )
 }
 
 abort_key_set_force_false <- function(table) {
-  abort(error_txt_key_set_force_false(table), class = dm_error_full("key_set_force_false"))
-}
-
-error_txt_key_set_force_false <- function(table) {
-  glue("Table {tick(table)} already has a primary key. Use `force = TRUE` to change the existing primary key.")
+  cli::cli_abort(
+    "Table {.field {table}} already has a primary key. Use {.code force = TRUE} to change the existing primary key.",
+    class = dm_error_full("key_set_force_false"),
+    call = dm_error_call()
+  )
 }
 
 abort_first_rm_fks <- function(table, fk_tables) {
-  abort(error_txt_first_rm_fks(table, fk_tables), class = dm_error_full("first_rm_fks"))
-}
-
-error_txt_first_rm_fks <- function(table, fk_tables) {
-  glue(
-    "There are foreign keys pointing from table(s) {commas(tick(fk_tables))} to table {tick(table)}. ",
-    "First remove those, or set `fail_fk = FALSE`."
+  cli::cli_abort(
+    "{cli::qty(length(fk_tables))}There {?is/are} {?a foreign key/foreign keys} pointing from table{?s} {.field {fk_tables}} to table {.field {table}}. First remove those, or set {.code fail_fk = FALSE}.",
+    class = dm_error_full("first_rm_fks"),
+    call = dm_error_call()
   )
 }

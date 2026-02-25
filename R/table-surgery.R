@@ -46,6 +46,7 @@
 #' decomposed_table$parent_table
 #' @export
 decompose_table <- function(.data, new_id_column, ...) {
+  dm_local_error_call()
   table_name <- deparse(substitute(.data))
   avail_cols <- colnames(.data)
   id_col_q <- ensym(new_id_column)
@@ -60,7 +61,9 @@ decompose_table <- function(.data, new_id_column, ...) {
     select(.data, !!!sel_vars$indices) %>%
     distinct() %>%
     # Without as.integer(), RPostgres creates integer64 column (#15)
-    mutate(!!id_col_q := as.integer(coalesce(row_number(!!sym(names(sel_vars$indices)[[1]])), 0L))) %>%
+    mutate(
+      !!id_col_q := as.integer(coalesce(row_number(!!sym(names(sel_vars$indices)[[1]])), 0L))
+    ) %>%
     select(!!id_col_q, everything())
 
   non_key_indices <-

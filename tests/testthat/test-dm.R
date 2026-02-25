@@ -73,7 +73,8 @@ test_that("dm() works for adding tables", {
 
   # are in the default case (`repair = 'unique'`) the tables renamed (old table AND new table) according to "unique" default setting
   expect_identical(
-    dm(dm_for_filter(), tf_1 = data_card_1(), .name_repair = "unique", .quiet = TRUE) %>% src_tbls_impl(),
+    dm(dm_for_filter(), tf_1 = data_card_1(), .name_repair = "unique", .quiet = TRUE) %>%
+      src_tbls_impl(),
     c("tf_1...1", "tf_2", "tf_3", "tf_4", "tf_5", "tf_6", "tf_1...7")
   )
 
@@ -106,7 +107,8 @@ test_that("dm() works for adding tables", {
 
 test_that("dm() for adding tables with compound keys", {
   expect_snapshot({
-    dm(dm_for_flatten(), res_flat = result_from_flatten()) %>% dm_paste(options = c("select", "keys"))
+    dm(dm_for_flatten(), res_flat = result_from_flatten()) %>%
+      dm_paste(options = c("select", "keys"))
   })
 })
 
@@ -203,7 +205,14 @@ test_that("output for dm() with dm", {
     dm()
     dm(empty_dm())
     dm(dm_for_filter()) %>% collect()
-    dm(dm_for_filter(), dm_for_flatten(), dm_for_filter(), .name_repair = "unique", .quiet = TRUE) %>% collect()
+    dm(
+      dm_for_filter(),
+      dm_for_flatten(),
+      dm_for_filter(),
+      .name_repair = "unique",
+      .quiet = TRUE
+    ) %>%
+      collect()
   })
 })
 
@@ -226,12 +235,19 @@ test_that("output dm() for dm for compound keys", {
   })
 
   expect_snapshot({
-    dm(dm_for_flatten(), dm_for_flatten(), .name_repair = "unique") %>% dm_paste(options = c("select", "keys"))
+    dm(dm_for_flatten(), dm_for_flatten(), .name_repair = "unique") %>%
+      dm_paste(options = c("select", "keys"))
   })
 })
 
 test_that("can create dm with as_dm()", {
   expect_equivalent_dm(as_dm(dm_get_tables(dm_test_obj())), dm_test_obj())
+})
+
+test_that("as_dm() rejects non-list objects", {
+  expect_snapshot(error = TRUE, {
+    as_dm(1)
+  })
 })
 
 test_that("creation of empty `dm` works", {
@@ -356,6 +372,14 @@ test_that("`pull_tbl()`-methods work", {
     pull_tbl(dm_for_filter(), tf_5, keyed = TRUE),
     dm_get_tables(dm_for_filter(), keyed = TRUE)[["tf_5"]]
   )
+})
+
+test_that("`pull_tbl()` keyed=TRUE fails for zoomed dm", {
+  expect_snapshot(error = TRUE, {
+    dm_for_filter() %>%
+      dm_zoom_to(tf_1) %>%
+      pull_tbl(keyed = TRUE)
+  })
 })
 
 test_that("`pull_tbl()`-methods work for (0)", {
@@ -522,7 +546,6 @@ test_that("output", {
 
 
 # Compound tests ----------------------------------------------------------
-
 
 test_that("output for compound keys", {
   # FIXME: COMPOUND: Need proper test

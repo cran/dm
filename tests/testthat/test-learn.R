@@ -13,7 +13,12 @@ test_that("Standard learning from MSSQL (schema 'dbo') or Postgres (schema 'publ
     ))
   )
 
-  dm_for_filter_copied <- copy_dm_to(con_db, dm_for_filter(), temporary = FALSE, table_names = ~ unique_db_table_name(.x))
+  dm_for_filter_copied <- copy_dm_to(
+    con_db,
+    dm_for_filter(),
+    temporary = FALSE,
+    table_names = ~ unique_db_table_name(.x)
+  )
   order_of_deletion <- c("tf_2", "tf_1", "tf_5", "tf_6", "tf_4", "tf_3")
 
   remote_tbl_names <-
@@ -152,18 +157,83 @@ test_that("Learning from specific schema works?", {
 })
 
 test_that("Learning from SQLite works (#288)?", {
-  skip("FIXME")
-  src_sqlite <- skip_if_error(src_sqlite()(":memory:", TRUE))
+  con_sqlite <- skip_if_error(DBI::dbConnect(RSQLite::SQLite(), ":memory:"))
+  withr::defer(DBI::dbDisconnect(con_sqlite))
 
-  copy_to(src_sqlite(), tibble(a = 1:3), name = "test")
+  DBI::dbWriteTable(con_sqlite, "test", tibble(a = 1:3))
 
   expect_equivalent_dm(
-    src_sqlite() %>%
-      dm_from_con() %>%
+    dm_from_con(con_sqlite) %>%
       dm_select_tbl(test) %>%
       collect(),
     dm(test = tibble(a = 1:3))
   )
+})
+
+test_that("Learning keys from SQLite works", {
+  con_sqlite <- skip_if_error(DBI::dbConnect(RSQLite::SQLite(), ":memory:"))
+  withr::defer(DBI::dbDisconnect(con_sqlite))
+
+  DBI::dbExecute(con_sqlite, "CREATE TABLE first (id INTEGER PRIMARY KEY)")
+  DBI::dbExecute(
+    con_sqlite,
+    paste(
+      "CREATE TABLE second (",
+      "id INTEGER PRIMARY KEY, first_id INTEGER,",
+      "FOREIGN KEY (first_id) REFERENCES first (id))"
+    )
+  )
+  DBI::dbExecute(
+    con_sqlite,
+    paste(
+      "CREATE TABLE third (",
+      "id INTEGER PRIMARY KEY, first_id INTEGER, second_id INTEGER,",
+      "FOREIGN KEY (first_id) REFERENCES first (id),",
+      "FOREIGN KEY (second_id) REFERENCES second (id))"
+    )
+  )
+
+  learned_dm <- dm_from_con(con_sqlite, learn_keys = TRUE) %>%
+    collect()
+
+  expect_snapshot(dm_paste(learned_dm, options = "keys"))
+})
+
+test_that("Learning keys from an attached SQLite database works", {
+  con_sqlite <- skip_if_error(DBI::dbConnect(RSQLite::SQLite(), ":memory:"))
+  withr::defer(DBI::dbDisconnect(con_sqlite))
+
+  # Create a second (attached) database in a temp file
+  db2_path <- withr::local_tempfile(fileext = ".sqlite")
+  local({
+    con2 <- DBI::dbConnect(RSQLite::SQLite(), db2_path)
+    on.exit(DBI::dbDisconnect(con2))
+    DBI::dbExecute(con2, "CREATE TABLE parent (id INTEGER PRIMARY KEY, val TEXT NOT NULL)")
+    DBI::dbExecute(
+      con2,
+      paste(
+        "CREATE TABLE child (",
+        "id INTEGER PRIMARY KEY, parent_id INTEGER,",
+        "FOREIGN KEY (parent_id) REFERENCES parent (id))"
+      )
+    )
+  })
+
+  # Attach the second database under a schema alias
+  DBI::dbExecute(
+    con_sqlite,
+    paste0("ATTACH DATABASE '", db2_path, "' AS other")
+  )
+
+  learned_dm <- dm_from_con(
+    con_sqlite,
+    schema = "other",
+    learn_keys = TRUE,
+    .names = "{.schema}.{.table}_tbl"
+  ) %>%
+    collect()
+
+  expect_snapshot(dm_paste(learned_dm, options = "keys"))
 })
 
 
@@ -228,11 +298,16 @@ test_that("Learning from MSSQL (schema 'dbo') on other DB works?", {
     value = tibble(c = c(1L, 1L, 1L, 5L, 4L), d = c(10L, 11L, 10L, 10L, 11L))
   )
   # set PK
-  DBI::dbExecute(con_db, "ALTER TABLE [test_database_dm].[dbo].[test_1] ALTER COLUMN [b] INTEGER NOT NULL")
+  DBI::dbExecute(
+    con_db,
+    "ALTER TABLE [test_database_dm].[dbo].[test_1] ALTER COLUMN [b] INTEGER NOT NULL"
+  )
   DBI::dbExecute(con_db, "ALTER TABLE [test_database_dm].[dbo].[test_1] ADD PRIMARY KEY ([b])")
   # set FK relation
-  DBI::dbExecute(con_db, "ALTER TABLE [test_database_dm].[dbo].[test_2] ADD FOREIGN KEY ([c]) REFERENCES [test_database_dm].[dbo].[test_1] ([b]) ON DELETE NO ACTION ON UPDATE NO ACTION")
-
+  DBI::dbExecute(
+    con_db,
+    "ALTER TABLE [test_database_dm].[dbo].[test_2] ADD FOREIGN KEY ([c]) REFERENCES [test_database_dm].[dbo].[test_1] ([b]) ON DELETE NO ACTION ON UPDATE NO ACTION"
+  )
 
   # test 'get_src_tbl_names()'
   expect_identical(
@@ -309,14 +384,16 @@ test_that("Learning from a specific schema in another DB for MSSQL works?", {
     value = tibble(c = c(1L, 1L, 1L, 5L, 4L), d = c(10L, 11L, 10L, 10L, 11L))
   )
   # set PK
-  DBI::dbExecute(con_db, "ALTER TABLE [test_database_dm].[dm_test].[test_1] ALTER COLUMN [b] INTEGER NOT NULL")
+  DBI::dbExecute(
+    con_db,
+    "ALTER TABLE [test_database_dm].[dm_test].[test_1] ALTER COLUMN [b] INTEGER NOT NULL"
+  )
   DBI::dbExecute(con_db, "ALTER TABLE [test_database_dm].[dm_test].[test_1] ADD PRIMARY KEY ([b])")
   # set FK relation
   DBI::dbExecute(
     con_db,
     "ALTER TABLE [test_database_dm].[dm_test].[test_2] ADD FOREIGN KEY ([c]) REFERENCES [test_database_dm].[dm_test].[test_1] ([b]) ON DELETE NO ACTION ON UPDATE NO ACTION"
   )
-
 
   # test 'get_src_tbl_names()'
   expect_identical(
@@ -395,7 +472,12 @@ test_that("dm_meta() contents", {
     try(DBI::dbExecute(con_db, paste0("DROP SCHEMA ", schema_name_q)))
   })
 
-  dm_for_filter_copied <- copy_dm_to(con_db, dm_for_filter(), temporary = FALSE, schema = schema_name)
+  dm_for_filter_copied <- copy_dm_to(
+    con_db,
+    dm_for_filter(),
+    temporary = FALSE,
+    schema = schema_name
+  )
   order_of_deletion <- c("tf_2", "tf_1", "tf_5", "tf_6", "tf_4", "tf_3")
 
   meta <- dm_meta(con_db, schema = schema_name)
@@ -419,25 +501,31 @@ test_that("dm_meta() contents", {
       map(select, -any_of("column_default"), -contains("catalog"), -contains("schema")) %>%
       map(collect) %>%
       map(arrange_all_but_constraint_name) %>%
-      map(~ if ("constraint_name" %in% colnames(.x)) {
-        .x %>% mutate(constraint_name = as.integer(forcats::fct_inorder(constraint_name)))
-      } else {
-        .x
-      }) %>%
-      imap(~ if (is_mariadb(con_db) && .y == "columns") {
-        # mariadb output on autoincrement column is integer
-        # transform this to boolean
-        mutate(.x, is_autoincrement = as.logical(is_autoincrement))
-      } else {
-        .x
-      }) %>%
-      imap(~ if (is_mariadb(con_db) && .y == "table_constraints") {
-        # mariadb default action for delete_rule is RESTRICT (synonym for NO ACTION)
-        # https://mariadb.com/kb/en/foreign-keys/#constraints
-        mutate(.x, delete_rule = if_else(delete_rule == "RESTRICT", "NO ACTION", delete_rule))
-      } else {
-        .x
-      }) %>%
+      map(
+        ~ if ("constraint_name" %in% colnames(.x)) {
+          .x %>% mutate(constraint_name = as.integer(forcats::fct_inorder(constraint_name)))
+        } else {
+          .x
+        }
+      ) %>%
+      imap(
+        ~ if (is_mariadb(con_db) && .y == "columns") {
+          # mariadb output on autoincrement column is integer
+          # transform this to boolean
+          mutate(.x, is_autoincrement = as.logical(is_autoincrement))
+        } else {
+          .x
+        }
+      ) %>%
+      imap(
+        ~ if (is_mariadb(con_db) && .y == "table_constraints") {
+          # mariadb default action for delete_rule is RESTRICT (synonym for NO ACTION)
+          # https://mariadb.com/kb/en/foreign-keys/#constraints
+          mutate(.x, delete_rule = if_else(delete_rule == "RESTRICT", "NO ACTION", delete_rule))
+        } else {
+          .x
+        }
+      ) %>%
       map(arrange_all) %>%
       jsonlite::toJSON(pretty = TRUE) %>%
       gsub(schema_name, "schema_name", .) %>%

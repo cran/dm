@@ -40,6 +40,8 @@
 #' dm_nycflights13() %>%
 #'   dm_wrap_tbl(root = airlines)
 dm_wrap_tbl <- function(dm, root, strict = TRUE, progress = NA) {
+  dm_local_error_call()
+
   wrap_plan <- dm_wrap_tbl_plan(dm, {{ root }})
 
   ticker <- new_ticker(
@@ -60,7 +62,10 @@ dm_wrap_tbl <- function(dm, root, strict = TRUE, progress = NA) {
   if (length(wrapped_dm) > 1) {
     if (strict) {
       # FIXME: Detect earlier
-      abort("The `dm` is not cycle free and can't be wrapped into a single tibble.")
+      cli::cli_abort(
+        "The {.cls dm} is not cycle free and can't be wrapped into a single tibble.",
+        call = dm_error_call()
+      )
     }
   }
 
@@ -82,14 +87,14 @@ dm_wrap_tbl_plan <- function(dm, root) {
     has_terminal_child <- !is.na(child_name)
     if (has_terminal_child) {
       wrap_plan <- add_row(wrap_plan, action = "dm_nest_tbl", table = child_name)
-      graph <- igraph::delete_vertices(graph, child_name)
+      graph <- graph_delete_vertices(graph, child_name)
       positions <- node_type_from_graph(graph, drop = root_name)
     }
     parent_name <- names(positions)[positions == "terminal parent"][1]
     has_terminal_parent <- !is.na(parent_name)
     if (has_terminal_parent) {
       wrap_plan <- add_row(wrap_plan, action = "dm_pack_tbl", table = parent_name)
-      graph <- igraph::delete_vertices(graph, parent_name)
+      graph <- graph_delete_vertices(graph, parent_name)
       positions <- node_type_from_graph(graph, drop = root_name)
     }
     if (!has_terminal_child && !has_terminal_parent) break

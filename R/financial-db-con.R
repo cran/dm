@@ -5,15 +5,16 @@
 #' @noRd
 financial_db_con <- function() {
   if (Sys.getenv("DM_OFFLINE") != "") {
-    abort("Offline")
+    cli::cli_abort("Offline")
   }
 
   err_relational <- tryCatch(return(relational_con()), error = identity)
   err_dbedu <- tryCatch(return(dbedu_con()), error = identity)
 
-  abort(paste0(
+  cli::cli_abort(paste0(
     "Can't connect to relational.fel.cvut.cz or databases.pacha.dev:\n",
-    conditionMessage(err_relational), "\n",
+    conditionMessage(err_relational),
+    "\n",
     conditionMessage(err_dbedu)
   ))
 }

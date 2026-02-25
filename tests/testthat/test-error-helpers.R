@@ -5,7 +5,10 @@ test_that("output", {
     abort_not_unique_key("Christmas", c("elves", "Rudolph", "mulled_wine"))
     abort_table_not_in_dm("laziness", "hard_work")
     abort_not_subset_of("playing", "game", "hunting", "game")
-    abort_sets_not_equal(c("A problem occurred.", "And another, even worse problem, occurred shortly after."))
+    abort_sets_not_equal(c(
+      "A problem occurred.",
+      "And another, even worse problem, occurred shortly after."
+    ))
     # The mentioned reasons for not being bijective and injective are the same, but this is intended:
     # If surjectivity is not given during the test for bijectivity it will fail earlier
     abort_not_bijective("child_table_name", "fk_col_name")
@@ -24,7 +27,7 @@ test_that("output", {
     abort_update_not_supported()
     abort_only_possible_wo_filters("find_wisdom")
     abort_tables_not_neighbors("subjects", "king")
-    abort_only_parents()
+    abort_only_parents("dm_flatten", "table", "recursive")
     abort_not_same_src()
     abort_what_a_weird_object("monster")
     abort_not_same_src()
@@ -56,5 +59,29 @@ test_that("output", {
     abort_no_schemas_supported()
     abort_temporary_not_in_schema()
     abort_one_of_schema_table_names()
+  })
+})
+
+test_that("singular and plural", {
+  expect_snapshot(error = TRUE, {
+    # abort_not_subset_of: compound keys (plural)
+    abort_not_subset_of("t1", c("a", "b"), "t2", c("c", "d"))
+    # abort_not_bijective: compound keys (plural)
+    abort_not_bijective("child_tbl", c("col_a", "col_b"))
+    # abort_not_injective: compound keys (plural)
+    abort_not_injective("child_tbl", c("col_a", "col_b"))
+    # abort_need_unique_names: plural
+    abort_need_unique_names(c("clone_a", "clone_b"))
+    # abort_first_rm_fks: singular
+    abort_first_rm_fks("parent", "child_1")
+    # abort_tbl_access: plural
+    abort_tbl_access(c("table_a", "table_b"))
+    # abort_cols_not_avail: singular
+    abort_cols_not_avail("pink5")
+  })
+  expect_snapshot({
+    # warn_tbl_access: singular and plural
+    warn_tbl_access("table_a")
+    warn_tbl_access(c("table_a", "table_b"))
   })
 })

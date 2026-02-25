@@ -312,7 +312,7 @@
       writeLines(conditionMessage(expect_error(dm_paste(dm(), options = c("bogus",
         "all", "mad")))))
     Output
-      Option unknown: "bogus", "mad". Must be one of "all", "tables", "keys", "select", "color".
+      Options unknown: "bogus" and "mad". Must be one of "all", "tables", "keys", "select", and "color".
 
 # output 2
 
@@ -327,4 +327,29 @@
       dm::dm(
         `tibble(...)`,
       )
+
+# chunking behavior for large dm
+
+    Code
+      writeLines(dm:::dm_paste_impl(create_large_dm(3), c("keys"), 2, chunk_size = 3))
+    Output
+      dm_step_1 <- dm::dm(
+        main,
+        table_1,
+        table_2,
+        table_3,
+      )
+      
+      dm_step_2 <- dm_step_1 %>%
+        dm::dm_add_pk(main, id) %>%
+        dm::dm_add_pk(table_1, id) %>%
+        dm::dm_add_pk(table_2, id)
+      
+      dm_step_3 <- dm_step_2 %>%
+        dm::dm_add_pk(table_3, id)
+      
+      dm_step_3 %>%
+        dm::dm_add_fk(table_1, main_id, main) %>%
+        dm::dm_add_fk(table_2, main_id, main) %>%
+        dm::dm_add_fk(table_3, main_id, main)
 

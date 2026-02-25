@@ -218,8 +218,10 @@ dm_flights %>%
 dm_flights_sqlite <-
   dm_flights %>%
   copy_dm_to(
-    dbplyr::src_memdb(), .,
-    unique_table_names = TRUE, set_key_constraints = FALSE
+    dbplyr::src_memdb(),
+    .,
+    unique_table_names = TRUE,
+    set_key_constraints = FALSE
   )
 
 dm_flights_sqlite
@@ -395,7 +397,10 @@ dm_get_available_colors()
 
 nycflights13_fk %>%
   dm_set_colors(
-    airlines = , planes = , weather = , airports = "blue"
+    airlines = ,
+    planes = ,
+    weather = ,
+    airports = "blue"
   ) %>%
   dm_draw()
 
@@ -510,8 +515,7 @@ flights_base %>%
 
 flights_base %>%
   left_join(planes, by = "tailnum") %>%
-  group_by(carrier) %>%
-  summarize(mismatch_rate = mean(is.na(type))) %>%
+  summarize(.by = carrier, mismatch_rate = mean(is.na(type))) %>%
   filter(mismatch_rate > 0) %>%
   ggplot(aes(x = carrier, y = mismatch_rate)) +
   geom_col()

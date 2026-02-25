@@ -12,7 +12,7 @@
 
 <meta name="author" content="James Wondrasek, Kirill Müller" />
 
-<meta name="date" content="2025-07-02" />
+<meta name="date" content="2026-02-25" />
 
 <title>Copy tables to and from a database</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Copy tables to and from a database</h1>
 <h4 class="author">James Wondrasek, Kirill Müller</h4>
-<h4 class="date">2025-07-02</h4>
+<h4 class="date">2026-02-25</h4>
 
 
 
@@ -393,10 +393,8 @@ all loans for each account.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>my_dm_total <span class="ot">&lt;-</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> account_id, <span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span></code></pre></div>
 <p>The derived table <code>total_loans</code> is a <em>lazy table</em>
 powered by the {<a href="https://dbplyr.tidyverse.org/">dbplyr</a>}
 package: the results are not materialized, instead an SQL query is built
@@ -411,15 +409,14 @@ full results in a table on the RDBMS.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>my_dm_total_computed <span class="ot">&lt;-</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  deployed_dm <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">compute</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>my_dm_total_computed<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span></code></pre></div>
-<pre><code>#&gt; Error in sql_render(my_dm_total_computed$total_loans): could not find function &quot;sql_render&quot;</code></pre>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> account_id, <span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">compute</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>my_dm_total_computed<span class="sc">$</span>total_loans <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">sql_render</span>()</span></code></pre></div>
+<pre><code>#&gt; [1m[33mError[39m in `sql_render()`:[22m
+#&gt; [33m![39m could not find function &quot;sql_render&quot;</code></pre>
 <p>Note the differences in queries returned by
 <code>sql_render()</code>. <code>my_dm_total$total_loans</code> is still
 being lazily evaluated and the full query constructed from the chain of

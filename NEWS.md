@@ -1,5 +1,113 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# dm 1.1.0
+
+## Features
+
+- Aligned with dplyr 1.2.0, all new verbs and arguments are supported.
+
+  ``` r
+  dm_nycflights13() |>
+    dm_zoom_to(flights) |>
+    summarize(.by = origin, mean(dep_delay, na.rm = TRUE))
+  ```
+
+- New `dm_flatten()` joins parent tables into a target table in-place and removes
+  the now-integrated parents from the dm (#2393, #2394).
+  Useful for denormalizing a star schema before reporting or further analysis.
+  Supports `recursive`, `allow_deep`, and any dplyr join type.
+
+  ``` r
+  dm_nycflights13() |>
+    dm_select_tbl(-weather) |>
+    dm_flatten(flights, recursive = TRUE)
+  ```
+
+- `dm_draw()` gains a `backend_opts` argument that collects all backend-specific
+  options in a single named list (#2381).
+  The individual top-level arguments (`graph_attrs`, `node_attrs`, `edge_attrs`,
+  `focus`, `graph_name`, `font_size`, `columnArrows`) are soft-deprecated in
+  favour of passing their equivalents in `backend_opts`.
+
+  ``` r
+  dm_nycflights13() |>
+    dm_draw(backend_opts = list(column_arrow = FALSE))
+  ```
+
+- `dm_examine_constraints()` gains a `.max_value` argument controlling how many
+  distinct problematic values are reported in the `problem` column (#2200, #2387).
+  The default is `6`; use `.max_value = Inf` to report all violations.
+
+  ``` r
+  dm_nycflights13() |>
+    dm_examine_constraints(.max_value = Inf)
+  ```
+
+- `check_key()` now returns its input data frame when the key is valid
+  (#2221, #2303), making it usable in pipelines.
+
+  ``` r
+  my_data |>
+    check_key(id) |>
+    dplyr::filter(value > 0)
+  ```
+
+- igraph is now an optional dependency (#2146, #2364), reducing the mandatory
+  install footprint.
+  Functions that require igraph will prompt you to install it when needed.
+  Set `options(dm.use_igraph = FALSE)` to turn off the startup message.
+
+- Keys are now learned automatically from SQLite databases (@gadenbuie, #352).
+
+- Improved duckplyr compatibility.
+
+- `dm_pixarfilms()` now bundles the pixarfilms data directly and gains a `version`
+  argument (#2368, #2369).
+
+- All user-facing messages now use `cli::cli_inform()` with native formatting
+  (#2374).
+
+## Breaking changes
+
+- A startup message now recommends running `library(dplyr)` before `library(dm)`.
+  In a future version, the dm package will no longer reexport all dplyr functions.
+  The new pattern ensures that scripts written today will work after that change.
+  Set `options(dm.suppress_dplyr_startup_message = TRUE)` to turn off the startup message.
+
+  ``` r
+  library(dplyr) # or library(tidyverse)
+  library(dm)
+  ```
+
+- `copy_dm_to()` now uses `dm_sql()` internally and creates key constraints on the
+  database (@krlmlr, #1887, #2022).
+  Unique keys and autoincrement primary keys (#1725) are set up automatically.
+  Data models with cyclic foreign-key references are now supported on all databases
+  that allow `ALTER TABLE` to add constraints (all except DuckDB and SQLite, #664).
+
+  ``` r
+  con <- DBI::dbConnect(duckdb::duckdb())
+  dm_financial() |>
+    copy_dm_to(con, ., temporary = FALSE, set_key_constraints = TRUE)
+  DBI::dbDisconnect(con)
+  ```
+
+## Bug fixes
+
+- `dm_from_con(learn_keys = TRUE, .names = )` now correctly applies the specified
+  table naming pattern (@owenjonesuob, #2213, #2214).
+
+- `dm_from_con()` no longer learns tables from all schemas by default for Postgres,
+  MSSQL, and MariaDB (@mgirlich, #1440, #1448).
+  The defaults are `"public"` (Postgres), `"dbo"` (MSSQL), and the current
+  database (MariaDB), avoiding spurious system tables.
+
+- `dm_rm_fk()` no longer issues a spurious message when foreign keys reference
+  non-primary-key columns (#1270, #2367).
+
+- `dm_paste()` limits its pipelines to up to 100 steps, splitting longer pipelines as needed (#2301).
+
+
 # dm 1.0.12
 
 ## Bug fixes

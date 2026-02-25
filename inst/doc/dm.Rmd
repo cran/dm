@@ -162,9 +162,7 @@ Then we can perform any of the dplyr operations we want.
 fin_dm_total <-
   fin_dm_keys %>%
   dm_zoom_to(loans) %>%
-  group_by(account_id) %>%
-  summarize(total_amount = sum(amount, na.rm = TRUE)) %>%
-  ungroup() %>%
+  summarize(.by = account_id, total_amount = sum(amount, na.rm = TRUE)) %>%
   dm_insert_zoomed("total_loans")
 
 fin_dm_total$total_loans
@@ -214,7 +212,7 @@ The {dm} package follows the tidyverse principles:
 - most functions used on `dm` objects are pipeable (i.e., return new `dm` or table objects)
 - tidy evaluation is used (unquoted function arguments are supported)
 
-The {dm} package builds heavily upon the [{datamodelr} package](https://github.com/bergant/datamodelr), and upon the [tidyverse](https://www.tidyverse.org/).
+The {dm} package builds heavily upon the [{datamodelr} package](https://github.com/bergant/datamodelr), and upon the [tidyverse](https://tidyverse.org/).
 We're looking forward to a good collaboration!
 
 The [{polyply} package](https://github.com/russHyde/polyply) has a similar intent with a slightly different interface.

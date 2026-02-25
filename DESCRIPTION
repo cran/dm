@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 1.0.12
-Date: 2025-07-02
+Version: 1.1.0
+Date: 2026-02-24
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -48,19 +48,19 @@ Description: Provides tools for working with multiple related
 License: MIT + file LICENSE
 URL: https://dm.cynkra.com/, https://github.com/cynkra/dm
 BugReports: https://github.com/cynkra/dm/issues
-Depends: R (>= 3.3)
-Imports: backports, cli (>= 2.2.0), dplyr (>= 1.1.0), glue, igraph,
-        lifecycle (>= 1.0.3), memoise, methods, purrr (>= 1.0.0), rlang
-        (>= 1.0.2), tibble (>= 3.0.0), tidyr (>= 1.0.0), tidyselect (>=
+Depends: R (>= 4.0)
+Imports: backports, cli (>= 2.2.0), dplyr (>= 1.2.0), glue, lifecycle
+        (>= 1.0.3), memoise, methods, purrr (>= 1.0.0), rlang (>=
+        1.0.2), tibble (>= 3.0.0), tidyr (>= 1.0.0), tidyselect (>=
         1.2.0), vctrs (>= 0.3.2)
 Suggests: brio, colourpicker, covr, DBI (>= 1.2.0), dbplyr (>= 2.3.4),
-        DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0), fansi,
-        forcats, htmltools, htmlwidgets, jsonlite, keyring, knitr,
-        labelled (>= 2.12.0), magrittr, nycflights13, odbc (>= 1.4.2),
-        pillar, pixarfilms, pool, progress, reactable, RMariaDB (>=
-        1.3.3), rmarkdown, RPostgres, RSQLite (>= 2.2.8), rstudioapi,
-        shiny, shinyAce, shinydashboard, testthat (>= 3.2.0),
-        tidyverse, waldo, withr
+        DiagrammeR, DiagrammeRsvg, digest, duckdb (>= 0.4.0), duckplyr,
+        fansi, forcats, htmltools, htmlwidgets, igraph (>= 2.2.0),
+        jsonlite, keyring, knitr, labelled (>= 2.12.0), magrittr,
+        nycflights13, odbc (>= 1.4.2), pillar, pixarfilms, pool,
+        progress, reactable, RMariaDB (>= 1.3.3), rmarkdown, RPostgres,
+        RSQLite (>= 2.2.8), rstudioapi, shiny, shinyAce,
+        shinydashboard, testthat (>= 3.2.0), tidyverse, waldo, withr
 Config/Needs/website: brio, bslib, cynkra/cynkratemplate, htmltools,
         pagedown, purrr, rmarkdown, whisker, xml2
 Config/Needs/check: anthonynorth/roxyglobals
@@ -68,13 +68,13 @@ VignetteBuilder: knitr
 Config/autostyle/scope: line_breaks
 Config/autostyle/strict: true
 Config/testthat/edition: 3
-Config/testthat/parallel: true
+Config/testthat/parallel: false
 Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
         draw-dm, bind, rows-dm, learn
 Encoding: UTF-8
-RoxygenNote: 7.3.2.9000
+RoxygenNote: 7.3.3.9000
 NeedsCompilation: no
-Packaged: 2025-07-02 08:41:21 UTC; kirill
+Packaged: 2026-02-24 23:10:08 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (ORCID:
     <https://orcid.org/0000-0002-1416-3412>),
@@ -88,4 +88,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph] (ROR: <https://ror.org/0335t7e62>)
 Maintainer: Kirill Müller <kirill@cynkra.com>
 Repository: CRAN
-Date/Publication: 2025-07-02 16:50:06 UTC
+Date/Publication: 2026-02-25 06:30:59 UTC

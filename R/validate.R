@@ -22,6 +22,7 @@ boilerplate <- new_dm_def()
 #' try(dm_validate(bad_dm))
 #' @autoglobal
 dm_validate <- function(x) {
+  dm_local_error_call()
   check_dm(x)
 
   if (!identical(names(unclass(x)), "def")) {
@@ -31,7 +32,9 @@ dm_validate <- function(x) {
   def <- dm_get_def(x)
 
   table_names <- def$table
-  if (any(table_names == "")) abort_dm_invalid("Not all tables are named.")
+  if (any(table_names == "")) {
+    abort_dm_invalid("Not all tables are named.")
+  }
 
   check_df_structure(def, boilerplate, "dm definition")
 
@@ -41,7 +44,7 @@ dm_validate <- function(x) {
     )
   }
   if (!all_same_source(def$data)) {
-    abort_dm_invalid(error_txt_not_same_src())
+    abort_dm_invalid("Not all tables in the object share the same `src`.")
   }
 
   check_df_structure(c_list_of(def$pks), c_list_of(boilerplate$pks), "`pks` column")
@@ -111,7 +114,7 @@ dm_validate <- function(x) {
 #' @rdname deprecated
 #' @keywords internal
 validate_dm <- function(x) {
-  deprecate_soft("0.3.0", "dm::validate_dm()", "dm::dm_validate()")
+  deprecate_warn("0.3.0", "dm::validate_dm()", "dm::dm_validate()")
   dm_validate(x)
 }
 
@@ -131,7 +134,9 @@ check_df_structure <- function(check, boilerplate, where) {
   force(where)
 
   if (!identical(names(check), names(boilerplate))) {
-    abort_dm_invalid(glue("Inconsistent column names in {where}: {commas(names(check), Inf)} vs. {commas(names(boilerplate), Inf)}."))
+    abort_dm_invalid(glue(
+      "Inconsistent column names in {where}: {commas(names(check), Inf)} vs. {commas(names(boilerplate), Inf)}."
+    ))
   }
 
   if (!identical(check[0, ], boilerplate[0, ])) {
@@ -154,7 +159,9 @@ check_colnames <- function(key_tibble, dm_col_names, which) {
   good <- map2_lgl(key_tibble$table, key_tibble$column, ~ ..2 %in% dm_col_names[[..1]])
   if (!all(good)) {
     bad_key <- key_tibble[which(!good)[[1]], ]
-    abort_dm_invalid(glue("{which} column name not in `dm` tables' column names: `{bad_key$table}`$`{bad_key$column}`"))
+    abort_dm_invalid(glue(
+      "{which} column name not in `dm` tables' column names: `{bad_key$table}`$`{bad_key$column}`"
+    ))
   }
 }
 
@@ -197,9 +204,9 @@ check_no_nulls_col <- function(x, where) {
 # dm invalid --------------------------------------------------------------
 
 abort_dm_invalid <- function(why) {
-  abort(error_txt_dm_invalid(why), class = dm_error_full("dm_invalid"))
-}
-
-error_txt_dm_invalid <- function(why) {
-  glue("This `dm` is invalid, reason: {why}")
+  cli::cli_abort(
+    "This {.cls dm} is invalid, reason: {why}",
+    class = dm_error_full("dm_invalid"),
+    call = dm_error_call()
+  )
 }

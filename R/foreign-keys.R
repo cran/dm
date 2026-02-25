@@ -69,10 +69,18 @@
 #'     dm_add_pk(planes, tailnum) %>%
 #'     dm_add_fk(flights, tailnum, planes, check = TRUE)
 #' )
-dm_add_fk <- function(dm, table, columns, ref_table, ref_columns = NULL, ...,
-                      check = FALSE,
-                      on_delete = c("no_action", "cascade")) {
+dm_add_fk <- function(
+  dm,
+  table,
+  columns,
+  ref_table,
+  ref_columns = NULL,
+  ...,
+  check = FALSE,
+  on_delete = c("no_action", "cascade")
+) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
   table_name <- dm_tbl_name(dm, {{ table }})
   ref_table_name <- dm_tbl_name(dm, {{ ref_table }})
@@ -121,7 +129,14 @@ dm_add_fk_impl <- function(dm, table, column, ref_table, ref_column, on_delete) 
 
     my <- ref_table == my_ref_table
     where_other <- which(!my)
-    dm <- dm_add_fk_impl(dm, table[where_other], column[where_other], ref_table[where_other], ref_column[where_other], on_delete[where_other])
+    dm <- dm_add_fk_impl(
+      dm,
+      table[where_other],
+      column[where_other],
+      ref_table[where_other],
+      ref_column[where_other],
+      on_delete[where_other]
+    )
 
     table <- table[my]
     column <- column[my]
@@ -175,9 +190,10 @@ dm_add_fk_impl <- function(dm, table, column, ref_table, ref_column, on_delete) 
 #' @keywords internal
 dm_has_fk <- function(dm, table, ref_table, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
 
-  deprecate_soft("0.2.1", "dm::dm_has_fk()", "dm::dm_get_all_fks()")
+  deprecate_warn("0.2.1", "dm::dm_has_fk()", "dm::dm_get_all_fks()")
 
   table_name <- dm_tbl_name(dm, {{ table }})
   ref_table_name <- dm_tbl_name(dm, {{ ref_table }})
@@ -192,9 +208,10 @@ dm_has_fk_impl <- function(dm, table_name, ref_table_name) {
 #' @export
 dm_get_fk <- function(dm, table, ref_table, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
 
-  deprecate_soft("0.2.1", "dm::dm_get_fk()", "dm::dm_get_all_fks()")
+  deprecate_warn("0.2.1", "dm::dm_get_fk()", "dm::dm_get_all_fks()")
 
   table_name <- dm_tbl_name(dm, {{ table }})
   ref_table_name <- dm_tbl_name(dm, {{ ref_table }})
@@ -247,6 +264,7 @@ dm_get_fk2_impl <- function(dm, table_name, ref_table_name) {
 #' @export
 dm_get_all_fks <- function(dm, parent_table = NULL, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
   table_expr <- enexpr(parent_table) %||% src_tbls_impl(dm, quiet = TRUE)
   table_names <- eval_select_table(table_expr, set_names(src_tbls_impl(dm, quiet = TRUE)))
@@ -256,10 +274,20 @@ dm_get_all_fks <- function(dm, parent_table = NULL, ...) {
 dm_get_all_fks_impl <- function(dm, parent_table = NULL, ignore_on_delete = FALSE, id = FALSE) {
   def <- dm_get_def(dm)
 
-  dm_get_all_fks_def_impl(def = def, parent_table = parent_table, ignore_on_delete = ignore_on_delete, id = id)
+  dm_get_all_fks_def_impl(
+    def = def,
+    parent_table = parent_table,
+    ignore_on_delete = ignore_on_delete,
+    id = id
+  )
 }
 
-dm_get_all_fks_def_impl <- function(def, parent_table = NULL, ignore_on_delete = FALSE, id = FALSE) {
+dm_get_all_fks_def_impl <- function(
+  def,
+  parent_table = NULL,
+  ignore_on_delete = FALSE,
+  id = FALSE
+) {
   def_sub <- def[c("table", "fks")]
   names(def_sub)[[1]] <- "parent_table"
 
@@ -310,6 +338,7 @@ dm_get_all_fks_def_impl <- function(def, parent_table = NULL, ignore_on_delete =
 #'   dm_draw()
 dm_rm_fk <- function(dm, table = NULL, columns = NULL, ref_table = NULL, ref_columns = NULL, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
 
   table_name <- dm_tbl_name_null(dm, {{ table }})
@@ -321,7 +350,14 @@ dm_rm_fk <- function(dm, table = NULL, columns = NULL, ref_table = NULL, ref_col
 }
 
 #' @autoglobal
-dm_rm_fk_impl <- function(dm, table_name, cols, ref_table_name, ref_cols) {
+dm_rm_fk_impl <- function(
+  dm,
+  table_name,
+  cols,
+  ref_table_name,
+  ref_cols,
+  error_call = caller_env()
+) {
   def <- dm_get_def(dm)
 
   # Filter by each argument if given:
@@ -338,10 +374,14 @@ dm_rm_fk_impl <- function(dm, table_name, cols, ref_table_name, ref_cols) {
 
   # table_name: keep FK entries pointing to the other table
   if (!is.null(table_name)) {
-    idx_fk <- map2(def$fks[idx], idx_fk, ~ {
-      ii <- (.x$table[.y] == table_name)
-      .y[ii]
-    })
+    idx_fk <- map2(
+      def$fks[idx],
+      idx_fk,
+      ~ {
+        ii <- (.x$table[.y] == table_name)
+        .y[ii]
+      }
+    )
 
     # Prune after each step (this also ensures that negative selection works further below)
     keep <- (lengths(idx_fk) > 0)
@@ -351,18 +391,25 @@ dm_rm_fk_impl <- function(dm, table_name, cols, ref_table_name, ref_cols) {
 
   # ref_cols: find column names once for each ref_table
   if (!is.null(ref_cols)) {
-    idx_fk <- pmap(list(def$fks[idx], idx_fk, def$data[idx]), ~ {
-      ii <- tryCatch(
-        {
-          names_vars <- names(eval_select_indices(ref_cols, colnames(..3)))
-          map_lgl(.x$ref_column[.y], identical, names_vars)
-        },
-        error = function(e) {
-          0
-        }
-      )
-      .y[ii]
-    })
+    idx_fk <- pmap(
+      list(def$fks[idx], idx_fk, def$data[idx]),
+      ~ {
+        ii <- tryCatch(
+          {
+            names_vars <- names(eval_select_indices(
+              ref_cols,
+              colnames(..3),
+              error_call = error_call
+            ))
+            map_lgl(.x$ref_column[.y], identical, names_vars)
+          },
+          error = function(e) {
+            0
+          }
+        )
+        .y[ii]
+      }
+    )
 
     # Prune after each step (this also ensures that negative selection works further below)
     keep <- (lengths(idx_fk) > 0)
@@ -374,20 +421,32 @@ dm_rm_fk_impl <- function(dm, table_name, cols, ref_table_name, ref_cols) {
   if (!is.null(cols)) {
     all_tables <- set_names(def$data, def$table)
 
-    idx_fk <- map2(def$fks[idx], idx_fk, ~ {
-      ii <- map2_lgl(.x$table[.y], .x$column[.y], ~ {
-        tryCatch(
-          {
-            names_vars <- names(eval_select_indices(cols, colnames(all_tables[[.x]])))
-            identical(.y, names_vars)
-          },
-          error = function(e) {
-            FALSE
+    idx_fk <- map2(
+      def$fks[idx],
+      idx_fk,
+      ~ {
+        ii <- map2_lgl(
+          .x$table[.y],
+          .x$column[.y],
+          ~ {
+            tryCatch(
+              {
+                names_vars <- names(eval_select_indices(
+                  cols,
+                  colnames(all_tables[[.x]]),
+                  error_call = error_call
+                ))
+                identical(.y, names_vars)
+              },
+              error = function(e) {
+                FALSE
+              }
+            )
           }
         )
-      })
-      .y[ii]
-    })
+        .y[ii]
+      }
+    )
 
     # Prune after each step (this also ensures that negative selection works further below)
     keep <- (lengths(idx_fk) > 0)
@@ -406,26 +465,37 @@ dm_rm_fk_impl <- function(dm, table_name, cols, ref_table_name, ref_cols) {
   } else if (!is.null(ref_cols)) {
     show_disambiguation <- FALSE
   } else {
-    # Check if all FKs point to the primary key
-    show_disambiguation <- !all(map2_lgl(def$fks[idx], def$pks[idx], ~ {
-      all(map_lgl(.x$ref_column, identical, .y$column[[1]]))
-    }))
+    # Check if all FKs (being removed) point to the primary key
+    show_disambiguation <- !all(pmap_lgl(
+      list(def$fks[idx], idx_fk, def$pks[idx]),
+      ~ {
+        all(map_lgl(..1$ref_column[..2], identical, ..3$column[[1]]))
+      }
+    ))
   }
 
   if (show_disambiguation) {
     def_rm <- def[idx, c("table", "pks", "fks")]
     def_rm$fks <- map2(def_rm$fks, idx_fk, vec_slice)
-    def_rm$fks <- map2(def_rm$fks, def_rm$pks, ~ {
-      .x$need_ref <- !map_lgl(.x$ref_column, identical, .y$column[[1]])
-      .x
-    })
+    def_rm$fks <- map2(
+      def_rm$fks,
+      def_rm$pks,
+      ~ {
+        .x$need_ref <- !map_lgl(.x$ref_column, identical, .y$column[[1]])
+        .x
+      }
+    )
 
     disambiguation <-
       def_rm %>%
       select(ref_table = table, fks) %>%
       unnest(-ref_table) %>%
       mutate(ref_col_text = if_else(need_ref, glue(", {deparse_keys(ref_column)})"), "")) %>%
-      mutate(text = glue("dm_rm_fk({tick_if_needed(table)}, {deparse_keys(column)}, {tick_if_needed(ref_table)}{ref_col_text})")) %>%
+      mutate(
+        text = glue(
+          "dm_rm_fk({tick_if_needed(table)}, {deparse_keys(column)}, {tick_if_needed(ref_table)}{ref_col_text})"
+        )
+      ) %>%
       pull()
 
     message("Removing foreign keys: %>%\n  ", glue_collapse(disambiguation, " %>%\n  "))
@@ -487,6 +557,7 @@ dm_rm_fk_impl <- function(dm, table_name, cols, ref_table_name, ref_cols) {
 #' @export
 dm_enum_fk_candidates <- function(dm, table, ref_table, ...) {
   check_dots_empty()
+  dm_local_error_call()
   check_not_zoomed(dm)
   # FIXME: with "direct" filter maybe no check necessary: but do we want to check
   # for tables retrieved with `tbl()` or with `dm_get_tables()[[table_name]]`
@@ -521,7 +592,13 @@ enum_fk_candidates <- function(dm_zoomed, ref_table, ...) {
   ref_tbl_pk <- dm_get_pk_impl(dm_zoomed, ref_table_name)
 
   ref_tbl <- dm_get_tables_impl(dm_zoomed)[[ref_table_name]]
-  enum_fk_candidates_impl(table_name, tbl_zoomed(dm_zoomed), ref_table_name, ref_tbl, ref_tbl_pk) %>%
+  enum_fk_candidates_impl(
+    table_name,
+    tbl_zoomed(dm_zoomed),
+    ref_table_name,
+    ref_tbl,
+    ref_tbl_pk
+  ) %>%
     rename(columns = column) %>%
     mutate(columns = new_keys(columns))
 }
@@ -543,7 +620,7 @@ enum_fk_candidates_impl <- function(table_name, tbl, ref_table_name, ref_tbl, re
     arrange(desc(candidate))
 }
 
-check_fk <- function(t1, t1_name, colname, t2, t2_name, pk) {
+check_fk <- function(t1, t1_name, colname, t2, t2_name, pk, max_value = MAX_COMMAS) {
   stopifnot(length(colname) == length(pk))
 
   val_names <- paste0("value", seq_along(colname))
@@ -575,7 +652,7 @@ check_fk <- function(t1, t1_name, colname, t2, t2_name, pk) {
       filter(!(!!any_value_na_expr)) %>%
       anti_join(t2_join, by = val_names) %>%
       arrange(desc(n), !!!syms(val_names)) %>%
-      head(MAX_COMMAS + 1L) %>%
+      head(max_value + 1L) %>%
       collect(),
     error = identity
   )
@@ -596,6 +673,7 @@ check_fk <- function(t1, t1_name, colname, t2, t2_name, pk) {
 
   vals_formatted <- commas(
     glue("{res_tbl$value} ({res_tbl$n})"),
+    max_commas = max_value,
     capped = TRUE
   )
   glue(
@@ -604,11 +682,13 @@ check_fk <- function(t1, t1_name, colname, t2, t2_name, pk) {
   )
 }
 
-fk_table_to_def_fks <- function(table,
-                                child_table = "child_table",
-                                child_fk_cols = "child_fk_cols",
-                                parent_table = "parent_table",
-                                parent_key_cols = "parent_key_cols") {
+fk_table_to_def_fks <- function(
+  table,
+  child_table = "child_table",
+  child_fk_cols = "child_fk_cols",
+  parent_table = "parent_table",
+  parent_key_cols = "parent_key_cols"
+) {
   table %>%
     group_by(!!ensym(parent_table)) %>%
     summarize(
@@ -624,28 +704,17 @@ fk_table_to_def_fks <- function(table,
 # Errors ------------------------------------------------------------------
 
 abort_fk_exists <- function(child_table_name, colnames, parent_table_name) {
-  abort(
-    error_txt_fk_exists(
-      child_table_name, colnames, parent_table_name
-    ),
-    class = dm_error_full("fk_exists")
-  )
-}
-
-error_txt_fk_exists <- function(child_table_name, colnames, parent_table_name) {
-  glue(
-    "({commas(tick(colnames))}) is already a foreign key of table ",
-    "{tick(child_table_name)} into table {tick(parent_table_name)}."
+  cli::cli_abort(
+    "({commas(tick(colnames))}) is already a foreign key of table {.field {child_table_name}} into table {.field {parent_table_name}}.",
+    class = dm_error_full("fk_exists"),
+    call = dm_error_call()
   )
 }
 
 abort_is_not_fkc <- function() {
-  abort(
-    error_txt_is_not_fkc(),
-    class = dm_error_full("is_not_fkc")
+  cli::cli_abort(
+    "No foreign keys to remove.",
+    class = dm_error_full("is_not_fkc"),
+    call = dm_error_call()
   )
-}
-
-error_txt_is_not_fkc <- function() {
-  "No foreign keys to remove."
 }

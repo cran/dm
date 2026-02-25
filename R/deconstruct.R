@@ -17,7 +17,13 @@ vec_new_uuid_along <- function(x) {
   map_chr(x, function(.x) new_uuid())
 }
 
-new_fks <- function(..., child_uuid = NULL, child_fk_cols = NULL, parent_uuid = NULL, parent_key_cols = NULL) {
+new_fks <- function(
+  ...,
+  child_uuid = NULL,
+  child_fk_cols = NULL,
+  parent_uuid = NULL,
+  parent_key_cols = NULL
+) {
   check_dots_empty0(...)
 
   child_fk_cols <- new_keys(child_fk_cols)
@@ -41,13 +47,16 @@ new_fks_out <- function(child_fk_cols = NULL, parent_uuid = NULL, parent_key_col
   )
 }
 
-new_keyed_tbl <- function(x,
-                          ...,
-                          pk = NULL,
-                          uks = NULL,
-                          fks_in = NULL,
-                          fks_out = NULL,
-                          uuid = NULL) {
+new_keyed_tbl <- function(
+  x,
+  ...,
+  pk = NULL,
+  uks = NULL,
+  fks_in = NULL,
+  fks_out = NULL,
+  uuid = NULL,
+  zoom2 = NULL
+) {
   check_dots_empty()
 
   pk <- vec_cast(pk, character())
@@ -60,13 +69,19 @@ new_keyed_tbl <- function(x,
   }
 
   class(x) <- unique(c("dm_keyed_tbl", class(x)))
-  attr(x, "dm_key_info") <- list(
+  dm_key_info <- list(
     pk = pk,
     uks = uks,
     fks_in = fks_in,
     fks_out = fks_out,
     uuid = uuid
   )
+
+  if (!is.null(zoom2)) {
+    dm_key_info$zoom2 <- zoom2
+  }
+
+  attr(x, "dm_key_info") <- dm_key_info
 
   x
 }
@@ -77,7 +92,8 @@ new_keyed_tbl_from_keys_info <- function(tbl, keys_info) {
     pk = keys_info$pk,
     fks_in = keys_info$fks_in,
     fks_out = keys_info$fks_out,
-    uuid = keys_info$uuid
+    uuid = keys_info$uuid,
+    zoom2 = keys_info$zoom2
   )
 }
 
@@ -176,7 +192,11 @@ fks_df_from_keys_info <- function(tables) {
     map_dfr(info, ~ tibble(child_uuid = .x$uuid, .x$fks_out))
 
   fks <-
-    vec_rbind(fks_out, fks_in, .ptype = new_fks(child_uuid = character(), parent_uuid = character())) %>%
+    vec_rbind(
+      fks_out,
+      fks_in,
+      .ptype = new_fks(child_uuid = character(), parent_uuid = character())
+    ) %>%
     distinct()
 
   uuid_lookup <- tibble(
@@ -190,15 +210,27 @@ fks_df_from_keys_info <- function(tables) {
 
   fks %>%
     # Multiple tables with the same uuid can occur due to aliasing,
-    # hence `multiple = "all"`
-    left_join(child_uuid_lookup, by = "child_uuid", multiple = "all") %>%
-    left_join(parent_uuid_lookup, by = "parent_uuid", multiple = "all") %>%
+    # hence `multiple = "all"` and `relationship = "many-to-many"`
+    left_join(
+      child_uuid_lookup,
+      by = "child_uuid",
+      multiple = "all",
+      relationship = "many-to-many"
+    ) %>%
+    left_join(
+      parent_uuid_lookup,
+      by = "parent_uuid",
+      multiple = "all",
+      relationship = "many-to-many"
+    ) %>%
     select(-child_uuid, -parent_uuid) %>%
     filter(map2_lgl(child_fk_cols, child_data, ~ all(.x %in% colnames(.y)))) %>%
     filter(map2_lgl(parent_key_cols, parent_data, ~ all(.x %in% colnames(.y)))) %>%
     group_by(parent_table) %>%
     # FIXME: Capture on_delete
-    summarize(fks = list(new_fk(as.list(parent_key_cols), child_table, as.list(child_fk_cols), "no_action"))) %>%
+    summarize(
+      fks = list(new_fk(as.list(parent_key_cols), child_table, as.list(child_fk_cols), "no_action"))
+    ) %>%
     ungroup() %>%
     rename(table = parent_table)
 }
@@ -224,8 +256,8 @@ keyed_build_join_spec <- function(x, y, by = NULL, suffix = NULL) {
 
   if (is.null(by)) {
     by <- keyed_by(x, y)
-  } else if (!is_named2(by)) {
-    by <- set_names(by, by)
+  } else {
+    by <- normalize_join_by(by)
   }
 
   if (is.null(suffix)) {
@@ -277,17 +309,23 @@ keyed_by <- function(x, y) {
   fks_df <- fks_df_from_keys_info(list(x = x, y = y))
 
   if (nrow(fks_df) == 0) {
-    abort("Can't infer `by`: foreign key information lost?")
+    cli::cli_abort("Can't infer {.arg by}: foreign key information lost?", call = dm_error_call())
   }
 
   stopifnot(map_int(fks_df$fks, NROW) > 0)
 
   if (nrow(fks_df) > 1) {
-    abort("Can't infer `by`: foreign key available in both directions")
+    cli::cli_abort(
+      "Can't infer {.arg by}: foreign key available in both directions.",
+      call = dm_error_call()
+    )
   }
 
   if (nrow(fks_df$fks[[1]]) > 1) {
-    abort("Can't infer `by`: multiple foreign keys available")
+    cli::cli_abort(
+      "Can't infer {.arg by}: multiple foreign keys available.",
+      call = dm_error_call()
+    )
   }
 
   fk <- fks_df$fks[[1]][1, ]

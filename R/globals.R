@@ -34,6 +34,12 @@ utils::globalVariables(c(
   "new_table", # <dm_disentangle>
   "fks", # <dm_disentangle>
   "uks", # <dm_disentangle>
+  "child_table", # <dm_flatten_impl>
+  "parent_table", # <dm_flatten_impl>
+  "child_table", # <dm_flatten_join>
+  "parent_table", # <dm_flatten_join>
+  "child_table", # <dm_flatten_transfer_fks>
+  "parent_table", # <dm_flatten_transfer_fks>
   "pks", # <str.dm>
   "fks", # <str.dm>
   "filters", # <str.dm>
@@ -56,6 +62,7 @@ utils::globalVariables(c(
   "child_fk_cols", # <dm_get_data_model>
   "parent_table", # <dm_get_data_model>
   "parent_key_cols", # <dm_get_data_model>
+  "id", # <dm_get_data_model>
   "uk_col", # <dm_get_data_model>
   "column", # <dm_get_data_model>
   "key", # <dm_get_data_model>
@@ -132,6 +139,7 @@ utils::globalVariables(c(
   "table_catalog", # <dm_learn_from_db>
   "table_schema", # <dm_learn_from_db>
   "table_name", # <dm_learn_from_db>
+  "catalog", # <dm_learn_from_db>
   "columns", # <dm_learn_from_db>
   "ordinal_position", # <dm_learn_from_db>
   "constraint_column_usage", # <dm_learn_from_db>
@@ -237,6 +245,8 @@ utils::globalVariables(c(
   "film", # <dm_pixarfilms>
   "award_type", # <dm_pixarfilms>
   "genre", # <dm_pixarfilms>
+  "category", # <dm_pixarfilms>
+  "value", # <dm_pixarfilms>
   "column", # <enum_pk_candidates>
   "columns", # <enum_pk_candidates>
   "column", # <enum_pk_candidates_impl>

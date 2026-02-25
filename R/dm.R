@@ -49,9 +49,11 @@
 #' dm_nycflights13()[["airports"]]
 #'
 #' dm_nycflights13() %>% names()
-dm <- function(...,
-               .name_repair = c("check_unique", "unique", "universal", "minimal"),
-               .quiet = FALSE) {
+dm <- function(
+  ...,
+  .name_repair = c("check_unique", "unique", "universal", "minimal"),
+  .quiet = FALSE
+) {
   quos <- enquos(...)
   names <- names2(quos)
 
@@ -61,15 +63,15 @@ dm <- function(...,
 
   for (i in which(is_dm)) {
     if (names[[i]] != "") {
-      abort(c(
-        "All dm objects passed to `dm()` must be unnamed.",
+      cli::cli_abort(c(
+        "All dm objects passed to {.fun dm} must be unnamed.",
         i = paste0("Argument ", i, " has name ", tick(names[[i]]), ".")
       ))
     }
 
     if (is_zoomed(dots[[i]])) {
-      abort(c(
-        "All dm objects passed to `dm()` must be unzoomed.",
+      cli::cli_abort(c(
+        "All dm objects passed to {.fun dm} must be unzoomed.",
         i = paste0("Argument ", i, " is a zoomed dm.")
       ))
     }
@@ -226,10 +228,12 @@ new_uk <- function(column = list()) {
   fast_tibble(column = column)
 }
 
-new_fk <- function(ref_column = list(),
-                   table = character(),
-                   column = list(),
-                   on_delete = character()) {
+new_fk <- function(
+  ref_column = list(),
+  table = character(),
+  column = list(),
+  on_delete = character()
+) {
   stopifnot(
     is.list(column),
     is.list(ref_column),
@@ -309,7 +313,7 @@ as_dm.default <- function(x, ...) {
   check_dots_empty()
 
   if (!is.list(x) || is.object(x)) {
-    abort(paste0("Can't coerce <", class(x)[[1]], "> to <dm>."))
+    cli::cli_abort("Can't coerce {.cls {class(x)[[1]]}} to {.cls dm}.")
   }
 
   # Automatic name repair
@@ -394,7 +398,9 @@ show_dm <- function(x) {
 format.dm <- function(x, ...) {
   # for both dm and dm_zoomed
   def <- dm_get_def(x)
-  glue("dm: {def_get_n_tables(def)} tables, {def_get_n_columns(def)} columns, {def_get_n_pks(def)} primary keys, {def_get_n_fks(def)} foreign keys")
+  glue(
+    "dm: {def_get_n_tables(def)} tables, {def_get_n_columns(def)} columns, {def_get_n_pks(def)} primary keys, {def_get_n_fks(def)} foreign keys"
+  )
 }
 
 #' @export
@@ -432,17 +438,25 @@ as_dm_zoomed_df <- function(x) {
 }
 
 new_dm_zoomed_df <- function(x, ...) {
-  if (!is.data.frame(x)) {
-    return(structure(x, class = c("dm_zoomed_df", class(x)), ...))
+  if (is.data.frame(x) && !inherits(x, "duckplyr_df")) {
+    # need this in order to avoid star (from rownames, automatic from `structure(...)`)
+    # in print method for local tibbles
+    return(new_tibble(
+      x,
+      class = c("dm_zoomed_df", class(x), c("tbl_df", "tbl", "data.frame")),
+      nrow = nrow(x),
+      ...
+    ))
   }
-  # need this in order to avoid star (from rownames, automatic from `structure(...)`)
-  # in print method for local tibbles
-  new_tibble(
-    x,
-    class = c("dm_zoomed_df", class(x), c("tbl_df", "tbl", "data.frame")),
-    nrow = nrow(x),
-    ...
-  )
+
+  # Careful to not touch duckplyr row names
+  class(x) <- c("dm_zoomed_df", class(x))
+  extra_attrs <- list(...)
+  for (name in names(extra_attrs)) {
+    print(name)
+    attr(x, name) <- extra_attrs[[name]]
+  }
+  x
 }
 
 # this is called from `tibble:::trunc_mat()`, which is called from `tibble::format.tbl()`
@@ -475,6 +489,7 @@ format.dm_zoomed_df <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) 
 
 #' @export
 `$<-.dm` <- function(x, name, value) {
+  dm_local_error_call()
   abort_update_not_supported()
 }
 
@@ -483,7 +498,11 @@ format.dm_zoomed_df <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) 
   check_dots_empty()
 
   # for both dm and dm_zoomed
-  if (is.numeric(id)) id <- src_tbls_impl(x)[id] else id <- as_string(id)
+  if (is.numeric(id)) {
+    id <- src_tbls_impl(x)[id]
+  } else {
+    id <- as_string(id)
+  }
   tbl_impl(x, id, quiet = TRUE)
 }
 
@@ -494,12 +513,15 @@ format.dm_zoomed_df <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) 
 
 #' @export
 `[[<-.dm` <- function(x, name, value) {
+  dm_local_error_call()
   abort_update_not_supported()
 }
 
 #' @export
 `[.dm` <- function(x, id) {
-  if (is.numeric(id)) id <- src_tbls_impl(x)[id]
+  if (is.numeric(id)) {
+    id <- src_tbls_impl(x)[id]
+  }
   id <- as.character(id)
   dm_select_tbl(x, !!!id)
 }
@@ -513,6 +535,7 @@ format.dm_zoomed_df <- function(x, ..., n = NULL, width = NULL, n_extra = NULL) 
 
 #' @export
 `[<-.dm` <- function(x, name, value) {
+  dm_local_error_call()
   abort_update_not_supported()
 }
 
@@ -530,6 +553,7 @@ names.dm_zoomed <- function(x) {
 
 #' @export
 `names<-.dm` <- function(x, value) {
+  dm_local_error_call()
   abort_update_not_supported()
 }
 
@@ -546,6 +570,7 @@ length.dm_zoomed <- function(x) {
 
 #' @export
 `length<-.dm` <- function(x, value) {
+  dm_local_error_call()
   abort_update_not_supported()
 }
 
@@ -682,7 +707,7 @@ src_tbls_impl <- function(dm, quiet = FALSE) {
 #'   class()
 compute.dm <- function(x, ..., temporary = TRUE) {
   if (!isTRUE(temporary)) {
-    abort("`compute.dm()` does not support `temporary = FALSE`.")
+    cli::cli_abort("{.fun compute.dm} does not support {.code temporary = FALSE}.")
   }
 
   # for both dm and dm_zoomed
@@ -812,18 +837,26 @@ pull_tbl <- function(dm, table, ..., keyed = FALSE) {
 #' @export
 pull_tbl.dm <- function(dm, table, ..., keyed = FALSE) {
   check_dots_empty()
+  dm_local_error_call()
 
   # for both dm and dm_zoomed
   # FIXME: shall we issue a special error in case someone tries sth. like: `pull_tbl(dm_for_filter, c(t4, t3))`?
   table_name <- as_string(enexpr(table))
-  if (table_name == "") abort_no_table_provided()
+  if (table_name == "") {
+    abort_no_table_provided()
+  }
   tbl_impl(dm, table_name, keyed = keyed)
 }
 
 #' @export
 pull_tbl.dm_zoomed <- function(dm, table, ..., keyed = FALSE) {
+  dm_local_error_call()
+
   if (isTRUE(keyed)) {
-    abort("`keyed = TRUE` not supported for zoomed dm objects.")
+    cli::cli_abort(
+      "{.code keyed = TRUE} not supported for zoomed dm objects.",
+      call = dm_error_call()
+    )
   }
 
   check_dots_empty()

@@ -44,21 +44,38 @@ is_sqlite <- function(dest) {
 }
 
 is_mssql <- function(dest) {
-  inherits(dest, c(
-    "Microsoft SQL Server", "src_Microsoft SQL Server", "dblogConnection-Microsoft SQL Server", "src_dblogConnection-Microsoft SQL Server"
-  ))
+  inherits(
+    dest,
+    c(
+      "Microsoft SQL Server",
+      "src_Microsoft SQL Server",
+      "dblogConnection-Microsoft SQL Server",
+      "src_dblogConnection-Microsoft SQL Server"
+    )
+  )
 }
 
 is_postgres <- function(dest) {
-  inherits_any(dest, c(
-    "src_PostgreSQLConnection", "src_PqConnection", "PostgreSQLConnection", "PqConnection", "src_PostgreSQL"
-  ))
+  inherits_any(
+    dest,
+    c(
+      "src_PostgreSQLConnection",
+      "src_PqConnection",
+      "PostgreSQLConnection",
+      "PqConnection",
+      "src_PostgreSQL"
+    )
+  )
 }
 
 is_redshift <- function(dest) {
-  inherits_any(dest, c(
-    "src_RedshiftConnection", "RedshiftConnection"
-  ))
+  inherits_any(
+    dest,
+    c(
+      "src_RedshiftConnection",
+      "RedshiftConnection"
+    )
+  )
 }
 
 is_mariadb <- function(dest) {
@@ -77,10 +94,10 @@ is_mariadb <- function(dest) {
 
 schema_supported_dbs <- function() {
   tibble::tribble(
-    ~db_name, ~id_function, ~test_shortcut,
-    "SQL Server", "is_mssql", "mssql",
-    "Postgres", "is_postgres", "postgres",
-    "MariaDB", "is_mariadb", "maria",
+    ~db_name     , ~id_function  , ~test_shortcut ,
+    "SQL Server" , "is_mssql"    , "mssql"        ,
+    "Postgres"   , "is_postgres" , "postgres"     ,
+    "MariaDB"    , "is_mariadb"  , "maria"        ,
   )
 }
 
@@ -127,9 +144,10 @@ find_name_clashes <- function(old, new) {
 }
 
 #' @autoglobal
-get_src_tbl_names <- function(src, schema = NULL, dbname = NULL, names = NULL) {
+get_src_tbl_names <- function(src, schema = NULL, dbname = NULL, names_pattern = "{.table}") {
+  schema <- check_schema(src, schema)
+
   if (!is_mssql(src) && !is_postgres(src) && !is_redshift(src) && !is_mariadb(src)) {
-    warn_if_arg_not(schema, only_on = c("MSSQL", "Postgres", "Redshift", "MariaDB"))
     warn_if_arg_not(dbname, only_on = "MSSQL")
     tables <- src_tbls(src)
     out <- purrr::map(tables, ~ DBI::Id(table = .x))
@@ -139,45 +157,29 @@ get_src_tbl_names <- function(src, schema = NULL, dbname = NULL, names = NULL) {
 
   con <- con_from_src_or_con(src)
 
-  if (!is.null(schema)) {
-    check_param_class(schema, "character")
-  }
-
   if (is_mssql(src)) {
     # MSSQL
-    schema <- schema_mssql(con, schema)
     dbname_sql <- dbname_mssql(con, dbname)
     names_table <- get_names_table_mssql(con, dbname_sql)
     dbname <- names(dbname_sql)
   } else if (is_postgres(src)) {
     # Postgres
-    schema <- schema_postgres(con, schema)
     dbname <- warn_if_arg_not(dbname, only_on = "MSSQL")
     names_table <- get_names_table_postgres(con)
   } else if (is_redshift(src)) {
     # Redshift
-    schema <- schema_redshift(con, schema)
     dbname <- warn_if_arg_not(dbname, only_on = "MSSQL")
     names_table <- get_names_table_redshift(con)
   } else if (is_mariadb(src)) {
     # MariaDB
-    schema <- schema_mariadb(con, schema)
     dbname <- warn_if_arg_not(dbname, only_on = "MSSQL")
     names_table <- get_names_table_mariadb(con)
   }
 
-  # Use smart default for `.names`, if it wasn't provided
-  if (!is.null(names)) {
-    names_pattern <- names
-  } else if (length(schema) == 1) {
-    names_pattern <- "{.table}"
-  } else {
-    names_pattern <- "{.schema}.{.table}"
-    cli::cli_inform('Using {.code .names = "{names_pattern}"}')
-  }
-
   names_table <- names_table %>%
-    filter(schema_name %in% !!(if (inherits(schema, "sql")) glue_sql_collapse(schema) else schema)) %>%
+    filter(
+      schema_name %in% !!(if (inherits(schema, "sql")) glue_sql_collapse(schema) else schema)
+    ) %>%
     collect() %>%
     # create remote names for the tables in the given schema (name is table_name; cannot be duplicated within a single schema)
     mutate(
@@ -220,6 +222,29 @@ get_src_tbl_names <- function(src, schema = NULL, dbname = NULL, names = NULL) {
     deframe()
 }
 
+check_schema <- function(src, schema) {
+  if (!is_mssql(src) && !is_postgres(src) && !is_redshift(src) && !is_mariadb(src)) {
+    warn_if_arg_not(schema, only_on = c("MSSQL", "Postgres", "Redshift", "MariaDB"))
+    return(schema)
+  }
+
+  con <- con_from_src_or_con(src)
+
+  if (!is.null(schema)) {
+    check_param_class(schema, "character")
+  }
+
+  if (is_mssql(src)) {
+    schema_mssql(con, schema)
+  } else if (is_postgres(src)) {
+    schema_postgres(con, schema)
+  } else if (is_redshift(src)) {
+    schema_redshift(con, schema)
+  } else if (is_mariadb(src)) {
+    schema_mariadb(con, schema)
+  }
+}
+
 # `schema_*()` : default schema if NULL, otherwise unchanged
 schema_mssql <- function(con, schema) {
   if (is_null(schema)) {
@@ -239,7 +264,8 @@ schema_redshift <- schema_postgres
 
 schema_mariadb <- function(con, schema) {
   if (is_null(schema)) {
-    schema <- sql("database()")
+    # Extra parenthesis because it is used in a dbplyr-generated IN clause later
+    schema <- sql("(database())")
   }
   schema
 }
@@ -259,19 +285,23 @@ dbname_mssql <- function(con, dbname) {
 get_names_table_mssql <- function(con, dbname_sql) {
   tbl(
     con,
-    sql(glue::glue("
+    sql(glue::glue(
+      "
       SELECT tabs.name AS table_name, schemas.name AS schema_name
       FROM {dbname_sql}sys.tables tabs
       INNER JOIN {dbname_sql}sys.schemas schemas ON
       tabs.schema_id = schemas.schema_id
-    "))
+    "
+    ))
   )
 }
 
 get_names_table_postgres <- function(con) {
   tbl(
     con,
-    sql("SELECT table_schema as schema_name, table_name as table_name from information_schema.tables")
+    sql(
+      "SELECT table_schema as schema_name, table_name as table_name from information_schema.tables"
+    )
   )
 }
 

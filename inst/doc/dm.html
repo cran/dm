@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2025-07-02" />
+<meta name="date" content="2026-02-25" />
 
 <title>Getting started with dm</title>
 
@@ -339,7 +339,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Getting started with dm</h1>
-<h4 class="date">2025-07-02</h4>
+<h4 class="date">2026-02-25</h4>
 
 
 
@@ -471,12 +471,10 @@ dplyr operations we want.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>fin_dm_total <span class="ot">&lt;-</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  fin_dm_keys <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">dm_zoom_to</span>(loans) <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">group_by</span>(account_id) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>fin_dm_total<span class="sc">$</span>total_loans</span></code></pre></div>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">.by =</span> account_id, <span class="at">total_amount =</span> <span class="fu">sum</span>(amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">dm_insert_zoomed</span>(<span class="st">&quot;total_loans&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>fin_dm_total<span class="sc">$</span>total_loans</span></code></pre></div>
 <p>Note that, in the above example, we use
 <code>dm_insert_zoomed()</code> to add the results as a new table to our
 data model. This table is temporary and will be deleted when our session
@@ -529,7 +527,7 @@ return new <code>dm</code> or table objects)</li>
 supported)</li>
 </ul>
 <p>The {dm} package builds heavily upon the <a href="https://github.com/bergant/datamodelr">{datamodelr} package</a>,
-and upon the <a href="https://www.tidyverse.org/">tidyverse</a>. We’re
+and upon the <a href="https://tidyverse.org/">tidyverse</a>. We’re
 looking forward to a good collaboration!</p>
 <p>The <a href="https://github.com/russHyde/polyply">{polyply}
 package</a> has a similar intent with a slightly different

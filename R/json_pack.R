@@ -39,20 +39,23 @@ to_packed_json <- function(x) {
 json_pack.tbl_lazy <- function(.data, ..., .names_sep = NULL) {
   dots <- quos(...)
   if ("" %in% names2(dots)) {
-    abort("All elements of `...` must be named.")
+    cli::cli_abort("All elements of {.arg ...} must be named.")
   }
 
   col_nms <- colnames(.data)
   pack_cols <- purrr::map(dots, ~ tidyselect::vars_select(col_nms, !!.x))
   id_cols <- setdiff(col_nms, unlist(unique(pack_cols)))
 
-  sql_exprs <- purrr::imap(pack_cols, ~ sql_json_pack(
-    dbplyr::remote_con(.data),
-    cols = names(.x),
-    names_sep = .names_sep,
-    packed_col = .y,
-    data = .data
-  ))
+  sql_exprs <- purrr::imap(
+    pack_cols,
+    ~ sql_json_pack(
+      dbplyr::remote_con(.data),
+      cols = names(.x),
+      names_sep = .names_sep,
+      packed_col = .y,
+      data = .data
+    )
+  )
 
   .data %>%
     transmute(!!!syms(id_cols), !!!sql_exprs)
@@ -90,7 +93,7 @@ remove_prefix_and_sep <- function(x, prefix, sep) {
 `json_pack.tbl_Microsoft SQL Server` <- function(.data, ..., .names_sep = NULL) {
   dots <- quos(...)
   if ("" %in% names2(dots)) {
-    abort("All elements of `...` must be named.")
+    cli::cli_abort("All elements of {.arg ...} must be named.")
   }
   con <- dbplyr::remote_con(.data)
   in_query <- dbplyr::sql_render(.data)
@@ -112,7 +115,9 @@ remove_prefix_and_sep <- function(x, prefix, sep) {
     }
 
     for_json_path_query <- glue_sql(
-      "(SELECT value FROM OPENJSON((SELECT ", selected, " FOR JSON PATH))) AS {`packing_name`}",
+      "(SELECT value FROM OPENJSON((SELECT ",
+      selected,
+      " FOR JSON PATH))) AS {`packing_name`}",
       .con = con
     )
 
