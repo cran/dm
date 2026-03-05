@@ -1,7 +1,7 @@
 Package: dm
 Title: Relational Data Models
-Version: 1.1.0
-Date: 2026-02-24
+Version: 1.1.1
+Date: 2026-03-04
 Authors@R: 
     c(person(given = "Tobias",
              family = "Schieferdecker",
@@ -74,7 +74,7 @@ Config/testthat/start-first: zzx-deprecated, flatten, dplyr, filter-dm,
 Encoding: UTF-8
 RoxygenNote: 7.3.3.9000
 NeedsCompilation: no
-Packaged: 2026-02-24 23:10:08 UTC; kirill
+Packaged: 2026-03-05 06:09:18 UTC; kirill
 Author: Tobias Schieferdecker [aut],
   Kirill Müller [aut, cre] (ORCID:
     <https://orcid.org/0000-0002-1416-3412>),
@@ -88,4 +88,4 @@ Author: Tobias Schieferdecker [aut],
   cynkra GmbH [fnd, cph] (ROR: <https://ror.org/0335t7e62>)
 Maintainer: Kirill Müller <kirill@cynkra.com>
 Repository: CRAN
-Date/Publication: 2026-02-25 06:30:59 UTC
+Date/Publication: 2026-03-05 08:10:09 UTC

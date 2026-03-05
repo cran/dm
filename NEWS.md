@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# dm 1.1.1
+
+## Bug fixes
+
+- Fix igraph fallback to match igraph behavior for undirected edges and girth (#2424, #2425).
+
+- Remove spurious debugging output.
+
+
 # dm 1.1.0
 
 ## Features
